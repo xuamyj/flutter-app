@@ -31,3 +31,44 @@ CS47 setup instructions [https://docs.google.com/document/d/1SCndhmmtONNlmeYlEKx
 Separately: Added a .gitignore to the main flutter-app folder for *.DS_Store (separate from the one inside FlutterApp which is created by React Native init command)
 
 About to go back to the Chat Tutorial, but going to commit first.
+
+--------------------------------
+
+Chat Tutorial: Looking at the provided snack.expo.io
+  - They seem to have a components/ folder with Chat.js and Main.js files so let me copy that over
+  - And a Fire.js file. Let me copy that over also
+  - Their packages.json has:
+        "react-native-elements": "0.18.5"
+    so going to npm that in by running:
+        npm i react-native-elements
+    Whoops ours is "^0.19.1" and I have no idea if that's okay so gonna uninstall and reinstall:
+        npm uninstall react-native-elements
+        npm i react-native-elements@0.18.5
+  - Not changing App.js just yet
+
+Ah: After doing npm install/uninstall, seems like we need to Ctrl-C out of the `expo start` terminal and rerun `expo start`. Good to know
+
+Chat Tutorial: Time to Code! -> App.js
+  - Copied code into App.js
+  - Error: Unable to resolve "react-navigation" from "App.js". Okay, time to npm again:
+        npm install --save react-navigation
+  - Rerunning `expo start`
+  - It seems like version react-navigation 3.0 is annoying, so going to download an older version to match their demo [https://snack.expo.io/@bacon/firebase-basic-chat]:
+        npm uninstall react-navigation
+        npm install --save react-navigation@2.3.1
+  - Rerunning `expo start`
+  - Ok it's blank and no errors, so that's good, I think [screenshot1.png]
+
+Side note: There is a veryyy cute cat curled up on a towel on the couch next to me. Zzzzzzzzzz...
+
+Feels like a good time to commit.
+
+
+
+
+
+
+
+
+
+
