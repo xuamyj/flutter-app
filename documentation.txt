@@ -72,11 +72,59 @@ Side note update: "Yawwwwwwn," said the cat.
 
 Side note update update: Now the cat is washing itself. Toooo cute.
 
+--------------------------------
 
+Chat Tutorial: Chat Screen
+  - Followed instructions
+  - Need to add react-native-gifted-chat. The Chat Tutorial demo says
+        "react-native-gifted-chat": "0.3.0"
+  and the documentation [https://github.com/FaridSafi/react-native-gifted-chat] for react-native-gifted-chat says:
+        Use version 0.2.x for RN >= 0.44.0
+        Use version 0.1.x for RN >= 0.40.0
+        Use version 0.0.10 for RN < 0.40.0
+  - We're using
+        "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz"
+    which according to this post [https://blog.expo.io/expo-sdk-v31-0-0-is-now-available-cad6d0463f49] is based on RN 0.57
+  - So I'm just going to run npm install without a version and see what happens:
+        npm install react-native-gifted-chat --save
+  - Rerunning `expo start`
+  - Ok it lets you type messages but they don't get saved, which I think is right? Also no errors so...
 
+Committing again!
 
+--------------------------------
 
+Chat Tutorial: Database
+  - Copied things over up to the "Here is an example of the creds" picture.
+  - Ah here is why we need Anonymous auth. Adding it back in; will figure out how to take it out later.
+  - Continued following the tutorial. Ahhh so this is how Firebase works.
 
+Chat Tutorial: Database -> components/Chat.js
+  - Before I copy over any of this code, it seems to be missing a line of edits:
+        import Fire from '../Fire';
+  - Aha. Adding that line means we need to npm firebase in:
+        npm install --save firebase
+  - It is slowly installing...
+  - Rerunning `expo start`
+  - Nice, maybe I should stop being surprised when npm works haha...
 
+Back to Chat Tutorial: Database -> components/Chat.js
+  - Copied things over
+  - Getting errors:
+        @firebase/database:, FIREBASE WARNING: set at /messages/-LR_hWPm1bDFOEunEJ6b failed: permission_denied
+    and
+        [Unhandled promise rejection: Error: PERMISSION_DENIED: Permission denied]
+  - Ah okay so it turns out in Firebase, (left sidebar) Develop -> (left sidebar) Database -> (middle tab) Rules currently says:
+        "rules": {
+          ".read": false,
+          ".write": false
+        }
+  Changing it to
+        "rules": {
+          ".read": "auth != null",
+          ".write": "auth != null"
+        }
+  as per Stack Overflow [https://stackoverflow.com/questions/37403747/firebase-permission-denied]
 
+Nice!! It works. Time to commit!
 
