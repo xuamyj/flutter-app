@@ -1,6 +1,6 @@
 Nov 17
 
-First thought: Let's map out everything we need for the backend. [step1.png]
+First thought: Let's map out everything we need for the backend. [step1.jpg]
 
 Then: Hmm... I definitely don't want to implement messaging from scratch... I'm sure there is some library that I can use.
 Looking into:
