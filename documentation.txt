@@ -1,0 +1,33 @@
+Nov 17
+
+First thought: Let's map out everything we need for the backend. [step1.png]
+
+Then: Hmm... I definitely don't want to implement messaging from scratch... I'm sure there is some library that I can use.
+Looking into:
+  - Messaging in node.js + express
+  - Messaging in React Native
+
+Found: Oh nice, this [https://blog.expo.io/how-to-build-a-chat-app-with-react-native-3ef8604ebb3c] uses React Native + Firebase + Expo + Gifted Chat. Seems reasonable enough.
+
+Chat Tutorial: Setting up a Server
+  - Selected Email/password instead of Anonymous. Later we can add Facebook
+
+Chat Tutorial: Time to Code!
+  - Setting up a React Native app instead of using the starter snack
+
+CS47 setup instructions [https://docs.google.com/document/d/1SCndhmmtONNlmeYlEKxELrf8Uzp_SzRCZudcpnw9wmM/edit]:
+  - Part 1
+  - 1. Already had homebrew
+  - 2. Deleted old node and installed new node
+  - 3. Ran command
+
+  - Part 2
+  - 1. Installing older version of simulator because upgrading OSX mid-quarter = very bad idea.
+  - 2. Ran commands, called the app FlutterApp
+  - 3. Ran commands, had to do
+        sudo xcode-select -s /Applications/Xcode.app
+        but otherwise worked
+
+Separately: Added a .gitignore to the main flutter-app folder for *.DS_Store (separate from the one inside FlutterApp which is created by React Native init command)
+
+About to go back to the Chat Tutorial, but going to commit first.
