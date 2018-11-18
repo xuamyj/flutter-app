@@ -181,6 +181,38 @@ Pausing the tutorial for a sec to add a Logout button to the Profile page for te
 
 --------------------------------
 
+Nov 18
+
+Adding Logout button to Profile page
+  - Okay, done
+  - Also chnaged AuthLoading.js to go to Login instead of SignUp if the user is not logged in
+
+Auth Tutorial: Signing a user up
+  - Copied it over, but with
+        import firebase from 'firebase';
+
+Auth Tutorial: Logging an already existing user in
+  - Copied it over, but with
+        import firebase from 'firebase';
+  - Fixed typo: pasword should be password
+
+Nice, it works! Feels a bit slow but we can worry about that later. Committing!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

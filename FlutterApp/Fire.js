@@ -3,7 +3,7 @@ import firebase from 'firebase';
 class Fire {
   constructor() {
     this.init();
-    this.observeAuth();
+    // this.observeAuth();
   }
 
   // -------------------
@@ -32,19 +32,19 @@ class Fire {
   // AUTHENTICATION
   // --------------
 
-  observeAuth = () => {
-    return firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
-  }
+  // observeAuth = () => {
+  //   return firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
+  // }
 
-  onAuthStateChanged = user => {
-    if (!user) {
-      try {
-        firebase.auth().signInAnonymously();
-      } catch ({ message }) {
-        alert(message);
-      }
-    }
-  };
+  // onAuthStateChanged = user => {
+  //   if (!user) {
+  //     try {
+  //       firebase.auth().signInAnonymously();
+  //     } catch ({ message }) {
+  //       alert(message);
+  //     }
+  //   }
+  // };
 
   // --------
   // DATABASE

@@ -18,3 +18,6 @@ Gifted Chat - https://github.com/FaridSafi/react-native-gifted-chat
 React Native: Tab Navigation - https://reactnavigation.org/docs/en/tab-based-navigation.html
 
 Firebase: Structure Your Database - https://firebase.google.com/docs/database/web/structure-data
+
+Tutorial: "React Native & Firebase: Authentication" - https://medium.com/react-native-training/react-native-firebase-authentication-7652e1d2c8a2
+
