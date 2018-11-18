@@ -3,9 +3,12 @@ import firebase from 'firebase';
 class Fire {
   constructor() {
     this.init();
-
     this.observeAuth();
   }
+
+  // -------------------
+  // INITIALIZE DATABASE
+  // -------------------
 
   init = () =>
     firebase.initializeApp({
@@ -17,8 +20,21 @@ class Fire {
       messagingSenderId: "725969630373"
     });
 
-  observeAuth = () =>
-    firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
+  // ----------------
+  // GENERALLY USEFUL
+  // ----------------
+
+  get uid() {
+    return (firebase.auth().currentUser || {}).uid;
+  }
+
+  // --------------
+  // AUTHENTICATION
+  // --------------
+
+  observeAuth = () => {
+    return firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
+  }
 
   onAuthStateChanged = user => {
     if (!user) {
@@ -30,18 +46,22 @@ class Fire {
     }
   };
 
-  get uid() {
-    return (firebase.auth().currentUser || {}).uid;
-  }
+  // --------
+  // DATABASE
+  // --------
 
+  // the `get` says: translate this.ref into ref()
   get ref() {
     return firebase.database().ref('messages');
   }
 
-  on = callback =>
-    this.ref
+  // turn on the database connection
+  // listen for `child_added` event, if it happens, run `snapshot => ...`
+  on = callback => {
+    return this.ref
       .limitToLast(20)
       .on('child_added', snapshot => callback(this.parse(snapshot)));
+  }
 
   parse = snapshot => {
     const { timestamp: numberStamp, text, user } = snapshot.val();
@@ -58,10 +78,7 @@ class Fire {
     return message;
   }
 
-  get timestamp() {
-    return firebase.database.ServerValue.TIMESTAMP;
-  }
-
+  // stick messages into the database
   send = messages => {
     for (let i = 0; i < messages.length; i++) {
       const { text, user } = messages[i];
@@ -75,8 +92,15 @@ class Fire {
     }
   };
 
-  append = message => this.ref.push(message);
+  get timestamp() {
+    return firebase.database.ServerValue.TIMESTAMP;
+  }
 
+  append = message => {
+    return this.ref.push(message);
+  }
+
+  // turn off the database connection
   off() {
     this.ref.off();
   }

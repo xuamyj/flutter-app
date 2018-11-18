@@ -128,3 +128,23 @@ Back to Chat Tutorial: Database -> components/Chat.js
 
 Nice!! It works. Time to commit!
 
+--------------------------------
+
+Okay: What to do next? Let's see if we can get the bottom bar working. [https://reactnavigation.org/docs/en/tab-based-navigation.html]
+
+1. Refactored Main to be ChatMain
+
+2. Moved around functions and added comments in Fire.js, but code is the same
+
+Works, committing again.
+
+--------------------------------
+
+
+
+
+
+
+
+
+

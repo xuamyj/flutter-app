@@ -7,7 +7,7 @@ import {
     StyleSheet,
 } from 'react-native';
 
-class Main extends Component {
+class ChatMain extends Component {
   state = { name: '' }
 
   onPress = () => {
@@ -56,4 +56,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Main;
+export default ChatMain;
