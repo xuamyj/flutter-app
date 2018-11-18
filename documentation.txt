@@ -63,6 +63,14 @@ Side note: There is a veryyy cute cat curled up on a towel on the couch next to 
 
 Feels like a good time to commit.
 
+--------------------------------
+
+Chat Tutorial: Time to Code! -> Main.js
+  - Just followed it as is. It's a solid tutorial so far; everything is very nice and well-documented.
+
+Side note update: "Yawwwwwwn," said the cat.
+
+Side note update update: Now the cat is washing itself. Toooo cute.
 
 
 
