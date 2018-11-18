@@ -6,11 +6,17 @@ import ChatMain from './components/ChatMain';
 import Chat from './components/Chat';
 import ProfileMain from './components/ProfileMain';
 
+// Import the authentication screens
+import AuthLoading from './components/authentication/AuthLoading';
+import SignUp from './components/authentication/SignUp';
+import Login from './components/authentication/Login';
+
 // Import React Navigation
 import {
     createStackNavigator,
     createBottomTabNavigator,
-    createAppContainer
+    createAppContainer,
+    createSwitchNavigator
 } from 'react-navigation'
 
 // Create the Home navigator
@@ -40,15 +46,23 @@ const ProfileStack = createStackNavigator({
 });
 
 // Bottom tab
-export default createAppContainer(createBottomTabNavigator(
+const AppNavigator = createBottomTabNavigator({
+  Home: HomeStack,
+  Groups: GroupsStack,
+  Post: PostStack,
+  Chat: ChatStack,
+  Profile: ProfileStack,
+});
+
+// Authentication screens
+export default createAppContainer(createSwitchNavigator(
   {
-      Home: HomeStack,
-      Groups: GroupsStack,
-      Post: PostStack,
-      Chat: ChatStack,
-      Profile: ProfileStack,
+    AuthLoading: AuthLoading,
+    SignUp: SignUp,
+    Login: Login,
+    App: AppNavigator,
   },
   {
-    /* Other configuration remains unchanged */
+    initialRouteName: 'AuthLoading',
   }
 ));

@@ -156,6 +156,31 @@ Ok committing.
 
 --------------------------------
 
+Actually, let's do login first. Following this tutorial [https://medium.com/react-native-training/react-native-firebase-authentication-7652e1d2c8a2] for now.
+
+Auth Tutorial: Creating our Screens
+  - First made a folder inside components/ called authentication/ for these extra screens
+  - Loading.js: copied directly from the tutorial
+  - SignUp.js: copied directly from the tutorial
+  - Login.js: copied directly from the tutorial
+  - Did not copy Main.js from the tutorial since we already have our main app
+
+Auth Tutorial: Creating our Screens -> App.js
+  - Instead of copying App.js from the tutorial, looked at the react-naviation docs [https://reactnavigation.org/docs/en/auth-flow.html]
+  - Now we are at "you should see our Loading screen with the ActivityIndicator spinning forever" -- nice.
+
+Auth Tutorial: Determining if a user is authenticated
+  - Copied it over except instead of
+        import firebase from 'react-native-firebase'
+    used
+        import firebase from 'firebase';
+  - Nice, we're already signed in from before, so it reroutes us to the main app, and everything there works as expected
+
+Pausing the tutorial for a sec to add a Logout button to the Profile page for testing. Eventually this should be moved to a Settings page that gets accessed from the Profile page.
+  - Actually, this is a good place to commit and go to sleep (y)
+
+--------------------------------
+
 
 
 
