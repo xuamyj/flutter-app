@@ -140,10 +140,21 @@ Works, committing again.
 
 --------------------------------
 
+Back to bottom bar:
 
+3. Created placeholder HomeMain, GroupsMain, PostMain, and ProfileMain components.
 
+4. Updated App.js so that each bottom tab is a StackNavigator
 
+5. Ironically had to update react-navigation to 3.0.0:
+        npm uninstall react-navigation
+        npm install react-navigation
 
+Now reading Firebase docs... Structure Your Database [https://firebase.google.com/docs/database/web/structure-data] is pretty useful
+
+Ok committing.
+
+--------------------------------
 
 
 
