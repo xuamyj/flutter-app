@@ -100,9 +100,74 @@ class Fire {
     firebase.database().ref('messages').off();
   }
 
+  // ----------------
+  // DATABASE: PHOTOS
+  // ----------------
+
+  // // save picture, return url of picture
+  // function writeImage() {
+
+  // }
+
   // ---------------
   // DATABASE: USERS
   // ---------------
+
+  // save uid + email + display name the first time
+  writeUserData(userId, email, displayName) {
+    firebase.database().ref('users/' + userId).set({
+      email: email,
+      display_name: displayName,
+      profile_picture : ''
+    });
+  }
+
+  // update display name
+  updateUserDisplayName(userId, displayName, successCallback, errorCallback) {
+    firebase.database().ref('users/' + userId).update({
+      display_name: displayName,
+    }).then(function() {
+      successCallback();
+    }).catch(function(error) {
+      errorCallback();
+    });
+  }
+
+  // update profile picture
+  updateUserProfilePic(userId, imageUrl, successCallback, errorCallback) {
+    firebase.database().ref('users/' + userId).update({
+      profile_picture : imageUrl
+    }).then(function() {
+      successCallback();
+    }).catch(function(error) {
+      errorCallback();
+    });
+  }
+
+  // get display name from uid
+  getUserDisplayName(userId, successCallback) {
+    return firebase.database().ref('users/' + userId).once('value').then(function(snapshot) {
+      var displayName = (snapshot.val() && snapshot.val().display_name) || '';
+      successCallback(displayName);
+    });
+  }
+
+  // get profile picture from uid
+  getUserProfilePic(userId, successCallback) {
+    return firebase.database().ref('users/' + userId).once('value').then(function(snapshot) {
+      var imageUrl = (snapshot.val() && snapshot.val().profile_picture) || '';
+      successCallback(imageUrl);
+    });
+  }
+
+  // // get uid from email
+  // function getUserIdFromEmail(email) {
+
+  // }
+
+  // ----------------
+  // DATABASE: GROUPS
+  // ----------------
 
 }
 

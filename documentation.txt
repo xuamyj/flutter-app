@@ -232,10 +232,11 @@ Commit: no change in functionality, just moved things around in the code to have
 
 --------------------------------
 
+Wrote a bunch of code in Fire.js and connected it with Settings.js.
 
+It was a decent amount of fiddling so committing again.
 
-
-
+--------------------------------
 
 
 

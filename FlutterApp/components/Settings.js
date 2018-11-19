@@ -1,11 +1,50 @@
 import React from 'react';
-import { Text, View, Button, StyleSheet } from 'react-native';
+import {
+  Text,
+  View,
+  Button,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+
+import firebase from 'firebase';
+
+import Fire from '../Fire';
 
 class Settings extends React.Component {
+
+  state = { displayName: '', profilePic: '', displayNameInput: '', errorMessage: null }
+
+  onPress = () => {
+    Fire.shared.updateUserDisplayName(Fire.shared.uid, this.state.displayNameInput, () => {
+      console.log("TOAST GOES HERE");
+    }, () => {
+      console.log("ERROR GOES HERE");
+    })
+  }
+
+  onChangeText = displayNameInput => this.setState({ displayNameInput });
+
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         <Text>Settings!</Text>
+        <Text>{this.state.displayName}</Text>
+
+        <Text style={styles.title}>Display name:</Text>
+        <TextInput
+          onChangeText={this.onChangeText}
+          style={styles.nameInput}
+          placeHolder="Higgs"
+          value={this.state.displayNameInput}
+        />
+        <Text style={styles.title}>Set a new profile picture:</Text>
+
+        <TouchableOpacity onPress={this.onPress}>
+          <Text style={styles.buttonText}>Update profile</Text>
+        </TouchableOpacity>
+
         <Button
           title="Logout"
           onPress={
@@ -21,14 +60,34 @@ class Settings extends React.Component {
       </View>
     );
   }
+
+  componentDidMount() {
+    Fire.shared.getUserDisplayName(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        displayName: result
+      }))
+    })
+  }
 }
 
+const offset = 24;
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
+  nameInput: {
+    height: offset * 2,
+    margin: offset,
+    paddingHorizontal: offset,
+    borderColor: '#111111',
+    borderWidth: 1,
+  },
+  title: {
+    marginTop: offset,
+    marginLeft: offset,
+    fontSize: offset,
+  },
+  buttonText: {
+    marginLeft: offset,
+    fontSize: offset,
+  },
 })
 
 export default Settings;
