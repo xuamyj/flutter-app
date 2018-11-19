@@ -21,3 +21,9 @@ Firebase: Structure Your Database - https://firebase.google.com/docs/database/we
 
 Tutorial: "React Native & Firebase: Authentication" - https://medium.com/react-native-training/react-native-firebase-authentication-7652e1d2c8a2
 
+## Things we're not going to worry about for now
+
+  * Sign up with Facebook
+  * Change email/password for logging in
+  * Forgot password reset for logging in
+  * Search functionality

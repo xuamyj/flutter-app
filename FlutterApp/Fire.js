@@ -46,9 +46,9 @@ class Fire {
   //   }
   // };
 
-  // --------
-  // DATABASE
-  // --------
+  // -----------------------
+  // DATABASE: CHAT TUTORIAL
+  // -----------------------
 
   // the `get` says: translate this.ref into ref()
   get ref() {
@@ -104,6 +104,12 @@ class Fire {
   off() {
     this.ref.off();
   }
+
+  // ---------------
+  // DATABASE: USERS
+  // ---------------
+
+
 }
 
 Fire.shared = new Fire();

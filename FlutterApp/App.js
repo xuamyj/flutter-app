@@ -5,6 +5,7 @@ import PostMain from './components/PostMain';
 import ChatMain from './components/ChatMain';
 import Chat from './components/Chat';
 import ProfileMain from './components/ProfileMain';
+import Settings from './components/Settings';
 
 // Import the authentication screens
 import AuthLoading from './components/authentication/AuthLoading';
@@ -43,6 +44,7 @@ const ChatStack = createStackNavigator({
 // Create the Profile navigator
 const ProfileStack = createStackNavigator({
   Profile: { screen: ProfileMain },
+  Settings: { screen: Settings },
 });
 
 // Bottom tab

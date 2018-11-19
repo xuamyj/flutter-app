@@ -198,10 +198,35 @@ Auth Tutorial: Logging an already existing user in
 
 Nice, it works! Feels a bit slow but we can worry about that later. Committing!
 
+--------------------------------
 
+Now on Firebase Console [https://console.firebase.google.com]:
 
+  1. Develop -> Authentication -> Sign-in method: disabled Anonymous sign-in
 
+  2. Develop -> Authentication -> Users: deleted a bunch of test users
 
+  3. Develop -> Database -> Data: deleted a bunch of messages
+
+Now testing the app again:
+  - Nice, it works.
+  - The chat definitely needs to be updated later but it's fine for now.
+
+(Nothing to commit yet because we only changed the db content and tested the app.)
+
+Okay I think the plan now is going to be:
+  I. User additional data (SignUp and Profile -> Settings)
+  II. Create and view groups (Groups and Groups -> Create Group)
+  III. Post items
+  IV. View posted items (Home, Groups, and Profile -> Posted)
+  V. More stuff after (fix Chat, mark items as read, etc) that but it's enough to think about for now
+
+Going to use react-native-tab-view [https://github.com/react-native-community/react-native-tab-view]:
+        npm install react-native-tab-view
+
+Added tabs and a Settings button to Settings page. Nothing displayed yet. Committing
+
+--------------------------------
 
 
 
