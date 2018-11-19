@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
 
 import firebase from 'firebase';
 
-export default class SignUp extends React.Component {
+class SignUp extends React.Component {
   state = { email: '', password: '', errorMessage: null }
 
   handleSignUp = () => {
@@ -19,7 +19,7 @@ export default class SignUp extends React.Component {
       <View style={styles.container}>
         <Text>Sign Up</Text>
         {this.state.errorMessage &&
-          <Text style={{ color: 'red' }}>
+          <Text style={styles.errorMsg}>
             {this.state.errorMessage}
           </Text>}
         <TextInput
@@ -59,5 +59,10 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginTop: 8
+  },
+  errorMsg: {
+    color: 'red'
   }
 })
+
+export default SignUp;

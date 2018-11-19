@@ -3,7 +3,7 @@ import { View, Text, ActivityIndicator, StyleSheet } from 'react-native'
 
 import firebase from 'firebase';
 
-export default class AuthLoading extends React.Component {
+class AuthLoading extends React.Component {
   render() {
     return (
       <View style={styles.container}>
@@ -27,3 +27,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   }
 })
+
+export default AuthLoading;

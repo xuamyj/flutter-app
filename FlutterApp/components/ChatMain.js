@@ -35,7 +35,6 @@ class ChatMain extends Component {
   }
 }
 
-
 const offset = 24;
 const styles = StyleSheet.create({
   nameInput: {

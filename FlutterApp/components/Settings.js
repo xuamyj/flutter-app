@@ -1,10 +1,10 @@
 import React from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, View, Button, StyleSheet } from 'react-native';
 
 class Settings extends React.Component {
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={styles.container}>
         <Text>Settings!</Text>
         <Button
           title="Logout"
@@ -22,5 +22,13 @@ class Settings extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
+})
 
 export default Settings;

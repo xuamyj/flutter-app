@@ -15,13 +15,13 @@ import {
 import firebase from 'firebase';
 
 const GivenRoute = () => (
-  <View style={[styles.scene, { backgroundColor: '#F8C1D8' }]} />
+  <View style={[styles.scene, styles.given]} />
 );
 const ReceivedRoute = () => (
-  <View style={[styles.scene, { backgroundColor: '#CFCB9C' }]} />
+  <View style={[styles.scene, styles.received]} />
 );
 const PostedRoute = () => (
-  <View style={[styles.scene, { backgroundColor: '#B6DCE2' }]} />
+  <View style={[styles.scene, styles.posted]} />
 );
 
 class ProfileMain extends React.Component {
@@ -40,7 +40,7 @@ class ProfileMain extends React.Component {
 
   render() {
     return (
-      <View style={{flex:1}}>
+      <View style={styles.container}>
         <TouchableOpacity onPress={this.onPress}>
           <Text style={styles.buttonText}>Settings</Text>
         </TouchableOpacity>
@@ -61,8 +61,20 @@ class ProfileMain extends React.Component {
 
 const offset = 24;
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   scene: {
     flex: 1,
+  },
+  given: {
+    backgroundColor: '#F8C1D8'
+  },
+  received: {
+    backgroundColor: '#CFCB9C'
+  },
+  posted: {
+    backgroundColor: '#B6DCE2'
   },
   buttonText: {
     marginLeft: offset,

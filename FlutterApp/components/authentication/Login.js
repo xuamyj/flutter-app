@@ -3,7 +3,7 @@ import { StyleSheet, Text, TextInput, View, Button } from 'react-native'
 
 import firebase from 'firebase';
 
-export default class Login extends React.Component {
+class Login extends React.Component {
   state = { email: '', password: '', errorMessage: null }
 
   handleLogin = () => {
@@ -20,7 +20,7 @@ export default class Login extends React.Component {
       <View style={styles.container}>
         <Text>Login</Text>
         {this.state.errorMessage &&
-          <Text style={{ color: 'red' }}>
+          <Text style={styles.errorMsg}>
             {this.state.errorMessage}
           </Text>}
         <TextInput
@@ -60,5 +60,10 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     marginTop: 8
+  },
+  errorMsg: {
+    color: 'red'
   }
 })
+
+export default Login;

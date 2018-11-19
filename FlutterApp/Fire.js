@@ -50,15 +50,10 @@ class Fire {
   // DATABASE: CHAT TUTORIAL
   // -----------------------
 
-  // the `get` says: translate this.ref into ref()
-  get ref() {
-    return firebase.database().ref('messages');
-  }
-
   // turn on the database connection
   // listen for `child_added` event, if it happens, run `snapshot => ...`
   on = callback => {
-    return this.ref
+    return firebase.database().ref('messages')
       .limitToLast(20)
       .on('child_added', snapshot => callback(this.parse(snapshot)));
   }
@@ -97,18 +92,17 @@ class Fire {
   }
 
   append = message => {
-    return this.ref.push(message);
+    return firebase.database().ref('messages').push(message);
   }
 
   // turn off the database connection
   off() {
-    this.ref.off();
+    firebase.database().ref('messages').off();
   }
 
   // ---------------
   // DATABASE: USERS
   // ---------------
-
 
 }
 

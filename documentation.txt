@@ -228,6 +228,14 @@ Added tabs and a Settings button to Settings page. Nothing displayed yet. Commit
 
 --------------------------------
 
+Commit: no change in functionality, just moved things around in the code to have consistent style (use StyleSheet and do `export default` at the end of the file)
+
+--------------------------------
+
+
+
+
+
 
 
 
