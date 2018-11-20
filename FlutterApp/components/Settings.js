@@ -1,61 +1,70 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  Button,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import { Text, View, StyleSheet, Button } from 'react-native';
+import { FormLabel, FormInput, FormValidationMessage, Avatar } from 'react-native-elements'
 
 import firebase from 'firebase';
 
 import Fire from '../Fire';
 
 class Settings extends React.Component {
+  state = {
+    userName: 'Amy',
+    userPicUrl: 'http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg',
+    inputName: '',
+    inputPicUrl: '',
+    errorMsg: 'Error message placeholder',
+  }
 
-  state = { displayName: '', profilePic: '', displayNameInput: '', errorMessage: null }
+  onChangeInputName = (inputName) => {this.setState({ inputName: inputName })}
+  onChangeInputPicUrl = (inputPicUrl) => {this.setState({ inputPicUrl: inputPicUrl })}
 
-  onPress = () => {
-    Fire.shared.updateUserDisplayName(Fire.shared.uid, this.state.displayNameInput, () => {
-      console.log("TOAST GOES HERE");
-    }, () => {
-      console.log("ERROR GOES HERE");
+  onPressUpdateProfile = () => {
+    // TODO backend
+    console.log(this.state.inputName);
+    console.log(this.state.inputPicUrl);
+  }
+
+  onSignout = () => {
+    // amy side note: ahh, javascript without arrows... i missed you!
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+      // don't need to do anything because firebase.auth().onAuthStateChanged() in AuthLoading.js
+    }).catch(function(error) {
+      // TODO toast
     })
   }
 
-  onChangeText = displayNameInput => this.setState({ displayNameInput });
-
   render() {
     return (
-      <View>
-        <Text>Settings!</Text>
-        <Text>{this.state.displayName}</Text>
-
-        <Text style={styles.title}>Display name:</Text>
-        <TextInput
-          onChangeText={this.onChangeText}
-          style={styles.nameInput}
-          placeHolder="Higgs"
-          value={this.state.displayNameInput}
+      <View style={styles.container}>
+        <Avatar
+          medium
+          rounded
+          source={{uri: this.state.userPicUrl}}
+          activeOpacity={0.7}
         />
-        <Text style={styles.title}>Set a new profile picture:</Text>
+        <Text>
+          {this.state.userName}
+        </Text>
 
-        <TouchableOpacity onPress={this.onPress}>
-          <Text style={styles.buttonText}>Update profile</Text>
-        </TouchableOpacity>
+        <FormLabel>Display name</FormLabel>
+        <FormInput onChangeText={this.onChangeInputName}/>
+        <FormValidationMessage>{this.state.errorMsg}</FormValidationMessage>
+
+        <FormLabel>Profile picture</FormLabel>
+        <FormInput onChangeText={this.onChangeInputPicUrl}/>
+        <FormValidationMessage>TODO cameraroll</FormValidationMessage>
+
+        <Button
+          title="Update profile"
+          color="#49B6BB"
+          onPress={this.onPressUpdateProfile}
+        />
 
         <Button
           title="Logout"
-          onPress={
-            () => firebase.auth().signOut().then(function() {
-              // Sign-out successful.
-              // don't need to do anything because firebase.auth().onAuthStateChanged() in AuthLoading.js
-            }).catch(function(error) {
-              return this.setState({ errorMessage: error.message });
-            })
-            // amy side note: ahh, javascript without arrows... i missed you!
-          }
+          color="#49B6BB"
+          onPress={this.onSignout}
         />
       </View>
     );
@@ -70,24 +79,10 @@ class Settings extends React.Component {
   }
 }
 
-const offset = 24;
 const styles = StyleSheet.create({
-  nameInput: {
-    height: offset * 2,
-    margin: offset,
-    paddingHorizontal: offset,
-    borderColor: '#111111',
-    borderWidth: 1,
-  },
-  title: {
-    marginTop: offset,
-    marginLeft: offset,
-    fontSize: offset,
-  },
-  buttonText: {
-    marginLeft: offset,
-    fontSize: offset,
-  },
+  container: {
+    flex: 1,
+  }
 })
 
 export default Settings;

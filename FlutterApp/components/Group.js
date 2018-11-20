@@ -9,22 +9,22 @@ const TreasuresRoute = () => (
   <View style={styles.scene} />
 );
 
-class HomeMain extends React.Component {
+class Group extends React.Component {
   state = {
     index: 0,
     routes: [
       { key: 'stories', title: 'Stories' },
       { key: 'treasures', title: 'Treasures' },
     ],
+    groupName: 'Disney',
   };
 
   render() {
     return (
       <View style={styles.container}>
-        <Image
-          style={styles.logo}
-          source={{uri: 'https://i.imgur.com/2nFQl0r.png'}}
-        />
+        <Text>
+          {this.state.groupName}
+        </Text>
 
         <TabView
           navigationState={this.state}
@@ -52,13 +52,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  logo: {
-    width: 110,
-    height: 60,
-  },
   scene: {
     flex: 1,
   },
 })
 
-export default HomeMain;
+export default Group;

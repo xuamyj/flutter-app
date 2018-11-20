@@ -1,27 +1,18 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Dimensions,
-  TouchableOpacity
-} from 'react-native';
-import {
-  TabView,
-  TabBar,
-  SceneMap
-} from 'react-native-tab-view';
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { Icon, Avatar } from 'react-native-elements';
+import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 import firebase from 'firebase';
 
 const GivenRoute = () => (
-  <View style={[styles.scene, styles.given]} />
+  <View style={styles.scene} />
 );
 const ReceivedRoute = () => (
-  <View style={[styles.scene, styles.received]} />
+  <View style={styles.scene} />
 );
 const PostedRoute = () => (
-  <View style={[styles.scene, styles.posted]} />
+  <View style={styles.scene} />
 );
 
 class ProfileMain extends React.Component {
@@ -32,18 +23,34 @@ class ProfileMain extends React.Component {
       { key: 'received', title: 'Received' },
       { key: 'posted', title: 'Posted' },
     ],
+    userName: 'Amy',
+    userPicUrl: 'http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg',
   };
 
-  onPress = () => {
+  onPressSettings = () => {
     this.props.navigation.navigate('Settings', {});
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.onPress}>
-          <Text style={styles.buttonText}>Settings</Text>
+        <TouchableOpacity onPress={this.onPressSettings}>
+          <Icon
+            name='settings'
+            color='#49B6BB'
+          />
         </TouchableOpacity>
+
+        <Avatar
+          medium
+          rounded
+          source={{uri: this.state.userPicUrl}}
+          activeOpacity={0.7}
+        />
+        <Text>
+          {this.state.userName}
+        </Text>
+
         <TabView
           navigationState={this.state}
           renderScene={SceneMap({
@@ -52,33 +59,27 @@ class ProfileMain extends React.Component {
             posted: PostedRoute
           })}
           onIndexChange={index => this.setState({ index })}
-          initialLayout={{ width: Dimensions.get('window').width }}
+          initialLayout={{width: Dimensions.get('window').width}}
+          renderTabBar={props =>
+            <TabBar
+              {...props}
+              indicatorStyle={{backgroundColor: '#49B6BB'}}
+              labelStyle={{color: 'gray'}}
+              style={{backgroundColor: 'white'}}
+            />
+          }
         />
       </View>
     );
   }
 }
 
-const offset = 24;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
   scene: {
     flex: 1,
-  },
-  given: {
-    backgroundColor: '#F8C1D8'
-  },
-  received: {
-    backgroundColor: '#CFCB9C'
-  },
-  posted: {
-    backgroundColor: '#B6DCE2'
-  },
-  buttonText: {
-    marginLeft: offset,
-    fontSize: offset,
   },
 });
 

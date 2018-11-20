@@ -238,9 +238,13 @@ It was a decent amount of fiddling so committing again.
 
 --------------------------------
 
+Now that I know how to connect the Firebase stuff with the frontend stuff, going to work on layout for a bit. So everything should be in the components/ folder.
 
+Okay, a bunch of layout was added (ofc, is very ugly and doesn't actually work).
 
+Committing, and then will work on actual functionality :)
 
+Afternoon update: Amending commit with better organized code
 
 
 

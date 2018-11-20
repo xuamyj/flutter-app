@@ -1,35 +1,71 @@
-import React, { Component } from 'react';
-import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    StyleSheet,
-} from 'react-native';
+import React from 'react';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { List, ListItem, SearchBar, Icon } from 'react-native-elements';
 
-class ChatMain extends Component {
-  state = { name: '' }
+class ChatMain extends React.Component {
+  state = {
+    chatList: [
+      {
+        name: 'Cynthia',
+        picUrl: 'https://i.imgur.com/z7fgB60.jpg',
+        key: '11221212',
+        subtitle: 'Cynthia: let\'s meet by the pond'
+      },
+      {
+        name: 'Belle',
+        picUrl: 'https://vignette.wikia.nocookie.net/disneyheroines/images/7/7c/Belle.jpg',
+        key: '33488788',
+        subtitle: 'You: Okay, see you in a bit!'
+      },
+    ]
+  };
 
-  onPress = () => {
-    this.props.navigation.navigate('Chat', { name: this.state.name });
+  onChangeSearchText = () => null; // search; do last
+  onClearSearchText = () => null; // search; do last
+
+  onPressNewChat = () => {
+    this.props.navigation.navigate('Chat', { name: 'TODO fix chat' });
   }
 
-  onChangeText = name => this.setState({ name });
+  onPressChat = () => {
+    this.props.navigation.navigate('Chat', { name: 'TODO fix chat' });
+  }
 
   render() {
     return (
-      <View>
-      <Text style={styles.title}>Enter your name:</Text>
-      <TextInput
-          onChangeText={this.onChangeText}
-          style={styles.nameInput}
-          placeHolder="Higgs Boson"
-          value={this.state.name}
+      <View style={styles.container}>
+        <TouchableOpacity onPress={this.onPressNewChat}>
+          <Icon
+            name='message'
+            color='#49B6BB'
+          />
+        </TouchableOpacity>
+
+        <Text>
+          Chats
+        </Text>
+
+        <SearchBar
+          lightTheme
+          onChangeText={this.onChangeSearchText}
+          onClearText={this.onClearSearchText}
+          placeholder='Search chats...'
         />
 
-      <TouchableOpacity onPress={this.onPress}>
-        <Text style={styles.buttonText}>Next</Text>
-      </TouchableOpacity>
+        <List containerStyle={styles.chatList}>
+          {
+            this.state.chatList.map((l) => (
+              <ListItem
+                roundAvatar
+                key={l.key}
+                title={l.name}
+                subtitle={l.subtitle}
+                avatar={{uri:l.picUrl}}
+                onPress={this.onPressChat}
+              />
+            ))
+          }
+        </List>
       </View>
     );
   }
@@ -37,22 +73,12 @@ class ChatMain extends Component {
 
 const offset = 24;
 const styles = StyleSheet.create({
-  nameInput: {
-    height: offset * 2,
-    margin: offset,
-    paddingHorizontal: offset,
-    borderColor: '#111111',
-    borderWidth: 1,
+  container: {
+    flex: 1,
   },
-  title: {
-    marginTop: offset,
-    marginLeft: offset,
-    fontSize: offset,
-  },
-  buttonText: {
-    marginLeft: offset,
-    fontSize: offset,
-  },
+  chatList: {
+    marginBottom: 20,
+  }
 });
 
 export default ChatMain;

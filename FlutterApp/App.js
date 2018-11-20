@@ -1,6 +1,8 @@
 // Import the screens
 import HomeMain from './components/HomeMain';
 import GroupsMain from './components/GroupsMain';
+import Group from './components/Group';
+import GroupCreate from './components/GroupCreate';
 import PostMain from './components/PostMain';
 import ChatMain from './components/ChatMain';
 import Chat from './components/Chat';
@@ -27,7 +29,9 @@ const HomeStack = createStackNavigator({
 
 // Create the Groups navigator
 const GroupsStack = createStackNavigator({
-  Groups: { screen: GroupsMain },
+  GroupsMain: { screen: GroupsMain },
+  Group: { screen: Group },
+  GroupCreate: { screen: GroupCreate },
 });
 
 // Create the Post navigator
@@ -49,11 +53,15 @@ const ProfileStack = createStackNavigator({
 
 // Bottom tab
 const AppNavigator = createBottomTabNavigator({
-  Home: HomeStack,
-  Groups: GroupsStack,
-  Post: PostStack,
-  Chat: ChatStack,
-  Profile: ProfileStack,
+  HOME: HomeStack,
+  GROUPS: GroupsStack,
+  POST: PostStack,
+  CHAT: ChatStack,
+  PROFILE: ProfileStack,
+}, {
+  tabBarOptions: {
+    activeTintColor: '#49B6BB',
+  }
 });
 
 // Authentication screens
