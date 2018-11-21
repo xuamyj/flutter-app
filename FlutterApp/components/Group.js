@@ -2,11 +2,14 @@ import React from 'react';
 import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
+import Stories from './subcomponents/Stories'
+import Treasures from './subcomponents/Treasures'
+
 const StoriesRoute = () => (
-  <View style={styles.scene} />
+  <Stories />
 );
 const TreasuresRoute = () => (
-  <View style={styles.scene} />
+  <Treasures />
 );
 
 class Group extends React.Component {

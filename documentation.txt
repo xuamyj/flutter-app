@@ -246,6 +246,18 @@ Committing, and then will work on actual functionality :)
 
 Afternoon update: Amending commit with better organized code
 
+--------------------------------
+
+Added subcomponents: Stories and Treasures (!)
+Wrote a lot of test data. Thus far, everything is still hardcoded. There are no props being passed at any point of this app, lol.
+Put them in HomeMain and Groups, but without filtering (ie. in Groups you still see all the items)
+
+Yay! It is starting to take shape :D
+
+--------------------------------
+
+
+
 
 
 
