@@ -256,6 +256,30 @@ Yay! It is starting to take shape :D
 
 --------------------------------
 
+Okay, time to categorize some things.
+Everything non-layout that needs to be done at this point:
+
+Basic functionality
+- Use camera to upload picture
+- Connect things to backend
+- Pass props so that the right stories/treasures/groups show up
+
+Item lifecycle functionality
+- Treasures should be modals
+- Add button for starting a chat
+- Figure out chat library + make chats between 2 people
+- Add button for marking an item as given
+- The entire flow for sending in your update
+
+Cleanliness
+- Error messages for forms
+- Toasts for success messages for forms ()
+- Autocomplete add to group ()
+- Notif red circle for unfinished items
+
+See README.md for things we're just not gonna think about for the time being
+
+--------------------------------
 
 
 

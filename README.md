@@ -27,3 +27,7 @@ Tutorial: "React Native & Firebase: Authentication" - https://medium.com/react-n
   * Change email/password for logging in
   * Forgot password reset for logging in
   * Search functionality
+  * Edit functionality
+    * Edit stories/treasures
+    * Delete treasures
+    * Add/remove people from a group
