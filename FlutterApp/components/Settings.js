@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet, Button, Image } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, Avatar } from 'react-native-elements'
+import { ImagePicker, Permissions } from 'expo';
 
 import firebase from 'firebase';
 
@@ -16,7 +17,6 @@ class Settings extends React.Component {
   }
 
   onChangeInputName = (inputName) => {this.setState({ inputName: inputName })}
-  onChangeInputPicUrl = (inputPicUrl) => {this.setState({ inputPicUrl: inputPicUrl })}
 
   onPressUpdateProfile = () => {
     // TODO backend
@@ -32,6 +32,16 @@ class Settings extends React.Component {
     }).catch(function(error) {
       // TODO toast
     })
+  }
+
+  onPressCamera = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status === 'granted') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images
+      });
+      {this.setState({ inputPicUrl: result.uri })}
+    }
   }
 
   render() {
@@ -51,9 +61,16 @@ class Settings extends React.Component {
         <FormInput onChangeText={this.onChangeInputName}/>
         <FormValidationMessage>{this.state.errorMsg}</FormValidationMessage>
 
-        <FormLabel>Profile picture</FormLabel>
-        <FormInput onChangeText={this.onChangeInputPicUrl}/>
-        <FormValidationMessage>TODO cameraroll</FormValidationMessage>
+        <FormLabel>Picture</FormLabel>
+        <Button
+          title="Upload Photo"
+          color="#49B6BB"
+          onPress={this.onPressCamera}
+        />
+        <Image
+          style={styles.imagePreview}
+          source={{uri: this.state.inputPicUrl}}
+        />
 
         <Button
           title="Update profile"
@@ -82,7 +99,11 @@ class Settings extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  }
+  },
+  imagePreview: {
+    width: 80,
+    height: 80,
+  },
 })
 
 export default Settings;

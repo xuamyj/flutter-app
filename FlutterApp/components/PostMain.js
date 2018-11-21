@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, Picker } from 'react-native';
+import { Text, View, StyleSheet, Button, Picker, Image } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, CheckBox } from 'react-native-elements'
+import { ImagePicker, Permissions } from 'expo';
 
 class PostMain extends React.Component {
   state = {
@@ -28,7 +29,6 @@ class PostMain extends React.Component {
 
   onChangeInputItemName = (inputItemName) => {this.setState({ inputItemName: inputItemName })}
   onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })}
-  onChangeInputItemPicUrl = (inputItemPicUrl) => {this.setState({ inputItemPicUrl: inputItemPicUrl })}
 
   onPressPost = () => {
     // TODO backend
@@ -36,6 +36,16 @@ class PostMain extends React.Component {
     console.log(this.state.inputItemDescription);
     console.log(this.state.inputItemPicUrl);
     console.log(this.state.inputGroupKey);
+  }
+
+  onPressCamera = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status === 'granted') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images
+      });
+      {this.setState({ inputItemPicUrl: result.uri })}
+    }
   }
 
   render() {
@@ -50,8 +60,15 @@ class PostMain extends React.Component {
         <FormValidationMessage>{this.state.errorMsgName}</FormValidationMessage>
 
         <FormLabel>Picture</FormLabel>
-        <FormInput onChangeText={this.onChangeInputPicUrl}/>
-        <FormValidationMessage>TODO cameraroll</FormValidationMessage>
+        <Button
+          title="Upload Photo"
+          color="#49B6BB"
+          onPress={this.onPressCamera}
+        />
+        <Image
+          style={styles.imagePreview}
+          source={{uri: this.state.inputItemPicUrl}}
+        />
 
         <FormLabel>Description</FormLabel>
         <FormInput onChangeText={this.onChangeInputItemDescription}/>
@@ -82,7 +99,11 @@ class PostMain extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  }
+  },
+  imagePreview: {
+    width: 80,
+    height: 80,
+  },
 })
 
 export default PostMain;

@@ -281,7 +281,7 @@ See README.md for things we're just not gonna think about for the time being
 
 --------------------------------
 
-
+[check] Use camera to upload picture
 
 
 
