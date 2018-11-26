@@ -283,6 +283,26 @@ See README.md for things we're just not gonna think about for the time being
 
 [check] Use camera to upload picture
 
+--------------------------------
+
+Working on: Connect things to backend
+
+1. Fixed userName part of onPressUpdateProfile
+2. Working on userPicUrl part of onPressUpdateProfile
+
+Copied code from someone else's example [https://github.com/expo/firebase-storage-upload-example/blob/master/App.js] which was linked to from someone's tutorial [https://medium.com/@wcandillon/uploading-images-to-firebase-with-expo-a913c9f8e98d]
+
+Fetch didn't work -> https://github.com/expo/firebase-storage-upload-example/issues/13
+
+
+
+
+
+
+
+
+
+
 
 
 

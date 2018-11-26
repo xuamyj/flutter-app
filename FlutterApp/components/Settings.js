@@ -9,8 +9,8 @@ import Fire from '../Fire';
 
 class Settings extends React.Component {
   state = {
-    userName: 'Amy',
-    userPicUrl: 'http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg',
+    userName: '',
+    userPicUrl: '',
     inputName: '',
     inputPicUrl: '',
     errorMsg: 'Error message placeholder',
@@ -18,20 +18,33 @@ class Settings extends React.Component {
 
   onChangeInputName = (inputName) => {this.setState({ inputName: inputName })}
 
-  onPressUpdateProfile = () => {
-    // TODO backend
-    console.log(this.state.inputName);
-    console.log(this.state.inputPicUrl);
+  onPressUpdateDisplayName = () => {
+    Fire.shared.updateUserName(Fire.shared.uid, this.state.inputName, () => {
+      this.setState({ userName: this.state.inputName });
+      // TODO toast
+    }, () => {
+      // TODO toast
+    });
+  }
+
+  onPressUpdateProfilePicture = async () => {
+    uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputPicUrl);
+    Fire.shared.updateUserPicUrl(Fire.shared.uid, uploadUrl, () => {
+      this.setState({userPicUrl: uploadUrl});
+      // TODO toast
+    }, () => {
+      // TODO toast
+    });
   }
 
   onSignout = () => {
-    // amy side note: ahh, javascript without arrows... i missed you!
-    firebase.auth().signOut().then(function() {
-      // Sign-out successful.
-      // don't need to do anything because firebase.auth().onAuthStateChanged() in AuthLoading.js
-    }).catch(function(error) {
-      // TODO toast
-    })
+    // // amy side note: ahh, javascript without arrows... i missed you!
+    // firebase.auth().signOut().then(function() {
+    //   // Sign-out successful.
+    //   // don't need to do anything because firebase.auth().onAuthStateChanged() in AuthLoading.js
+    // }).catch(function(error) {
+    //   // TODO toast
+    // })
   }
 
   onPressCamera = async () => {
@@ -61,21 +74,30 @@ class Settings extends React.Component {
         <FormInput onChangeText={this.onChangeInputName}/>
         <FormValidationMessage>{this.state.errorMsg}</FormValidationMessage>
 
+        <Button
+          title="Update display name"
+          color="#49B6BB"
+          onPress={this.onPressUpdateDisplayName}
+        />
+
         <FormLabel>Picture</FormLabel>
         <Button
           title="Upload Photo"
           color="#49B6BB"
           onPress={this.onPressCamera}
         />
-        <Image
-          style={styles.imagePreview}
-          source={{uri: this.state.inputPicUrl}}
-        />
+        {
+          this.state.inputPicUrl != '' &&
+          <Image
+            style={styles.imagePreview}
+            source={{uri: this.state.inputPicUrl}}
+          />
+        }
 
         <Button
-          title="Update profile"
+          title="Update profile picture"
           color="#49B6BB"
-          onPress={this.onPressUpdateProfile}
+          onPress={this.onPressUpdateProfilePicture}
         />
 
         <Button
@@ -88,9 +110,14 @@ class Settings extends React.Component {
   }
 
   componentDidMount() {
-    Fire.shared.getUserDisplayName(Fire.shared.uid, result => {
+    Fire.shared.getUserName(Fire.shared.uid, result => {
       this.setState(previousState => ({
-        displayName: result
+        userName: result
+      }))
+    })
+    Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userPicUrl: result
       }))
     })
   }

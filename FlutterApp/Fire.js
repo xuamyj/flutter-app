@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import uuid from 'uuid';
 
 class Fire {
   constructor() {
@@ -104,28 +105,37 @@ class Fire {
   // DATABASE: PHOTOS
   // ----------------
 
-  // // save picture, return url of picture
-  // function writeImage() {
+  uploadImageAsync = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const ref = firebase
+      .storage()
+      .ref()
+      .child(uuid.v4());
 
-  // }
+    const snapshot = await ref.put(blob);
+
+    const downloadURL = await snapshot.ref.getDownloadURL();
+    return downloadURL;
+  }
 
   // ---------------
   // DATABASE: USERS
   // ---------------
 
   // save uid + email + display name the first time
-  writeUserData(userId, email, displayName) {
+  writeUserData(userId, email, userName) {
     firebase.database().ref('users/' + userId).set({
       email: email,
-      display_name: displayName,
+      display_name: userName,
       profile_picture : ''
     });
   }
 
   // update display name
-  updateUserDisplayName(userId, displayName, successCallback, errorCallback) {
+  updateUserName(userId, userName, successCallback, errorCallback) {
     firebase.database().ref('users/' + userId).update({
-      display_name: displayName,
+      display_name: userName,
     }).then(function() {
       successCallback();
     }).catch(function(error) {
@@ -134,9 +144,9 @@ class Fire {
   }
 
   // update profile picture
-  updateUserProfilePic(userId, imageUrl, successCallback, errorCallback) {
+  updateUserPicUrl(userId, userPicUrl, successCallback, errorCallback) {
     firebase.database().ref('users/' + userId).update({
-      profile_picture : imageUrl
+      profile_picture : userPicUrl
     }).then(function() {
       successCallback();
     }).catch(function(error) {
@@ -145,18 +155,18 @@ class Fire {
   }
 
   // get display name from uid
-  getUserDisplayName(userId, successCallback) {
+  getUserName(userId, successCallback) {
     return firebase.database().ref('users/' + userId).once('value').then(function(snapshot) {
-      var displayName = (snapshot.val() && snapshot.val().display_name) || '';
-      successCallback(displayName);
+      var userName = (snapshot.val() && snapshot.val().display_name) || '';
+      successCallback(userName);
     });
   }
 
   // get profile picture from uid
-  getUserProfilePic(userId, successCallback) {
+  getUserPicUrl(userId, successCallback) {
     return firebase.database().ref('users/' + userId).once('value').then(function(snapshot) {
-      var imageUrl = (snapshot.val() && snapshot.val().profile_picture) || '';
-      successCallback(imageUrl);
+      var userPicUrl = (snapshot.val() && snapshot.val().profile_picture) || '';
+      successCallback(userPicUrl);
     });
   }
 
@@ -173,3 +183,82 @@ class Fire {
 
 Fire.shared = new Fire();
 export default Fire;
+
+
+// -------------------------------------------
+// copied from online due to fetch not working
+// -------------------------------------------
+
+;(function(self) {
+    'use strict'
+
+    function parseHeaders(rawHeaders) {
+        var headers = new Headers()
+        var preProcessedHeaders = rawHeaders.replace(/\r?\n[\t ]+/g, ' ')
+        preProcessedHeaders.split(/\r?\n/).forEach(function(line) {
+            var parts = line.split(':')
+            var key = parts.shift().trim()
+            if (key) {
+                var value = parts.join(':').trim()
+                headers.append(key, value)
+            }
+        })
+        return headers
+    }
+
+    var supportsBlob =
+        'FileReader' in self &&
+        'Blob' in self &&
+        (function() {
+            try {
+                new Blob()
+                return true
+            } catch (e) {
+                return false
+            }
+        })()
+
+    self.fetch = function(input, init) {
+        return new Promise(function(resolve, reject) {
+            var request = new Request(input, init)
+            var xhr = new XMLHttpRequest()
+
+            xhr.onload = function() {
+                var options = {
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    headers: parseHeaders(xhr.getAllResponseHeaders() || '')
+                }
+                options.url =
+                    'responseURL' in xhr ? xhr.responseURL : options.headers.get('X-Request-URL')
+                var body = 'response' in xhr ? xhr.response : xhr.responseText
+                resolve(new Response(body, options))
+            }
+
+            xhr.onerror = function() {
+                reject(new TypeError('Network request failed'))
+            }
+
+            xhr.ontimeout = function() {
+                reject(new TypeError('Network request failed'))
+            }
+
+            xhr.open(request.method, request.url, true)
+
+            if (request.credentials === 'include') {
+                xhr.withCredentials = true
+            } else if (request.credentials === 'omit') {
+                xhr.withCredentials = false
+            }
+            if ('responseType' in xhr && supportsBlob) {
+                xhr.responseType = 'blob'
+            }
+            request.headers.forEach(function(value, name) {
+                xhr.setRequestHeader(name, value)
+            })
+
+            xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+        })
+    }
+    self.fetch.polyfill = true
+})(typeof self !== 'undefined' ? self : this)
