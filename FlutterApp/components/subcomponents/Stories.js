@@ -1,6 +1,10 @@
-import React from 'react';
-import { Text, View, StyleSheet, Button, ScrollView } from 'react-native';
+import React, {Component} from 'react';
+import { Text, View, StyleSheet, Button, ScrollView, Dimensions, Image, Animated } from 'react-native';
 import { Card, Avatar, SearchBar } from 'react-native-elements';
+import { Metrics, Colors } from '../Themes';
+
+
+const {height, width} = Dimensions.get('window');
 
 class Stories extends React.Component {
 
@@ -57,52 +61,88 @@ class Stories extends React.Component {
         <ScrollView>
           {
             this.state.storyList.map((l) => (
-              <Card title={l.itemName} key="{l.key}">
-                {
+              <Animated.View style={styles.card}
+                             key="{l.key}">
+                <View style={styles.header}>
                   <View>
-                    <Text>
+                    <Text style = {styles.titleheader}> 
+                      {l.itemName}
+                    </Text>
+                  </View>
+                  <View>
+                    <Text style = {styles.groupheader}> 
                       {l.groupName}
                     </Text>
+                  </View>
+                </View>
+                <Image
+                style={styles.image}
+                source={{uri: l.giveItemPicUrl}}>
+                </Image>
+                <View style={styles.caption}>
+                  <Image style={styles.smallImageWrapper}
+                        source={{uri: l.giveUserPicUrl}}>
+                  </Image>
+                  <View style={styles.captiontext}>
+                    <Text>
+                      <Text style={{fontWeight: "bold"}}> {l.giveUserName}:</Text>
+                      <Text> {l.giveItemDescription}</Text>
+                    </Text>
+                  </View>
+                </View>
+              </Animated.View>
+              
+              /*
+              <Card 
+              title={l.itemName} 
+              key="{l.key}"
+              >
+                {
+                  <View>
+                    <Text style = {{color: 'grey'}}> {l.groupName}</Text>
 
-                    <Avatar
+                    <View style={styles.group}>
+                      <Avatar
                       xlarge
                       source={{uri: l.giveItemPicUrl}}
                       activeOpacity={0.7}
-                    />
-                    <Avatar
+                      />
+                      <View style={styles.caption}>
+                        <Avatar
+                          medium
+                          rounded
+                          source={{uri: l.giveUserPicUrl}}
+                          activeOpacity={0.7}
+                        />
+                        <Text>
+                          {l.giveUserName}: {l.giveItemDescription}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <View style={styles.group}>
+                      <Avatar
                       xlarge
                       source={{uri: l.recvItemPicUrl}}
                       activeOpacity={0.7}
-                    />
-
-                    <Avatar
-                      medium
-                      rounded
-                      source={{uri: l.giveUserPicUrl}}
-                      activeOpacity={0.7}
-                    />
-                    <Text>
-                      {l.giveUserName}
-                    </Text>
-                    <Text>
-                      {l.giveItemDescription}
-                    </Text>
-
-                    <Avatar
-                      medium
-                      rounded
-                      source={{uri: l.recvUserPicUrl}}
-                      activeOpacity={0.7}
-                    />
-                    <Text>
-                      {l.recvUserName}
-                    </Text>
-                    <Text>
-                      {l.recvItemDescription}
-                    </Text>
+                      />
+                      <View style={styles.caption}>
+                        <Avatar
+                        medium
+                        rounded
+                        source={{uri: l.recvUserPicUrl}}
+                        activeOpacity={0.7}
+                        />
+                        <Text>
+                          {l.recvUserName}: {l.recvItemDescription}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
                 }
               </Card>
+              */
+
             ))
           }
         </ScrollView>
@@ -114,7 +154,65 @@ class Stories extends React.Component {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 50,
-  }
+  },
+  group: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+
+  },
+  caption: {
+    flex: 1,
+    flexDirection: 'row',
+    width: width * 0.8,
+    justifyContent: 'space-between',
+  },
+  captiontext: {
+    margin: 5,
+  },
+  card: {
+    backgroundColor: 'white',
+    borderRadius: Metrics.doubleBaseMargin,
+    borderColor: Colors.border,
+    borderWidth: Metrics.borderWidth,
+    margin: Metrics.baseMargin,
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  image: {
+    width: Metrics.screenWidth * 0.9,
+    height: Metrics.screenWidth * 1.05,
+    resizeMode: 'contain',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  header: {
+    flex: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  titleheader: {
+    fontSize: 24,
+    fontWeight: 'bold'
+  },
+  groupheader: {
+    fontSize: 24,
+  },
+    smallImageWrapper: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 40,
+    height: 40,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    margin: 5,
+  },
 })
 
 export default Stories;
