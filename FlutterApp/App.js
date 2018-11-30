@@ -1,5 +1,3 @@
-import { Image } from 'react-native';
-
 // Import the screens
 import HomeMain from './components/HomeMain';
 import GroupsMain from './components/GroupsMain';
