@@ -1,6 +1,8 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, Button, FlatList } from 'react-native';
 import { Card, Avatar, SearchBar } from 'react-native-elements';
+import { Metrics, Colors } from '../Themes';
+import TreasureCard from './TreasureCard';
 
 class Treasures extends React.Component {
 
@@ -66,45 +68,30 @@ class Treasures extends React.Component {
   onChangeSearchText = () => null; // search; do last
   onClearSearchText = () => null; // search; do last
 
+  renderItem({item, index}) {
+    return (
+      <TreasureCard treasure={item} />
+    )
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <SearchBar
+          round
           lightTheme
+          containerStyle={styles.searchBarContainer}
+          inputStyle={styles.searchBar}
           onChangeText={this.onChangeSearchText}
           onClearText={this.onClearSearchText}
-          placeholder='Search treasures...'
+          placeholder='Search stories...'
         />
 
-        <ScrollView>
-          {
-            this.state.treasureList.map((l) => (
-              <Card title={l.itemName} key="{l.key}">
-                {
-                  <View>
-                    <Text>
-                      {l.groupName}
-                    </Text>
-                    <Avatar
-                      medium
-                      rounded
-                      source={{uri: l.userPicUrl}}
-                      activeOpacity={0.7}
-                    />
-                    <Text>
-                      {l.userName}
-                    </Text>
-                    <Avatar
-                      xlarge
-                      source={{uri: l.itemPicUrl}}
-                      activeOpacity={0.7}
-                    />
-                  </View>
-                }
-              </Card>
-            ))
-          }
-        </ScrollView>
+        <FlatList
+          style={styles.cardsContainer}
+          data={this.state.treasureList}
+          renderItem={this.renderItem}
+          numColumns={2} />
       </View>
     );
   }
@@ -113,7 +100,17 @@ class Treasures extends React.Component {
 const styles = StyleSheet.create({
   container: {
     marginBottom: 50,
-  }
+  },
+  searchBarContainer: {
+    backgroundColor: 'white',
+  },
+  searchBar: {
+    backgroundColor: Colors.background,
+    fontSize: 16,
+  },
+  cardsContainer: {
+    margin: Metrics.smallMargin,
+  },
 })
 
 export default Treasures;

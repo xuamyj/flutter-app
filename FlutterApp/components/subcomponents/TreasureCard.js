@@ -5,13 +5,10 @@ import { Metrics, Colors } from '../Themes';
 
 const {height, width} = Dimensions.get('window');
 
-export default class StoryCard extends React.Component {
+export default class TreasureCard extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state={
-      isGiver: true,
-    }
     this.handlePressIn = this.handlePressIn.bind(this);
     this.handlePressOut = this.handlePressOut.bind(this);
   }
@@ -22,7 +19,7 @@ export default class StoryCard extends React.Component {
 
   handlePressIn() {
     Animated.spring(this.animatedValue, {
-      toValue: .98
+      toValue: .97
     }).start();
   }
 
@@ -34,29 +31,22 @@ export default class StoryCard extends React.Component {
     }).start()
   }
 
-  switch = () => {
-    this.setState({
-      isGiver: !this.state.isGiver,
-    });
-
+  open = () => {
   }
 
   render() {
     const animatedStyle = {
       transform: [{scale: this.animatedValue}]
     }
-    var itemName = this.props.story.itemName;
-    var groupName = this.props.story.groupName;
-    var itemDescription = (this.state.isGiver === true) ? this.props.story.giveItemDescription : this.props.story.recvItemDescription;
-    var activeUserName = (this.state.isGiver === true) ? this.props.story.giveUserName : this.props.story.recvUserName;
-    var itemPicURL = (this.state.isGiver === true) ? this.props.story.giveItemPicUrl : this.props.story.recvItemPicUrl;
-    var giveUserPicUrl = this.props.story.giveUserPicUrl;
-    var recvUserPicUrl = this.props.story.recvUserPicUrl;
-    var giveUserPicStyle = (this.state.isGiver === true) ? styles.activePicStyle : styles.inactivePicStyle;
-    var recvUserPicStyle = (this.state.isGiver === true) ? styles.inactivePicStyle : styles.activePicStyle;
+    var itemName = this.props.treasure.itemName;
+    var groupName = this.props.treasure.groupName;
+    var itemDescription = this.props.treasure.itemDescription;
+    var userName = this.props.treasure.userName;
+    var itemPicURL = this.props.treasure.itemPicUrl;
+    var userPicUrl = this.props.treasure.userPicUrl;
 
     return  (
-      <TouchableWithoutFeedback onPress={this.switch} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
+      <TouchableWithoutFeedback onPress={this.open} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
         <Animated.View style={[styles.card, animatedStyle]}>
           <View style={styles.cardTitle}>
             <Text style={styles.itemName}>{itemName}</Text>
@@ -66,11 +56,8 @@ export default class StoryCard extends React.Component {
             <Image style={styles.image} source={{uri:itemPicURL}} />
           </View>
           <View style={styles.cardInfo}>
-            <View style={styles.userPics}>
-              <Avatar containerStyle={[styles.propic, giveUserPicStyle]} size="medium" rounded source={{uri: giveUserPicUrl}} />
-              <Avatar containerStyle={[styles.propic, recvUserPicStyle]} size="medium" rounded source={{uri: recvUserPicUrl}} />
-            </View>
-            <Text><Text style={styles.username}>{activeUserName}:</Text> {itemDescription}</Text>
+            <Avatar containerStyle={styles.propic} size="small" rounded source={{uri: userPicUrl}} />
+            <Text style={styles.username}>{userName}</Text>
           </View>
         </Animated.View>
       </TouchableWithoutFeedback>
@@ -89,26 +76,27 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: 'white',
-    borderRadius: Metrics.baseMargin,
+    borderRadius: Metrics.baseMargin * 0.75,
     shadowColor: Colors.dark,
-    shadowOffset: {width: 0, height: 3},
+    shadowOffset: {width: Metrics.smallMargin, height: Metrics.smallMargin},
     shadowOpacity: 1.0,
     shadowRadius: 5,
     elevation: 5,
-    margin: Metrics.baseMargin,
+    margin: Metrics.smallMargin,
+    width: width * 0.5 - Metrics.smallMargin * 3,
   },
   image: {
     width: '100%',
-    height: 300,
+    height: 150,
     resizeMode: 'cover',
   },
   itemName: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '500',
     color: Colors.dark,
   },
   groupName: {
-    fontSize: 13,
+    fontSize: 15,
     color: Colors.dark,
   },
   badgeStyle: {
@@ -117,15 +105,11 @@ const styles = StyleSheet.create({
   },
   cardInfo: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    paddingVertical: Metrics.baseMargin,
-    paddingHorizontal: Metrics.baseMargin,
-  },
-  userPics: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingVertical: Metrics.baseMargin,
+    paddingHorizontal: Metrics.baseMargin,
   },
   propic: {
     marginRight: Metrics.baseMargin,
@@ -133,11 +117,6 @@ const styles = StyleSheet.create({
   },
   username: {
     fontWeight: 'bold',
+    color: Colors.dark,
   },
-  activePicStyle: {
-    opacity: 1.0,
-  },
-  inactivePicStyle: {
-    opacity: 0.3,
-  }
 })
