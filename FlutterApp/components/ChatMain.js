@@ -31,6 +31,10 @@ class ChatMain extends React.Component {
     this.props.navigation.navigate('Chat', { name: 'TODO fix chat' });
   }
 
+  static navigationOptions = {
+    title: 'Messages',
+  };
+
   render() {
     return (
       <View style={styles.container}>

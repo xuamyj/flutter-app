@@ -34,6 +34,10 @@ class GroupsMain extends React.Component {
     this.props.navigation.navigate('Group', {});
   }
 
+  static navigationOptions = {
+    title: 'Groups',
+  };
+
   render() {
     return (
       <View style={styles.container}>

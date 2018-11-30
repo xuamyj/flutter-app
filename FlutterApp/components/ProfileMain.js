@@ -31,6 +31,10 @@ class ProfileMain extends React.Component {
     this.props.navigation.navigate('Settings', {});
   }
 
+  static navigationOptions = {
+    title: 'Profile',
+  };
+
   render() {
     return (
       <View style={styles.container}>

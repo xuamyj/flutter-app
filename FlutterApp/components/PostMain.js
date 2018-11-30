@@ -52,6 +52,10 @@ class PostMain extends React.Component {
     }
   }
 
+  static navigationOptions = {
+    title: 'Give',
+  };
+
   render() {
     let itemName;
     let description;
