@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Text, View, StyleSheet, Button, ScrollView, Dimensions, Image, Animated } from 'react-native';
 import { Card, Avatar, SearchBar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
+import StoryCard from './StoryCard';
 
 
 const {height, width} = Dimensions.get('window');
@@ -52,7 +53,10 @@ class Stories extends React.Component {
     return (
       <View style={styles.container}>
         <SearchBar
+          round
           lightTheme
+          containerStyle={styles.searchBarContainer}
+          inputStyle={styles.searchBar}
           onChangeText={this.onChangeSearchText}
           onClearText={this.onClearSearchText}
           placeholder='Search stories...'
@@ -61,88 +65,7 @@ class Stories extends React.Component {
         <ScrollView>
           {
             this.state.storyList.map((l) => (
-              <Animated.View style={styles.card}
-                             key="{l.key}">
-                <View style={styles.header}>
-                  <View>
-                    <Text style = {styles.titleheader}> 
-                      {l.itemName}
-                    </Text>
-                  </View>
-                  <View>
-                    <Text style = {styles.groupheader}> 
-                      {l.groupName}
-                    </Text>
-                  </View>
-                </View>
-                <Image
-                style={styles.image}
-                source={{uri: l.giveItemPicUrl}}>
-                </Image>
-                <View style={styles.caption}>
-                  <Image style={styles.smallImageWrapper}
-                        source={{uri: l.giveUserPicUrl}}>
-                  </Image>
-                  <View style={styles.captiontext}>
-                    <Text>
-                      <Text style={{fontWeight: "bold"}}> {l.giveUserName}:</Text>
-                      <Text> {l.giveItemDescription}</Text>
-                    </Text>
-                  </View>
-                </View>
-              </Animated.View>
-              
-              /*
-              <Card 
-              title={l.itemName} 
-              key="{l.key}"
-              >
-                {
-                  <View>
-                    <Text style = {{color: 'grey'}}> {l.groupName}</Text>
-
-                    <View style={styles.group}>
-                      <Avatar
-                      xlarge
-                      source={{uri: l.giveItemPicUrl}}
-                      activeOpacity={0.7}
-                      />
-                      <View style={styles.caption}>
-                        <Avatar
-                          medium
-                          rounded
-                          source={{uri: l.giveUserPicUrl}}
-                          activeOpacity={0.7}
-                        />
-                        <Text>
-                          {l.giveUserName}: {l.giveItemDescription}
-                        </Text>
-                      </View>
-                    </View>
-
-                    <View style={styles.group}>
-                      <Avatar
-                      xlarge
-                      source={{uri: l.recvItemPicUrl}}
-                      activeOpacity={0.7}
-                      />
-                      <View style={styles.caption}>
-                        <Avatar
-                        medium
-                        rounded
-                        source={{uri: l.recvUserPicUrl}}
-                        activeOpacity={0.7}
-                        />
-                        <Text>
-                          {l.recvUserName}: {l.recvItemDescription}
-                        </Text>
-                      </View>
-                    </View>
-                  </View>
-                }
-              </Card>
-              */
-
+              <StoryCard story={l} />
             ))
           }
         </ScrollView>
@@ -204,7 +127,7 @@ const styles = StyleSheet.create({
   groupheader: {
     fontSize: 24,
   },
-    smallImageWrapper: {
+  smallImageWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
     width: 40,
@@ -213,6 +136,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: 5,
   },
+  searchBarContainer: {
+    backgroundColor: 'white',
+  },
+  searchBar: {
+    backgroundColor: Colors.background,
+    fontSize: 16,
+  }
 })
 
 export default Stories;

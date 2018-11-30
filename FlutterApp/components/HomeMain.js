@@ -24,11 +24,6 @@ class HomeMain extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Image
-          style={styles.logo}
-          source={{uri: 'https://i.imgur.com/2nFQl0r.png'}}
-        />
-
         <TabView
           navigationState={this.state}
           renderScene={SceneMap({
