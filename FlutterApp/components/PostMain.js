@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, Picker, Image } from 'react-native';
+import { Text, View, StyleSheet, Button, Picker, Image, Alert } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, CheckBox } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 
@@ -36,6 +36,13 @@ class PostMain extends React.Component {
     console.log(this.state.inputItemDescription);
     console.log(this.state.inputItemPicUrl);
     console.log(this.state.inputGroupKey);
+    Alert.alert(
+      'Item posted!',
+      ('You have posted ' + this.state.inputItemName + '!'),
+      [
+        {text: 'OK'},
+      ],
+    );
   }
 
   onPressCamera = async () => {
@@ -55,41 +62,44 @@ class PostMain extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>
-          Post a treasure
-        </Text>
+        <View style={styles.fillout}>
+          <Text>
+            Post a treasure
+          </Text>
 
-        <FormLabel>Name</FormLabel>
-        <FormInput onChangeText={this.onChangeInputItemName}/>
-        <FormValidationMessage>{this.state.errorMsgName}</FormValidationMessage>
+          <FormLabel>Name</FormLabel>
+          <FormInput onChangeText={this.onChangeInputItemName}/>
+          <FormValidationMessage>{this.state.errorMsgName}</FormValidationMessage>
 
-        <FormLabel>Picture</FormLabel>
-        <Button
-          title="Upload Photo"
-          color="#49B6BB"
-          onPress={this.onPressCamera}
-        />
-        <Image
-          style={styles.imagePreview}
-          source={{uri: this.state.inputItemPicUrl}}
-        />
+          <FormLabel>Picture</FormLabel>
+          <Button
+            title="Upload Photo"
+            color="#49B6BB"
+            onPress={this.onPressCamera}
+          />
+          <Image
+            style={styles.imagePreview}
+            source={{uri: this.state.inputItemPicUrl}}
+          />
 
-        <FormLabel>Description</FormLabel>
-        <FormInput onChangeText={this.onChangeInputItemDescription}/>
-        <FormValidationMessage>{this.state.errorMsgDescription}</FormValidationMessage>
+          <FormLabel>Description</FormLabel>
+          <FormInput onChangeText={this.onChangeInputItemDescription}/>
+          <FormValidationMessage>{this.state.errorMsgDescription}</FormValidationMessage>
 
-        <FormLabel>Post to</FormLabel>
-        <Picker
-          selectedValue={this.state.inputGroupKey}
-          style={{ height: 50, width: 100 }}
-          onValueChange={(itemValue, itemIndex) => this.setState({inputGroupKey: itemValue})}>
-          {
-            this.state.groupList.map((l) => (
-              <Picker.Item label={l.name} value={l.key} key={l.key} />
-            ))
-          }
-        </Picker>
-
+          <FormLabel>Post to</FormLabel>
+          <View style={styles.centerSection}>
+            <Picker
+              selectedValue={this.state.inputGroupKey}
+              style={{ height: 50, width: 100 }}
+              onValueChange={(itemValue, itemIndex) => this.setState({inputGroupKey: itemValue})}>
+              {
+                this.state.groupList.map((l) => (
+                  <Picker.Item label={l.name} value={l.key} key={l.key} />
+                ))
+              }
+            </Picker>
+          </View>
+        </View>
         <Button
           title="Post"
           color="#49B6BB"
@@ -103,6 +113,15 @@ class PostMain extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 5,
+  },
+  fillout: {
+    flex: 1,
+  },
+  centerSection: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   imagePreview: {
     width: 80,

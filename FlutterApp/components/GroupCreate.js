@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet, Button, Alert } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 
 class GroupCreate extends React.Component {
@@ -17,6 +17,13 @@ class GroupCreate extends React.Component {
     // TODO backend
     console.log(this.state.inputGroupName);
     console.log(this.state.inputGroupMembers);
+    Alert.alert(
+      'Group created!',
+      ('You have created the group ' + this.state.inputGroupName + '!'),
+      [
+        {text: 'OK'},
+      ],
+    );
   }
 
   render() {
@@ -25,15 +32,15 @@ class GroupCreate extends React.Component {
         <Text>
           Create a group
         </Text>
+          <View style={styles.fillout}>
+          <FormLabel>Group name</FormLabel>
+          <FormInput onChangeText={this.onChangeInputGroupName}/>
+          <FormValidationMessage>{this.state.errorMsgName}</FormValidationMessage>
 
-        <FormLabel>Group name</FormLabel>
-        <FormInput onChangeText={this.onChangeInputGroupName}/>
-        <FormValidationMessage>{this.state.errorMsgName}</FormValidationMessage>
-
-        <FormLabel>Members</FormLabel>
-        <FormInput onChangeText={this.onChangeInputGroupMembers}/>
-        <FormValidationMessage>{this.state.errorMsgMembers}</FormValidationMessage>
-
+          <FormLabel>Members</FormLabel>
+          <FormInput onChangeText={this.onChangeInputGroupMembers}/>
+          <FormValidationMessage>{this.state.errorMsgMembers}</FormValidationMessage>
+        </View>
         <Button
           title="Create"
           color="#49B6BB"
@@ -47,7 +54,11 @@ class GroupCreate extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  }
+    padding: 5,
+  },
+  fillout: {
+    flex: 1,
+  },
 })
 
 export default GroupCreate;

@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { Icon, Avatar } from 'react-native-elements';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+import { Metrics, Colors } from './Themes';
 
 import firebase from 'firebase';
 
@@ -38,22 +39,32 @@ class ProfileMain extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.onPressSettings}>
-          <Icon
-            name='settings'
-            color='#49B6BB'
-          />
-        </TouchableOpacity>
+        <View style={styles.topView}>
+          <View style={styles.topSection}>
+          </View>
+          <View style={styles.topSection}>
+            <Avatar
+            medium
+            rounded
+            source={{uri: this.state.userPicUrl}}
+            activeOpacity={0.7}
+            style={styles.icon}
+            />
+            <Text>
+              {this.state.userName}
+            </Text>
+          </View>
+          <View style={styles.topSection}>
+            <TouchableOpacity onPress={this.onPressSettings}>
+            <Icon
+              name='settings'
+              color='#49B6BB'
+            />
+          </TouchableOpacity>
+          </View>
+        </View>
 
-        <Avatar
-          medium
-          rounded
-          source={{uri: this.state.userPicUrl}}
-          activeOpacity={0.7}
-        />
-        <Text>
-          {this.state.userName}
-        </Text>
+        
 
         <TabView
           navigationState={this.state}
@@ -81,6 +92,22 @@ class ProfileMain extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexDirection: 'column',
+  },
+  topView: {
+    flex: 0.15,
+    flexDirection: 'row',
+    height: 10,
+    justifyContent: 'space-between',
+  },
+  topSection:{
+    flex: 0.3,
+    padding: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  icon: {
+    resizeMode: 'contain',
   },
   scene: {
     flex: 1,
