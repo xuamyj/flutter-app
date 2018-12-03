@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { List, ListItem, SearchBar, Icon } from 'react-native-elements';
+import { Metrics, Colors } from './Themes';
 
 class ChatMain extends React.Component {
   state = {
@@ -39,27 +40,30 @@ class ChatMain extends React.Component {
     return (
       <View style={styles.container}>
 
-        <SearchBar
-          lightTheme
-          onChangeText={this.onChangeSearchText}
-          onClearText={this.onClearSearchText}
-          placeholder='Search chats...'
+      <SearchBar
+        round
+        lightTheme
+        containerStyle={styles.searchBarContainer}
+        inputStyle={styles.searchBar}
+        onChangeText={this.onChangeSearchText}
+        onClearText={this.onClearSearchText}
+        placeholder='Search chats...'
         />
 
-        <List containerStyle={styles.chatList}>
-          {
-            this.state.chatList.map((l) => (
-              <ListItem
-                roundAvatar
-                key={l.key}
-                title={l.name}
-                subtitle={l.subtitle}
-                avatar={{uri:l.picUrl}}
-                onPress={this.onPressChat}
-              />
-            ))
-          }
-        </List>
+      <ScrollView>
+        {
+          this.state.chatList.map((l) => (
+            <ListItem
+              roundAvatar
+              key={l.key}
+              title={l.name}
+              subtitle={l.subtitle}
+              avatar={{uri:l.picUrl}}
+              onPress={this.onPressChat}
+            />
+          ))
+        }
+      </ScrollView>
       </View>
     );
   }
@@ -70,9 +74,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  chatList: {
-    marginBottom: 20,
-  }
+  searchBarContainer: {
+    backgroundColor: 'white',
+  },
+  searchBar: {
+    backgroundColor: Colors.background,
+    fontSize: 16,
+  },
 });
 
 export default ChatMain;

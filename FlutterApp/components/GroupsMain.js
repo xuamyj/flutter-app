@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { List, ListItem, SearchBar, Icon } from 'react-native-elements';
 import { Metrics, Colors } from './Themes';
 
@@ -58,14 +58,17 @@ class GroupsMain extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <SearchBar
-          lightTheme
-          onChangeText={this.onChangeSearchText}
-          onClearText={this.onClearSearchText}
-          placeholder='Search groups...'
+      <SearchBar
+        round
+        lightTheme
+        containerStyle={styles.searchBarContainer}
+        inputStyle={styles.searchBar}
+        onChangeText={this.onChangeSearchText}
+        onClearText={this.onClearSearchText}
+        placeholder='Search groups...'
         />
 
-        <List containerStyle={styles.groupList}>
+        <ScrollView>
           {
             this.state.groupList.map((l) => (
               <ListItem
@@ -76,7 +79,7 @@ class GroupsMain extends React.Component {
               />
             ))
           }
-        </List>
+        </ScrollView>
       </View>
     );
   }
@@ -86,11 +89,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  groupList: {
-    marginBottom: 20,
-  },
   headerButton:{
     padding: Metrics.baseMargin * 1.5,
+  },
+  searchBarContainer: {
+    backgroundColor: 'white',
+  },
+  searchBar: {
+    backgroundColor: Colors.background,
+    fontSize: 16,
   },
 })
 
