@@ -1,8 +1,29 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { List, ListItem, SearchBar, Icon } from 'react-native-elements';
+import { Metrics, Colors } from './Themes';
 
 class GroupsMain extends React.Component {
+  static navigationOptions = ({navigation}) => {
+    return {
+      title: 'Groups',
+      headerRight: (
+        <View style={styles.headerButton}>
+          <TouchableOpacity onPress={navigation.getParam("onPressCreateGroup")}>
+            <Icon
+              name='group-add'
+              color='#49B6BB'
+            />
+          </TouchableOpacity>
+        </View>
+      ),
+    };
+  };
+
+  componentDidMount() {
+    this.props.navigation.setParams({ onPressCreateGroup: this.onPressCreateGroup });
+  }
+
   state = {
     groupList: [
       {
@@ -34,24 +55,9 @@ class GroupsMain extends React.Component {
     this.props.navigation.navigate('Group', {});
   }
 
-  static navigationOptions = {
-    title: 'Groups',
-  };
-
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.onPressCreateGroup}>
-          <Icon
-            name='group-add'
-            color='#49B6BB'
-          />
-        </TouchableOpacity>
-
-        <Text>
-          Groups
-        </Text>
-
         <SearchBar
           lightTheme
           onChangeText={this.onChangeSearchText}
@@ -82,7 +88,10 @@ const styles = StyleSheet.create({
   },
   groupList: {
     marginBottom: 20,
-  }
+  },
+  headerButton:{
+    padding: Metrics.baseMargin * 1.5,
+  },
 })
 
 export default GroupsMain;

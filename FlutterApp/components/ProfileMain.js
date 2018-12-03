@@ -17,6 +17,26 @@ const PostedRoute = () => (
 );
 
 class ProfileMain extends React.Component {
+  static navigationOptions = ({navigation}) => {
+    return {
+      title: 'Profile',
+      headerRight: (
+        <View style={styles.headerButton}>
+          <TouchableOpacity onPress={navigation.getParam('onPressSettings')}>
+            <Icon
+              name='settings'
+              color='#49B6BB'
+              />
+          </TouchableOpacity>
+        </View>
+      ),
+    };z
+  };
+
+  componentDidMount() {
+    this.props.navigation.setParams({ onPressSettings: this.onPressSettings });
+  }
+
   state = {
     index: 0,
     routes: [
@@ -32,39 +52,22 @@ class ProfileMain extends React.Component {
     this.props.navigation.navigate('Settings', {});
   }
 
-  static navigationOptions = {
-    title: 'Profile',
-  };
-
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.topView}>
-          <View style={styles.topSection}>
-          </View>
           <View style={styles.topSection}>
             <Avatar
             medium
             rounded
             source={{uri: this.state.userPicUrl}}
-            activeOpacity={0.7}
             style={styles.icon}
             />
             <Text>
               {this.state.userName}
             </Text>
           </View>
-          <View style={styles.topSection}>
-            <TouchableOpacity onPress={this.onPressSettings}>
-            <Icon
-              name='settings'
-              color='#49B6BB'
-            />
-          </TouchableOpacity>
-          </View>
-        </View>
 
-        
+
 
         <TabView
           navigationState={this.state}
@@ -94,17 +97,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
-  topView: {
-    flex: 0.15,
-    flexDirection: 'row',
-    height: 10,
-    justifyContent: 'space-between',
-  },
   topSection:{
-    flex: 0.3,
-    padding: 5,
+    flexDirection: 'column',
+    padding: Metrics.baseMargin,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  headerButton:{
+    padding: Metrics.baseMargin * 1.5,
   },
   icon: {
     resizeMode: 'contain',

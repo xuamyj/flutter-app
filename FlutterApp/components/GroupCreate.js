@@ -26,6 +26,10 @@ class GroupCreate extends React.Component {
     );
   }
 
+  static navigationOptions = {
+    title: 'New Group',
+  };
+
   render() {
     return (
       <View style={styles.container}>

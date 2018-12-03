@@ -20,6 +20,10 @@ class Chat extends Component {
     };
   }
 
+  static navigationOptions = {
+    title: 'Global',
+  };
+
   render() {
     return (
       <GiftedChat

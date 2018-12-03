@@ -57,6 +57,10 @@ class Settings extends React.Component {
     }
   }
 
+  static navigationOptions = {
+    title: 'Settings',
+  };
+
   render() {
     return (
       <View style={styles.container}>

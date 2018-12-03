@@ -22,13 +22,13 @@ class Group extends React.Component {
     groupName: 'Disney',
   };
 
+  static navigationOptions = {
+    title: 'Disney',
+  };
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>
-          {this.state.groupName}
-        </Text>
-
         <TabView
           navigationState={this.state}
           renderScene={SceneMap({

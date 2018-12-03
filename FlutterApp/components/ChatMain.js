@@ -38,16 +38,6 @@ class ChatMain extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.onPressNewChat}>
-          <Icon
-            name='message'
-            color='#49B6BB'
-          />
-        </TouchableOpacity>
-
-        <Text>
-          Chats
-        </Text>
 
         <SearchBar
           lightTheme
