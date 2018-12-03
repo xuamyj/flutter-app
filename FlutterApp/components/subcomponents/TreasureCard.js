@@ -1,11 +1,18 @@
 import React, {Component} from 'react';
-import { Text, View, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFeedback, TouchableOpacity, Button } from 'react-native';
 import { Avatar, Badge} from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
+import Modal from 'react-native-modal';
 
 const {height, width} = Dimensions.get('window');
 
 export default class TreasureCard extends React.Component {
+  state = {
+    isModalVisible: false
+  };
+
+  _toggleModal = () =>
+    this.setState({ isModalVisible: !this.state.isModalVisible });
 
   constructor(props) {
     super(props);
@@ -21,6 +28,7 @@ export default class TreasureCard extends React.Component {
     Animated.spring(this.animatedValue, {
       toValue: .97
     }).start();
+
   }
 
   handlePressOut() {
@@ -28,7 +36,8 @@ export default class TreasureCard extends React.Component {
       toValue: 1,
       friction: 1000,
       tension: 40,
-    }).start()
+    }).start();
+    this._toggleModal();
   }
 
   open = () => {
@@ -46,7 +55,9 @@ export default class TreasureCard extends React.Component {
     var userPicUrl = this.props.treasure.userPicUrl;
 
     return  (
+
       <TouchableWithoutFeedback onPress={this.open} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
+
         <Animated.View style={[styles.card, animatedStyle]}>
           <View style={styles.cardTitle}>
             <Text style={styles.itemName}>{itemName}</Text>
@@ -59,6 +70,27 @@ export default class TreasureCard extends React.Component {
             <Avatar containerStyle={styles.propic} size="small" rounded source={{uri: userPicUrl}} />
             <Text style={styles.username}>{userName}</Text>
           </View>
+
+          <Modal isVisible={this.state.isModalVisible}>
+            <View style={styles.modalCard}>
+              <View style={styles.modalCardTitle}>
+                <Text style={styles.itemName}>{itemName}</Text>
+                <Badge textStyle={styles.groupName} value={groupName} containerStyle={styles.badgeStyle}/>
+              </View>
+              <View>
+                <Image style={styles.modalImage} source={{uri:itemPicURL}} />
+              </View>
+              <View style={styles.modalCardInfo}>
+                <Avatar containerStyle={styles.propic} size="medium" rounded source={{uri: userPicUrl}} />
+                <Text>{userName}:{itemDescription}</Text>
+              </View>
+              <Button
+                onPress={this._toggleModal}
+                title="Hit me up!"
+                color="#49B6BB"
+              />
+            </View>
+          </Modal>
         </Animated.View>
       </TouchableWithoutFeedback>
     );
@@ -118,5 +150,27 @@ const styles = StyleSheet.create({
   username: {
     fontWeight: 'bold',
     color: Colors.dark,
+  },
+  modalCard: {
+    backgroundColor: 'white',
+    borderRadius: Metrics.baseMargin,
+    shadowColor: Colors.dark,
+    shadowOffset: {width: 0, height: 3},
+    shadowOpacity: 1.0,
+    shadowRadius: 5,
+    elevation: 5,
+    margin: Metrics.baseMargin,
+  },
+  modalCardTitle: {
+    padding: Metrics.baseMargin,
+  },
+  modalImage: {
+    width: '100%',
+    height: 300,
+    resizeMode: 'cover',
+  },
+  modalCardInfo: {
+    paddingVertical: Metrics.baseMargin,
+    paddingHorizontal: Metrics.baseMargin,
   },
 })

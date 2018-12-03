@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, FlatList } from 'react-native';
+import { Text, View, StyleSheet, Button, FlatList, TouchableOpacity } from 'react-native';
 import { Card, Avatar, SearchBar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 import TreasureCard from './TreasureCard';
@@ -63,7 +63,12 @@ class Treasures extends React.Component {
         key: '113',
       },
     ],
+    isModalVisible: false,
   }
+
+  _toggleModal = () =>
+    this.setState({ isModalVisible: !this.state.isModalVisible });
+
 
   onChangeSearchText = () => null; // search; do last
   onClearSearchText = () => null; // search; do last
