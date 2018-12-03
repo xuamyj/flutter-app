@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerButton:{
-    padding: Metrics.baseMargin * 1.5,
+    paddingHorizontal: Metrics.baseMargin * 1.5,
   },
   icon: {
     resizeMode: 'contain',
