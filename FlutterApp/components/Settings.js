@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, Image } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Button, Image } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, Avatar } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 
@@ -58,38 +58,41 @@ class Settings extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Settings',
+      title: 'Settings',
   };
 
   render() {
+
+
     return (
       <View style={styles.container}>
-        <Avatar
-          medium
-          rounded
-          source={{uri: this.state.userPicUrl}}
-          activeOpacity={0.7}
-        />
-        <Text>
-          {this.state.userName}
-        </Text>
-
-        <FormLabel>Display name</FormLabel>
-        <FormInput onChangeText={this.onChangeInputName}/>
-        <FormValidationMessage>{this.state.errorMsg}</FormValidationMessage>
-
+        <View style={styles.heading}>
+            <Avatar
+              large
+              rounded
+              source={{uri: this.state.userPicUrl}}
+              activeOpacity={0.7}
+            />
+            <Text style = {styles.text}>
+              {this.state.userName}
+            </Text>
+        </View>
+            <FormLabel>Display name</FormLabel>
+            <View style={styles.displayName}>
+                <FormInput onChangeText={this.onChangeInputName} containerStyle= {{width: "80%"}}/>
+                <TouchableOpacity onPress={this.onPressUpdateDisplayName} style={{marginRight: 20,}}>
+                    <Image style={styles.image} source={require("../assets/confirm.png")}/>
+                </TouchableOpacity>
+            </View>
+            <FormValidationMessage>{this.state.errorMsg}</FormValidationMessage>
         <Button
           title="Update display name"
           color="#49B6BB"
-          onPress={this.onPressUpdateDisplayName}
+          onPress={this.onPressCamera}
         />
 
         <FormLabel>Picture</FormLabel>
-        <Button
-          title="Upload Photo"
-          color="#49B6BB"
-          onPress={this.onPressCamera}
-        />
+
         {
           this.state.inputPicUrl != '' &&
           <Image
@@ -134,7 +137,25 @@ const styles = StyleSheet.create({
   imagePreview: {
     width: 80,
     height: 80,
+    borderRadius:40,
   },
+  heading:{
+      marginTop: 40,
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
+  text: {
+      fontWeight: 'bold',
+      fontSize: 20,
+  },
+  displayName: {
+      flexDirection: "row",
+      justifyContent: "space-evenly",
+  },
+  image: {
+      width: 30,
+      height: 30,
+  }
 })
 
 export default Settings;
