@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerButton:{
-    padding: Metrics.baseMargin * 1.5,
+    paddingHorizontal: Metrics.baseMargin * 1.5,
   },
   searchBarContainer: {
     backgroundColor: 'white',
