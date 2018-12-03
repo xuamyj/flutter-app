@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { List, ListItem, SearchBar, Icon } from 'react-native-elements';
+import { SearchBar, Icon } from 'react-native-elements';
 import { Metrics, Colors } from './Themes';
 
 class GroupsMain extends React.Component {
