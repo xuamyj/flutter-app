@@ -65,54 +65,54 @@ class Settings extends React.Component {
 
 
     return (
-      <View style={styles.container}>
-        <View style={styles.heading}>
-            <Avatar
-              large
-              rounded
-              source={{uri: this.state.userPicUrl}}
-              activeOpacity={0.7}
-            />
-            <Text style = {styles.text}>
-              {this.state.userName}
-            </Text>
-        </View>
+        <View style={styles.container}>
+            <View style={{position: 'absolute', top: 10, right: 10}}>
+                <Button
+                title="Logout"
+                color="grey"
+                onPress={this.onSignout}
+                />
+            </View>
+            <View style={styles.heading}>
+                <Avatar
+                large
+                rounded
+                source={{uri: this.state.userPicUrl}}
+                activeOpacity={0.7}
+                />
+                <Text style = {styles.text}>
+                {this.state.userName}
+                </Text>
+            </View>
             <FormLabel>Display name</FormLabel>
             <View style={styles.displayName}>
-                <FormInput onChangeText={this.onChangeInputName} containerStyle= {{width: "80%"}}/>
+                <FormInput onChangeText={this.onChangeInputName} inputStyle = {{color: 'black'}} containerStyle= {{width: "80%"}}/>
                 <TouchableOpacity onPress={this.onPressUpdateDisplayName} style={{marginRight: 20,}}>
                     <Image style={styles.image} source={require("../assets/confirm.png")}/>
                 </TouchableOpacity>
             </View>
             <FormValidationMessage>{this.state.errorMsg}</FormValidationMessage>
-        <Button
-          title="Update display name"
-          color="#49B6BB"
-          onPress={this.onPressCamera}
-        />
-
-        <FormLabel>Picture</FormLabel>
-
-        {
-          this.state.inputPicUrl != '' &&
-          <Image
-            style={styles.imagePreview}
-            source={{uri: this.state.inputPicUrl}}
-          />
-        }
-
-        <Button
-          title="Update profile picture"
-          color="#49B6BB"
-          onPress={this.onPressUpdateProfilePicture}
-        />
-
-        <Button
-          title="Logout"
-          color="#49B6BB"
-          onPress={this.onSignout}
-        />
-      </View>
+            <FormLabel containerStyle= {{marginTop: 15}}>Profile picture</FormLabel>
+            <View style={styles.photoPreview}>
+                <View style={{marginLeft: 10,}}>
+                <Button
+                title="Change Photo"
+                color="#49B6BB"
+                onPress={this.onPressCamera}
+                />
+                </View>
+                {
+                    this.state.inputPicUrl != '' &&
+                    <Image
+                    style={styles.imagePreview}
+                    source={{uri: this.state.inputPicUrl}}
+                    />
+                }
+                <TouchableOpacity onPress={this.onPressUpdateProfilePicture} style={{marginRight: 20, marginLeft: 20,}}>
+                    <Image style={styles.image} source={require("../assets/confirm.png")}/>
+                </TouchableOpacity>
+            </View>
+        </View>
     );
   }
 
@@ -140,13 +140,14 @@ const styles = StyleSheet.create({
     borderRadius:40,
   },
   heading:{
-      marginTop: 40,
+      marginTop: 50,
       justifyContent: 'center',
       alignItems: 'center',
   },
   text: {
       fontWeight: 'bold',
       fontSize: 20,
+      marginTop: 10,
   },
   displayName: {
       flexDirection: "row",
@@ -155,7 +156,13 @@ const styles = StyleSheet.create({
   image: {
       width: 30,
       height: 30,
-  }
+  },
+  photoPreview: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: 'center',
+      marginTop: 15,
+  },
 })
 
 export default Settings;
