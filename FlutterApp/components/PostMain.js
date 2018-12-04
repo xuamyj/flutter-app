@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Picker, Image, Alert } from 'react-native';
+import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Picker, Image, Alert, ScrollView } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, CheckBox } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 
@@ -61,7 +61,7 @@ class PostMain extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.fillout}>
           <Text>
             Post a treasure
@@ -110,7 +110,7 @@ class PostMain extends React.Component {
               </TouchableOpacity>
 
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }
