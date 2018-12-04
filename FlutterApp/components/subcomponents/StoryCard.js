@@ -67,8 +67,8 @@ export default class StoryCard extends React.Component {
           </View>
           <View style={styles.cardInfo}>
             <View style={styles.userPics}>
-              <Avatar containerStyle={[styles.propic, giveUserPicStyle]} size="medium" rounded source={{uri: giveUserPicUrl}} />
-              <Avatar containerStyle={[styles.propic, recvUserPicStyle]} size="medium" rounded source={{uri: recvUserPicUrl}} />
+              <Avatar containerStyle={[styles.propic, giveUserPicStyle]} small rounded source={{uri: giveUserPicUrl}} />
+              <Avatar containerStyle={[styles.propic, recvUserPicStyle]} small rounded source={{uri: recvUserPicUrl}} />
             </View>
             <Text><Text style={styles.username}>{activeUserName}:</Text> {itemDescription}</Text>
           </View>

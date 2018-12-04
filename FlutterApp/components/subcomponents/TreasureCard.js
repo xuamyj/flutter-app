@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFe
 import { Avatar, Badge} from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 import Modal from 'react-native-modal';
+import { FontAwesome } from '@expo/vector-icons';
 
 const {height, width} = Dimensions.get('window');
 
@@ -67,22 +68,32 @@ export default class TreasureCard extends React.Component {
             <Image style={styles.image} source={{uri:itemPicURL}} />
           </View>
           <View style={styles.cardInfo}>
-            <Avatar containerStyle={styles.propic} size="small" rounded source={{uri: userPicUrl}} />
+            <Avatar containerStyle={styles.propic} small rounded source={{uri: userPicUrl}} />
             <Text style={styles.username}>{userName}</Text>
           </View>
 
-          <Modal isVisible={this.state.isModalVisible}>
+          <Modal isVisible={this.state.isModalVisible}
+                 onBackdropPress={this._toggleModal}>
             <View style={styles.modalCard}>
               <View style={styles.modalCardTitle}>
                 <Text style={styles.itemName}>{itemName}</Text>
-                <Badge textStyle={styles.groupName} value={groupName} containerStyle={styles.badgeStyle}/>
+                <View style={styles.modalCardTitleRight}>
+                  <Badge textStyle={styles.groupName} value={groupName} containerStyle={styles.modalBadgeStyle}/>
+                  <TouchableOpacity onPress={this._toggleModal}>
+                    <FontAwesome name="times"
+                    size={Metrics.icons.medium}
+                    />
+                  </TouchableOpacity>
+                </View>
               </View>
               <View>
                 <Image style={styles.modalImage} source={{uri:itemPicURL}} />
               </View>
               <View style={styles.modalCardInfo}>
-                <Avatar containerStyle={styles.propic} size="medium" rounded source={{uri: userPicUrl}} />
-                <Text>{userName}:{itemDescription}</Text>
+                <Avatar containerStyle={styles.propic} small rounded source={{uri: userPicUrl}} />
+                <View style={styles.modalCardInfoText}>
+                  <Text><Text style={styles.username}>{userName}: </Text>{itemDescription}</Text>
+                </View>
               </View>
               <Button
                 onPress={this._toggleModal}
@@ -166,14 +177,32 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: Metrics.baseMargin,
+
+  },
+  modalCardTitleRight: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalImage: {
     width: '100%',
     height: 300,
     resizeMode: 'cover',
   },
+  modalBadgeStyle: {
+    backgroundColor: Colors.background,
+    padding: Metrics.baseMargin,
+    marginRight: 10,
+  },
   modalCardInfo: {
     paddingVertical: Metrics.baseMargin,
     paddingHorizontal: Metrics.baseMargin,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: Metrics.baseMargin,
   },
+  modalCardInfoText: {
+    width: width * 0.7,
+  }
 })
