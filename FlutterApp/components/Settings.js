@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, Button, Image } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, Avatar } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
+import { Metrics, Colors } from './Themes';
 
 import firebase from 'firebase';
 
@@ -59,6 +60,7 @@ class Settings extends React.Component {
 
   static navigationOptions = {
       title: 'Settings',
+      headerStyle: {backgroundColor: Colors.background},
   };
 
   render() {

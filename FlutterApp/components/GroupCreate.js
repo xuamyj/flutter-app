@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, Button, Alert } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
+import { Metrics, Colors } from './Themes';
 
 class GroupCreate extends React.Component {
   state = {
@@ -28,6 +29,7 @@ class GroupCreate extends React.Component {
 
   static navigationOptions = {
     title: 'New Group',
+    headerStyle: {backgroundColor: Colors.background},
   };
 
   render() {
