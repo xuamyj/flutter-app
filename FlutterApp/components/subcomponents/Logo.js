@@ -15,7 +15,7 @@ export default class Logo extends React.Component {
 
 const styles = StyleSheet.create({
   logo: {
-    width: Metrics.screenWidth * 0.3,
+    width: Metrics.screenWidth * 0.35,
     marginHorizontal: Metrics.baseMargin,
     marginVertical: Metrics.doubleBaseMargin,
     resizeMode: 'contain',
