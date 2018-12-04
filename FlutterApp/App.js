@@ -15,10 +15,9 @@ import Settings from './components/Settings';
 import AuthLoading from './components/authentication/AuthLoading';
 import SignUp from './components/authentication/SignUp';
 import Login from './components/authentication/Login';
+import FlutterIcon from './components/subcomponents/FlutterIcon';
 
-import { createIconSetFromIcoMoon } from '@expo/vector-icons';
-import icoMoonConfig from './selection.json';
-const Icon = createIconSetFromIcoMoon(icoMoonConfig, 'FlutterIcons', 'icomoons.ttf');
+import { Colors, Metrics } from './components/Themes'
 
 // Import React Navigation
 import {
@@ -66,7 +65,7 @@ const AppNavigator = createBottomTabNavigator({
   PROFILE: ProfileStack,
 }, {
   defaultNavigationOptions: ({ navigation }) => ({
-    tabBarIcon: () => {
+    tabBarIcon: ({tintColor}) => {
       const { routeName } = navigation.state;
       let iconName;
       if (routeName === 'HOME') {
@@ -81,11 +80,16 @@ const AppNavigator = createBottomTabNavigator({
         iconName = "user";
       }
 
-      return <Icon name={iconName} size={24} />;
+      return <FlutterIcon iconName={iconName} tintColor={tintColor}/>;
     },
   }),
   tabBarOptions: {
+    showLabel: false,
     activeTintColor: '#49B6BB',
+    inactiveTintColor: '#586589',
+    style: {
+      backgroundColor: Colors.background,
+    }
   }
 });
 
