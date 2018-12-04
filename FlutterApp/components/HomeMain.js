@@ -4,6 +4,7 @@ import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 import Stories from './subcomponents/Stories';
 import Treasures from './subcomponents/Treasures';
+import Logo from './subcomponents/Logo'
 
 const StoriesRoute = () => (
   <Stories />
@@ -22,7 +23,7 @@ class HomeMain extends React.Component {
   };
 
   static navigationOptions = {
-    title: 'Flutter',
+    headerTitle: <Logo />,
   };
 
   render() {
