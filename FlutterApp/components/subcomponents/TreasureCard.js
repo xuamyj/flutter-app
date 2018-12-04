@@ -11,8 +11,9 @@ export default class TreasureCard extends React.Component {
     isModalVisible: false
   };
 
-  _toggleModal = () =>
+  _toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
+  }
 
   constructor(props) {
     super(props);
@@ -37,7 +38,6 @@ export default class TreasureCard extends React.Component {
       friction: 1000,
       tension: 40,
     }).start();
-    this._toggleModal();
   }
 
   open = () => {
@@ -56,7 +56,7 @@ export default class TreasureCard extends React.Component {
 
     return  (
 
-      <TouchableWithoutFeedback onPress={this.open} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
+      <TouchableWithoutFeedback onPress={this._toggleModal} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
 
         <Animated.View style={[styles.card, animatedStyle]}>
           <View style={styles.cardTitle}>
@@ -110,9 +110,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: Metrics.baseMargin * 0.75,
     shadowColor: Colors.dark,
-    shadowOffset: {width: Metrics.smallMargin, height: Metrics.smallMargin},
-    shadowOpacity: 1.0,
-    shadowRadius: 5,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.6,
+    shadowRadius: 2,
     elevation: 5,
     margin: Metrics.smallMargin,
     width: width * 0.5 - Metrics.smallMargin * 3,
@@ -162,6 +162,9 @@ const styles = StyleSheet.create({
     margin: Metrics.baseMargin,
   },
   modalCardTitle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: Metrics.baseMargin,
   },
   modalImage: {

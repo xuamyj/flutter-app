@@ -52,7 +52,7 @@ class GroupsMain extends React.Component {
   }
 
   onPressGroup = () => {
-    this.props.navigation.navigate('Group', {});
+    this.props.navigation.navigate('Group', { name: 'Disney' });
   }
 
   render() {

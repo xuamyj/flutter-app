@@ -13,6 +13,11 @@ const TreasuresRoute = () => (
 );
 
 class Group extends React.Component {
+
+  static navigationOptions = ({ navigation }) => ({ 
+    title: (navigation.state.params || {}).name || 'Group!',
+  });
+
   state = {
     index: 0,
     routes: [
@@ -20,10 +25,6 @@ class Group extends React.Component {
       { key: 'treasures', title: 'Treasures' },
     ],
     groupName: 'Disney',
-  };
-
-  static navigationOptions = {
-    title: 'Disney',
   };
 
   render() {
