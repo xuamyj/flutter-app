@@ -7,6 +7,7 @@ class GroupsMain extends React.Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Groups',
+      headerStyle: {backgroundColor: Colors.background},
       headerRight: (
         <View style={styles.headerButton}>
           <TouchableOpacity onPress={navigation.getParam("onPressCreateGroup")}>
@@ -94,6 +95,8 @@ const styles = StyleSheet.create({
   },
   searchBarContainer: {
     backgroundColor: 'white',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
   },
   searchBar: {
     backgroundColor: Colors.background,

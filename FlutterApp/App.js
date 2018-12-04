@@ -15,7 +15,8 @@ import Settings from './components/Settings';
 import AuthLoading from './components/authentication/AuthLoading';
 import SignUp from './components/authentication/SignUp';
 import Login from './components/authentication/Login';
-import FlutterIcon from './components/subcomponents/FlutterIcon';
+import Icons from './components/Themes/Icons';
+import Fonts from './components/Themes/Fonts';
 
 import { Colors, Metrics } from './components/Themes'
 
@@ -69,24 +70,24 @@ const AppNavigator = createBottomTabNavigator({
       const { routeName } = navigation.state;
       let iconName;
       if (routeName === 'HOME') {
-        iconName = "home";
+        iconName = `home`;
       } else if (routeName === 'GROUPS') {
-        iconName = "group";
+        iconName = `group-thick`;
       } else if (routeName === 'POST') {
-        iconName = "gift";
+        iconName = `gift`;
       } else if (routeName === 'CHAT') {
-        iconName = "message";
+        iconName = `chat`;
       } else if (routeName === 'PROFILE') {
-        iconName = "user";
+        iconName = `user`;
       }
 
-      return <FlutterIcon iconName={iconName} tintColor={tintColor}/>;
+      return <Icons iconName={iconName} size={24} tintColor={tintColor}/>;
     },
   }),
   tabBarOptions: {
     showLabel: false,
     activeTintColor: '#49B6BB',
-    inactiveTintColor: '#586589',
+    inactiveTintColor: Colors.dark,
     style: {
       backgroundColor: Colors.background,
     }

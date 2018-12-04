@@ -20,7 +20,7 @@ export default class FlutterIcon extends React.Component {
     if (!this.state.fontLoaded) { return null;}
 
     return (
-      <Icon name={this.props.iconName} size={24} color={this.props.tintColor}/>
+      <Icon name={this.props.iconName} size={this.props.size} color={this.props.tintColor}/>
     );
   }
 }

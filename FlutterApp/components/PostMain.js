@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Picker, Image, Alert, ScrollView } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, CheckBox } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
+import { Metrics, Colors } from './Themes';
 
 class PostMain extends React.Component {
   state = {
@@ -57,6 +58,7 @@ class PostMain extends React.Component {
 
   static navigationOptions = {
     title: 'Give',
+    headerStyle: {backgroundColor: Colors.background}
   };
 
   render() {

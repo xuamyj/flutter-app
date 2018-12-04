@@ -108,6 +108,8 @@ const styles = StyleSheet.create({
   },
   searchBarContainer: {
     backgroundColor: 'white',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
   },
   searchBar: {
     backgroundColor: Colors.background,

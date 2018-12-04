@@ -4,7 +4,9 @@
   "private": true,
   "rnpm": {
     "assets": [
-      "assets/fonts"
+      "assets/fonts",
+      "assets/fonts/Nunito",
+      "assets/fonts/OpenSans"
     ]
   },
   "scripts": {

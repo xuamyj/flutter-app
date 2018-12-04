@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+import { Metrics, Colors } from './Themes';
 
 import Stories from './subcomponents/Stories'
 import Treasures from './subcomponents/Treasures'
@@ -14,7 +15,7 @@ const TreasuresRoute = () => (
 
 class Group extends React.Component {
 
-  static navigationOptions = ({ navigation }) => ({ 
+  static navigationOptions = ({ navigation }) => ({
     title: (navigation.state.params || {}).name || 'Group!',
   });
 
@@ -42,8 +43,8 @@ class Group extends React.Component {
             <TabBar
               {...props}
               indicatorStyle={{backgroundColor: '#49B6BB'}}
-              labelStyle={{color: 'gray'}}
-              style={{backgroundColor: 'white'}}
+              labelStyle={{color: Colors.dark}}
+              style={{backgroundColor: Colors.background}}
             />
           }
         />

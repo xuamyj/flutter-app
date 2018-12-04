@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import { Text, View, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFeedback, TouchableOpacity, Button } from 'react-native';
 import { Avatar, Badge} from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
+import Icons from '../Themes/Icons';
 import Modal from 'react-native-modal';
-import { FontAwesome } from '@expo/vector-icons';
 
 const {height, width} = Dimensions.get('window');
 
@@ -80,9 +80,7 @@ export default class TreasureCard extends React.Component {
                 <View style={styles.modalCardTitleRight}>
                   <Badge textStyle={styles.groupName} value={groupName} containerStyle={styles.modalBadgeStyle}/>
                   <TouchableOpacity onPress={this._toggleModal}>
-                    <FontAwesome name="times"
-                    size={Metrics.icons.medium}
-                    />
+                    <Icons iconName={"cross"} size={18}/>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -97,7 +95,7 @@ export default class TreasureCard extends React.Component {
               </View>
               <Button
                 onPress={this._toggleModal}
-                title="Hit me up!"
+                title="I want this!"
                 color="#49B6BB"
               />
             </View>
