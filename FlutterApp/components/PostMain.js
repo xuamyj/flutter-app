@@ -63,10 +63,6 @@ class PostMain extends React.Component {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.fillout}>
-          <Text>
-            Post a treasure
-          </Text>
-
           <FormLabel>Post Title</FormLabel>
           <FormInput onChangeText={this.onChangeInputItemName}/>
           <FormValidationMessage>{this.state.errorMsgName}</FormValidationMessage>
