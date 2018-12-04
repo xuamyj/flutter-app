@@ -106,3 +106,5 @@ export default createAppContainer(createSwitchNavigator(
     initialRouteName: 'AuthLoading',
   }
 ));
+
+console.disableYellowBox = true;

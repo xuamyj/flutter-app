@@ -67,7 +67,6 @@ class PostMain extends React.Component {
         <View style={styles.fillout}>
           <FormLabel>Post Title</FormLabel>
           <FormInput onChangeText={this.onChangeInputItemName}/>
-          <FormValidationMessage>{this.state.errorMsgName}</FormValidationMessage>
           <View style = {{paddingVertical:10}}>
             <FormLabel>Picture</FormLabel>
           </View>
@@ -91,7 +90,8 @@ class PostMain extends React.Component {
             numberOfLines={4}
             onChangeText={this.onChangeInputItemDescription}
           />
-              <View style={{borderColor: "blue", borderWidth: 3,}}>
+              <View >
+              <FormLabel>Group</FormLabel>
                 <Picker
                   selectedValue={this.state.inputGroupKey}
                   onValueChange={(itemValue, itemIndex) => this.setState({inputGroupKey: itemValue})}>
@@ -102,10 +102,11 @@ class PostMain extends React.Component {
                   }
                 </Picker>
               </View>
-
+              <View style={styles.postView}>
               <TouchableOpacity style={styles.post} onPress={this.onPressPost}>
-                <Text style={{fontWeight:"bold", color: "white", fontSize: 16,}}>Post</Text>
+                <Text style={{fontWeight:"bold", color: "white", fontSize: 16,}}>Give</Text>
               </TouchableOpacity>
+              </View>
 
         </View>
       </ScrollView>
@@ -129,7 +130,9 @@ const styles = StyleSheet.create({
   imagePreview: {
     width: 200,
     height: 200,
-    borderRadius: 5,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#C1C1C1',
 }, post: {
     borderRadius: 20,
     backgroundColor: "#49B6BB",
@@ -137,7 +140,14 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: "center",
-}
+},
+    postView: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 10,
+      marginBottom: 20,
+    }
 })
 
 export default PostMain;
