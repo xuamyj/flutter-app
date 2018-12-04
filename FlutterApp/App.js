@@ -1,3 +1,5 @@
+import React from 'react';
+
 // Import the screens
 import HomeMain from './components/HomeMain';
 import GroupsMain from './components/GroupsMain';
@@ -13,6 +15,10 @@ import Settings from './components/Settings';
 import AuthLoading from './components/authentication/AuthLoading';
 import SignUp from './components/authentication/SignUp';
 import Login from './components/authentication/Login';
+
+import { createIconSetFromIcoMoon } from '@expo/vector-icons';
+import icoMoonConfig from './selection.json';
+const Icon = createIconSetFromIcoMoon(icoMoonConfig, 'FlutterIcons', 'icomoons.ttf');
 
 // Import React Navigation
 import {
@@ -59,6 +65,25 @@ const AppNavigator = createBottomTabNavigator({
   CHAT: ChatStack,
   PROFILE: ProfileStack,
 }, {
+  defaultNavigationOptions: ({ navigation }) => ({
+    tabBarIcon: () => {
+      const { routeName } = navigation.state;
+      let iconName;
+      if (routeName === 'HOME') {
+        iconName = "home";
+      } else if (routeName === 'GROUPS') {
+        iconName = "group";
+      } else if (routeName === 'POST') {
+        iconName = "gift";
+      } else if (routeName === 'CHAT') {
+        iconName = "message";
+      } else if (routeName === 'PROFILE') {
+        iconName = "user";
+      }
+
+      return <Icon name={iconName} size={24} />;
+    },
+  }),
   tabBarOptions: {
     activeTintColor: '#49B6BB',
   }
