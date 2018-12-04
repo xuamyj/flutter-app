@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, Picker, Image, Alert } from 'react-native';
+import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Picker, Image, Alert } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, CheckBox } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 
@@ -67,44 +67,49 @@ class PostMain extends React.Component {
             Post a treasure
           </Text>
 
-          <FormLabel>Name</FormLabel>
+          <FormLabel>Post Title</FormLabel>
           <FormInput onChangeText={this.onChangeInputItemName}/>
           <FormValidationMessage>{this.state.errorMsgName}</FormValidationMessage>
-
-          <FormLabel>Picture</FormLabel>
-          <Button
-            title="Upload Photo"
-            color="#49B6BB"
-            onPress={this.onPressCamera}
-          />
-          <Image
-            style={styles.imagePreview}
-            source={{uri: this.state.inputItemPicUrl}}
-          />
+          <View style = {{paddingVertical:10}}>
+            <FormLabel>Picture</FormLabel>
+          </View>
+          <View style= {{alignItems: 'center',}}>
+              <Image
+                style={styles.imagePreview}
+                source={{uri: this.state.inputItemPicUrl}}
+              />
+              <Button
+                title="Upload Photo"
+                color="#49B6BB"
+                onPress={this.onPressCamera}
+              />
+          </View>
 
           <FormLabel>Description</FormLabel>
-          <FormInput onChangeText={this.onChangeInputItemDescription}/>
-          <FormValidationMessage>{this.state.errorMsgDescription}</FormValidationMessage>
+          <TextInput
+            style = {{margin: 20, paddingLeft: 8, height: 60, borderColor: '#C1C1C1', borderWidth: 1, borderRadius: 5,}}
+            multiline={true}
+            placeholder = "Why is it meaningful to you? When did you last use it?"
+            numberOfLines={4}
+            onChangeText={this.onChangeInputItemDescription}
+          />
+              <View style={{borderColor: "blue", borderWidth: 3,}}>
+                <Picker
+                  selectedValue={this.state.inputGroupKey}
+                  onValueChange={(itemValue, itemIndex) => this.setState({inputGroupKey: itemValue})}>
+                  {
+                    this.state.groupList.map((l) => (
+                      <Picker.Item label={l.name} value={l.key} key={l.key} />
+                    ))
+                  }
+                </Picker>
+              </View>
 
-          <FormLabel>Post to</FormLabel>
-          <View style={styles.centerSection}>
-            <Picker
-              selectedValue={this.state.inputGroupKey}
-              style={{ height: 50, width: 100 }}
-              onValueChange={(itemValue, itemIndex) => this.setState({inputGroupKey: itemValue})}>
-              {
-                this.state.groupList.map((l) => (
-                  <Picker.Item label={l.name} value={l.key} key={l.key} />
-                ))
-              }
-            </Picker>
-          </View>
+              <TouchableOpacity style={styles.post} onPress={this.onPressPost}>
+                <Text style={{fontWeight:"bold", color: "white", fontSize: 16,}}>Post</Text>
+              </TouchableOpacity>
+
         </View>
-        <Button
-          title="Post"
-          color="#49B6BB"
-          onPress={this.onPressPost}
-        />
       </View>
     );
   }
@@ -124,9 +129,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   imagePreview: {
-    width: 80,
-    height: 80,
-  },
+    width: 200,
+    height: 200,
+    borderRadius: 5,
+}, post: {
+    borderRadius: 20,
+    backgroundColor: "#49B6BB",
+    width: "60%",
+    height: 40,
+    justifyContent: 'center',
+    alignItems: "center",
+}
 })
 
 export default PostMain;
