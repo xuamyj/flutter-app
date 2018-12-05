@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: Metrics.baseMargin,
+    paddingHorizontal: Metrics.baseMargin,
+    paddingVertical: Metrics.smallMargin,
   },
   card: {
     backgroundColor: 'white',
@@ -106,7 +107,7 @@ const styles = StyleSheet.create({
     fontFamily: 'NunitoSemiBold',
   },
   groupName: {
-    fontSize: 13.5,
+    fontSize: 12,
     color: Colors.dark,
   },
   badgeStyle: {
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: Metrics.baseMargin,
     paddingTop: 2,
-    paddingBottom: Metrics.smallMargin,
+    paddingBottom: Metrics.smallMargin * 1.5,
   },
   propic: {
     marginRight: Metrics.baseMargin,
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
   username: {
     fontWeight: 'bold',
     color: Colors.dark,
-    fontSize: 12,
+    fontSize: 12.5,
     marginLeft: -Metrics.smallMargin,
   },
 })

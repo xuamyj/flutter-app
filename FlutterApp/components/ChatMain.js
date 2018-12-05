@@ -34,7 +34,7 @@ class ChatMain extends React.Component {
 
   static navigationOptions = {
     title: 'Messages',
-    headerStyle: {backgroundColor: Colors.background, shadowColor: 'transparent', elevation: 0},
+    headerStyle: {backgroundColor: Colors.background },
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',

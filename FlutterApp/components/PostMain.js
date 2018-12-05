@@ -58,7 +58,7 @@ class PostMain extends React.Component {
 
   static navigationOptions = {
     title: 'Give',
-    headerStyle: {backgroundColor: Colors.background, shadowColor: 'transparent', elevation: 0},
+    headerStyle: {backgroundColor: Colors.background },
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
