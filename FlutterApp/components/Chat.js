@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { GiftedChat } from 'react-native-gifted-chat';
+import { Metrics, Colors } from './Themes';
 
 import Fire from '../Fire';
 
 class Chat extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: (navigation.state.params || {}).name || 'Chat!',
-    headerStyle: {backgroundColor: Colors.background, shadowColor: 'transparent', elevation: 0},
+    headerStyle: {backgroundColor: Colors.background},
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
