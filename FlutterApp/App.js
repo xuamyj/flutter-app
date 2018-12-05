@@ -16,9 +16,8 @@ import AuthLoading from './components/authentication/AuthLoading';
 import SignUp from './components/authentication/SignUp';
 import Login from './components/authentication/Login';
 import Icons from './components/Themes/Icons';
-import Fonts from './components/Themes/Fonts';
 
-import { Colors, Metrics } from './components/Themes'
+import { Colors, Metrics, Fonts } from './components/Themes'
 
 // Import React Navigation
 import {
@@ -72,7 +71,7 @@ const AppNavigator = createBottomTabNavigator({
       if (routeName === 'HOME') {
         iconName = `home`;
       } else if (routeName === 'GROUPS') {
-        iconName = `group-thick`;
+        iconName = `group`;
       } else if (routeName === 'POST') {
         iconName = `gift`;
       } else if (routeName === 'CHAT') {
@@ -81,7 +80,11 @@ const AppNavigator = createBottomTabNavigator({
         iconName = `user`;
       }
 
-      return <Icons iconName={iconName} size={24} tintColor={tintColor}/>;
+      if (routeName == 'GROUPS') {
+        return <Icons iconName={iconName} size={26} tintColor={tintColor}/>;
+      } else {
+        return <Icons iconName={iconName} size={24} tintColor={tintColor}/>;
+      }
     },
   }),
   tabBarOptions: {
@@ -95,7 +98,7 @@ const AppNavigator = createBottomTabNavigator({
 });
 
 // Authentication screens
-export default createAppContainer(createSwitchNavigator(
+const AppContainer = createAppContainer(createSwitchNavigator(
   {
     AuthLoading: AuthLoading,
     SignUp: SignUp,
@@ -107,4 +110,12 @@ export default createAppContainer(createSwitchNavigator(
   }
 ));
 
-console.disableYellowBox = true;
+export default class App extends React.Component {
+  render() {
+    return (
+      <Fonts>
+        <AppContainer />
+      </Fonts>
+    );
+  }
+}

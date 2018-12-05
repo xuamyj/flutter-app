@@ -62,15 +62,15 @@ export default class StoryCard extends React.Component {
             <Text style={styles.itemName}>{itemName}</Text>
             <Badge textStyle={styles.groupName} value={groupName} containerStyle={styles.badgeStyle}/>
           </View>
-          <View>
+          <View style={styles.imageContainer}>
             <Image style={styles.image} source={{uri:itemPicURL}} />
+            <View style={styles.userPics}>
+              <Avatar containerStyle={[styles.propic, giveUserPicStyle]} medium rounded source={{uri: giveUserPicUrl}} />
+              <Avatar containerStyle={[styles.propic, recvUserPicStyle]} medium rounded source={{uri: recvUserPicUrl}} />
+            </View>
           </View>
           <View style={styles.cardInfo}>
-            <View style={styles.userPics}>
-              <Avatar containerStyle={[styles.propic, giveUserPicStyle]} small rounded source={{uri: giveUserPicUrl}} />
-              <Avatar containerStyle={[styles.propic, recvUserPicStyle]} small rounded source={{uri: recvUserPicUrl}} />
-            </View>
-            <Text><Text style={styles.username}>{activeUserName}:</Text> {itemDescription}</Text>
+            <Text style={styles.description}><Text style={styles.username}>{activeUserName}</Text> {itemDescription}</Text>
           </View>
         </Animated.View>
       </TouchableWithoutFeedback>
@@ -102,13 +102,17 @@ const styles = StyleSheet.create({
     height: 300,
     resizeMode: 'cover',
   },
+  imageContainer: {
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  },
   itemName: {
     fontSize: 20,
-    fontWeight: '500',
     color: Colors.dark,
+    fontFamily: 'NunitoSemiBold',
   },
   groupName: {
-    fontSize: 13,
+    fontSize: 14.5,
     color: Colors.dark,
   },
   badgeStyle: {
@@ -119,17 +123,25 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    paddingVertical: Metrics.baseMargin,
-    paddingHorizontal: Metrics.baseMargin,
+    padding: Metrics.baseMargin,
   },
   userPics: {
+    position: 'absolute',
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    padding: Metrics.baseMargin,
   },
   propic: {
     marginRight: Metrics.baseMargin,
     marginBottom: Metrics.smallMargin,
+    shadowColor: Colors.dark,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.6,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  description: {
+    fontSize: 14,
   },
   username: {
     fontWeight: 'bold',
@@ -138,6 +150,6 @@ const styles = StyleSheet.create({
     opacity: 1.0,
   },
   inactivePicStyle: {
-    opacity: 0.3,
+    opacity: 0.4,
   }
 })

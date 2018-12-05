@@ -34,7 +34,11 @@ class ChatMain extends React.Component {
 
   static navigationOptions = {
     title: 'Messages',
-    headerStyle: {backgroundColor: Colors.background}
+    headerStyle: {backgroundColor: Colors.background, shadowColor: 'transparent', elevation: 0},
+    headerTitleStyle: {
+      fontFamily: 'NunitoBold',
+      fontWeight: '200',
+    }
   };
 
   render() {
@@ -82,7 +86,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     backgroundColor: Colors.background,
-    fontSize: 16,
+    fontSize: 15,
   },
 });
 

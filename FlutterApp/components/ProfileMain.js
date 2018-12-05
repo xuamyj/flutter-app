@@ -20,7 +20,11 @@ class ProfileMain extends React.Component {
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Amy',
-      headerStyle: {backgroundColor: Colors.background, shadowColor: 'transparent', elevation: 0},
+      headerStyle: {backgroundColor: Colors.background, borderBottomWidth: 0, elevation: 0},
+      headerTitleStyle: {
+        fontFamily: 'NunitoBold',
+        fontWeight: '200',
+      },
       headerRight: (
         <View style={styles.headerButton}>
           <TouchableOpacity onPress={navigation.getParam('onPressSettings')}>
@@ -80,7 +84,7 @@ class ProfileMain extends React.Component {
             <TabBar
               {...props}
               indicatorStyle={{backgroundColor: '#49B6BB'}}
-              labelStyle={{color: Colors.dark}}
+              labelStyle={{fontSize: 14, color: Colors.dark}}
               style={{backgroundColor: Colors.background}}
             />
           }

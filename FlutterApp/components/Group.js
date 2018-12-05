@@ -17,7 +17,11 @@ class Group extends React.Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: (navigation.state.params || {}).name || 'Group!',
-    headerStyle: {backgroundColor: Colors.background},
+    headerStyle: {backgroundColor: Colors.background, shadowColor: 'transparent', elevation: 0},
+    headerTitleStyle: {
+      fontFamily: 'NunitoBold',
+      fontWeight: '200',
+    }
   });
 
   state = {

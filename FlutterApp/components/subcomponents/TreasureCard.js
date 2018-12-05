@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import { Text, View, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFeedback, TouchableOpacity, Button } from 'react-native';
 import { Avatar, Badge} from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
-import Icons from '../Themes/Icons';
-import Modal from 'react-native-modal';
+import TreasurePopup from '../subcomponents/TreasurePopup';
 
 const {height, width} = Dimensions.get('window');
 
@@ -41,9 +40,6 @@ export default class TreasureCard extends React.Component {
     }).start();
   }
 
-  open = () => {
-  }
-
   render() {
     const animatedStyle = {
       transform: [{scale: this.animatedValue}]
@@ -72,34 +68,7 @@ export default class TreasureCard extends React.Component {
             <Text style={styles.username}>{userName}</Text>
           </View>
 
-          <Modal isVisible={this.state.isModalVisible}
-                 onBackdropPress={this._toggleModal}>
-            <View style={styles.modalCard}>
-              <View style={styles.modalCardTitle}>
-                <Text style={styles.itemName}>{itemName}</Text>
-                <View style={styles.modalCardTitleRight}>
-                  <Badge textStyle={styles.groupName} value={groupName} containerStyle={styles.modalBadgeStyle}/>
-                  <TouchableOpacity onPress={this._toggleModal}>
-                    <Icons iconName={"cross"} size={18}/>
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View>
-                <Image style={styles.modalImage} source={{uri:itemPicURL}} />
-              </View>
-              <View style={styles.modalCardInfo}>
-                <Avatar containerStyle={styles.propic} small rounded source={{uri: userPicUrl}} />
-                <View style={styles.modalCardInfoText}>
-                  <Text><Text style={styles.username}>{userName}: </Text>{itemDescription}</Text>
-                </View>
-              </View>
-              <Button
-                onPress={this._toggleModal}
-                title="I want this!"
-                color="#49B6BB"
-              />
-            </View>
-          </Modal>
+          <TreasurePopup isVisible={this.state.isModalVisible} toggle={this._toggleModal} treasure={this.props.treasure} />
         </Animated.View>
       </TouchableWithoutFeedback>
     );
@@ -133,11 +102,11 @@ const styles = StyleSheet.create({
   },
   itemName: {
     fontSize: 16,
-    fontWeight: '500',
     color: Colors.dark,
+    fontFamily: 'NunitoSemiBold',
   },
   groupName: {
-    fontSize: 15,
+    fontSize: 13.5,
     color: Colors.dark,
   },
   badgeStyle: {
@@ -149,58 +118,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingVertical: Metrics.baseMargin,
-    paddingHorizontal: Metrics.baseMargin,
+    padding: Metrics.baseMargin,
+    paddingTop: 2,
+    paddingBottom: Metrics.smallMargin,
   },
   propic: {
     marginRight: Metrics.baseMargin,
-    marginBottom: Metrics.smallMargin,
+    marginTop: Metrics.baseMargin * -1.5,
+    shadowColor: Colors.dark,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.6,
+    shadowRadius: 2,
+    elevation: 2,
   },
   username: {
     fontWeight: 'bold',
     color: Colors.dark,
+    fontSize: 12,
+    marginLeft: -Metrics.smallMargin,
   },
-  modalCard: {
-    backgroundColor: 'white',
-    borderRadius: Metrics.baseMargin,
-    shadowColor: Colors.dark,
-    shadowOffset: {width: 0, height: 3},
-    shadowOpacity: 1.0,
-    shadowRadius: 5,
-    elevation: 5,
-    margin: Metrics.baseMargin,
-  },
-  modalCardTitle: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: Metrics.baseMargin,
-
-  },
-  modalCardTitleRight: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalImage: {
-    width: '100%',
-    height: 300,
-    resizeMode: 'cover',
-  },
-  modalBadgeStyle: {
-    backgroundColor: Colors.background,
-    padding: Metrics.baseMargin,
-    marginRight: 10,
-  },
-  modalCardInfo: {
-    paddingVertical: Metrics.baseMargin,
-    paddingHorizontal: Metrics.baseMargin,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: Metrics.baseMargin,
-  },
-  modalCardInfoText: {
-    width: width * 0.7,
-  }
 })

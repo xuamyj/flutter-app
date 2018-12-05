@@ -18,6 +18,10 @@ class GroupsMain extends React.Component {
           </TouchableOpacity>
         </View>
       ),
+      headerTitleStyle: {
+        fontFamily: 'NunitoBold',
+        fontWeight: '200',
+      }
     };
   };
 
@@ -100,7 +104,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     backgroundColor: Colors.background,
-    fontSize: 16,
+    fontSize: 15,
   },
 })
 

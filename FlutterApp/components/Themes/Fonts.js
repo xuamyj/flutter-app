@@ -1,12 +1,26 @@
 import React from 'react';
-
+import {
+  Text,
+  View,
+} from 'react-native';
 import { Font } from 'expo';
 
 export default class Fonts extends React.Component {
-  componentDidMount() {
-    Font.loadAsync({
-      'nunito': require('../../assets/fonts/Nunito/Nunito-Regular.ttf'),
-      'open-sans': require('../../assets/fonts/OpenSans/OpenSans-Regular.ttf'),
-    });
-  }
+  state = {
+    fontLoaded: false,
+  };
+
+  async componentDidMount() {
+      await Font.loadAsync({
+        'Nunito': require('../../assets/fonts/Nunito/Nunito-Regular.ttf'),
+        'NunitoSemiBold': require('../../assets/fonts/Nunito/Nunito-SemiBold.ttf'),
+        'NunitoBold': require('../../assets/fonts/Nunito/Nunito-Bold.ttf'),
+      });
+
+      this.setState({ fontLoaded: true });
+    }
+
+    render() {
+      return this.state.fontLoaded ? this.props.children : null;
+    }
 }

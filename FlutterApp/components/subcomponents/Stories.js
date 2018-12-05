@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     backgroundColor: Colors.background,
-    fontSize: 16,
+    fontSize: 15,
   }
 })
 

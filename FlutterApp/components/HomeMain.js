@@ -4,7 +4,6 @@ import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 
 import Stories from './subcomponents/Stories';
 import Treasures from './subcomponents/Treasures';
-import Logo from './subcomponents/Logo'
 import { Colors } from '../components/Themes';
 
 const StoriesRoute = () => (
@@ -24,8 +23,12 @@ class HomeMain extends React.Component {
   };
 
   static navigationOptions = {
-    headerTitle: <Logo />,
-    headerStyle: {backgroundColor: Colors.background, shadowColor: 'transparent', elevation: 0}
+    headerTitle: 'Flutter',
+    headerStyle: {backgroundColor: Colors.background, borderBottomWidth: 0, elevation: 0},
+    headerTitleStyle: {
+      fontFamily: 'NunitoBold',
+      fontWeight: '200',
+    }
   };
 
   render() {
@@ -43,7 +46,7 @@ class HomeMain extends React.Component {
             <TabBar
               {...props}
               indicatorStyle={{backgroundColor: '#49B6BB'}}
-              labelStyle={{color: Colors.dark}}
+              labelStyle={{fontSize: 14, color: Colors.dark}}
               style={{backgroundColor: Colors.background}}
             />
           }
