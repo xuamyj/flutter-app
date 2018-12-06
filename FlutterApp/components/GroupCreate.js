@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, TouchableOpacity, Alert } from 'react-native';
+import { Text, View, StyleSheet, Button, TouchableOpacity, Alert, Image } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import { Metrics, Colors } from './Themes';
 
@@ -40,14 +40,23 @@ class GroupCreate extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.fillout}>
-          <FormLabel>Group name</FormLabel>
+          <FormLabel labelStyle={styles.label}>Group name</FormLabel>
           <FormInput onChangeText={this.onChangeInputGroupName}/>
-          <FormValidationMessage>{this.state.errorMsgName}</FormValidationMessage>
+        </View>
+        <View style= {{alignItems: 'center',}}>
+            <Image
+              style={styles.imagePreview}
+              source={{uri: this.state.inputItemPicUrl}}
+            />
+            <Button
+              title="Upload Photo"
+              color="#49B6BB"
+              onPress={this.onPressCamera}
+            />
         </View>
         <View style={styles.fillout}>
-          <FormLabel>Members</FormLabel>
+          <FormLabel labelStyle={styles.label}>Members</FormLabel>
           <FormInput onChangeText={this.onChangeInputGroupMembers}/>
-          <FormValidationMessage>{this.state.errorMsgMembers}</FormValidationMessage>
         </View>
         <View style={styles.postView}>
         <TouchableOpacity style={styles.post} onPress={this.onPressPost}>
@@ -63,9 +72,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 5,
+    paddingHorizontal: Metrics.doubleBaseMargin,
   },
   fillout: {
-    margin: 10,
     paddingBottom: 20,
     borderRadius: 15,
     backgroundColor: "white",
@@ -90,7 +99,8 @@ const styles = StyleSheet.create({
       height: 0.5
     },
     shadowRadius: 10,
-    shadowOpacity: 1.0
+    shadowOpacity: 1.0,
+    elevation: 1,
   },
       postView: {
         flexDirection: 'row',
@@ -99,6 +109,18 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginBottom: 20,
     },
+    label: {
+      fontWeight: 'normal',
+      color: Colors.dark,
+      fontSize: 18,
+    },
+    imagePreview: {
+      width: '100%',
+      height: 120,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: '#C1C1C1',
+  },
 })
 
 export default GroupCreate;

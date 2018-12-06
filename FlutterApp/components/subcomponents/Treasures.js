@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   cardsContainer: {
-    paddingHorizontal: Metrics.baseMargin * 1.4,
+    paddingHorizontal: Metrics.baseMargin * 1.5,
     marginBottom: Metrics.smallMargin,
   },
 })

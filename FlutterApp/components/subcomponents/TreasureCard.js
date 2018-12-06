@@ -93,10 +93,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 1,
     elevation: 3,
-    marginHorizontal: Metrics.baseMargin,
+    marginHorizontal: Metrics.baseMargin * 0.75,
     marginTop: Metrics.smallMargin,
     marginBottom: Metrics.baseMargin * 1.25,
-    width: width * 0.5 - Metrics.doubleBaseMargin * 1.5 - Metrics.smallMargin * 0.8
+    width: width * 0.5 - Metrics.doubleBaseMargin * 1.5
   },
   image: {
     width: '100%',

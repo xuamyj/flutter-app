@@ -1,67 +1,123 @@
 import React, {Component} from 'react';
-import { Text, View, StyleSheet, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFeedback } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 
 const {height, width} = Dimensions.get('window');
 
 export default class GroupItem extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.handlePressIn = this.handlePressIn.bind(this);
+    this.handlePressOut = this.handlePressOut.bind(this);
+  }
+
+  componentWillMount() {
+    this.animatedValue = new Animated.Value(1);
+  }
+
+  handlePressIn() {
+    Animated.spring(this.animatedValue, {
+      toValue: .98
+    }).start();
+  }
+
+  handlePressOut() {
+    Animated.spring(this.animatedValue, {
+      toValue: 1,
+      friction: 1000,
+      tension: 40,
+    }).start();
+  }
+
   render() {
+    const animatedStyle = {
+      transform: [{scale: this.animatedValue}]
+    }
+
+    var membersLabel = this.props.group.size - 3;
+    var extraMembers = null;
+    if (membersLabel > 0) {
+      extraMembers = <Avatar containerStyle={styles.propic} medium rounded title={"+"+membersLabel} />
+    }
+
     return (
-      <View style={styles.container}>
-      <View style={styles.itemContainer}>
-        <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.props.chat.picUrl}} />
-        <View style={styles.text}>
-          <View style={styles.heading}>
-            <Text style={styles.name} ellipsizeMode={'tail'} numberOfLines={1}>{this.props.chat.name}</Text>
-            <Text style={styles.date}>Dec 4</Text>
+      <TouchableWithoutFeedback onPress={() => {this.props.openGroup(this.props.group.name)}} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
+        <Animated.View style={[styles.container, animatedStyle]}>
+          <Image style={styles.image} source={{uri:this.props.group.picUrl}} />
+          <Text style={styles.groupName}>{this.props.group.name}</Text>
+          <View style={styles.memberContainer}>
+            <View style={styles.groupMembersContainer}>
+              <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.props.group.user1}} />
+              <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.props.group.user2}} />
+              <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.props.group.user3}} />
+              {extraMembers}
+            </View>
           </View>
-          <Text style={styles.preview} ellipsizeMode={'tail'} numberOfLines={1}>{this.props.chat.subtitle}</Text>
-        </View>
-      </View>
-      <View style={styles.border} />
-      </View>
+        </Animated.View>
+      </TouchableWithoutFeedback>
     )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: Metrics.baseMargin,
+    shadowColor: Colors.dark,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.3,
+    shadowRadius: 1,
+    elevation: 3,
+    marginHorizontal: Metrics.doubleBaseMargin,
+    marginTop: Metrics.smallMargin,
+    marginBottom: Metrics.baseMargin * 1.25,
   },
-  itemContainer: {
+  image: {
+    width: '100%',
+    height: 120,
+    resizeMode: 'cover',
+    borderRadius: Metrics.baseMargin,
+    opacity: 0.25,
+  },
+  groupName: {
+    position: 'absolute',
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: Metrics.doubleBaseMargin,
-    paddingVertical: Metrics.baseMargin * 1.5,
+    padding: Metrics.baseMargin,
+  },
+  groupMembersContainer: {
+    position: 'absolute',
+    flex: 1,
+    flexDirection: 'row',
+    padding: Metrics.baseMargin,
   },
   propic: {
-    marginRight: Metrics.doubleBaseMargin,
+    marginBottom: Metrics.smallMargin,
+    shadowColor: Colors.dark,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.6,
+    shadowRadius: 2,
+    elevation: 2,
+    marginRight: Metrics.baseMargin,
   },
-  text: {
-    flex: 1,
+  memberContainer: {
     flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
   },
-  heading: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  nameContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-end',
   },
-  name: {
-    fontSize: 16,
+  groupName: {
+    position: 'absolute',
+    flex: 1,
+    fontFamily: 'NunitoSemiBold',
     color: Colors.dark,
-  },
-  date: {
-    fontSize: 13,
-    color: Colors.dark,
-  },
-  preview: {
-    fontSize: 14,
-    color: Colors.lightText,
-  },
-  border: {
-    width: '90%',
-    borderBottomColor: Colors.background,
-    borderBottomWidth: 1,
+    fontSize: 23,
+    paddingHorizontal: Metrics.doubleBaseMargin,
+    paddingVertical: Metrics.baseMargin * 1.5,
   }
 })

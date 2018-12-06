@@ -69,10 +69,10 @@ class PostMain extends React.Component {
     return (
       <ScrollView style={styles.container}>
         <View style={styles.fillout}>
-          <FormLabel>Post Title</FormLabel>
+          <FormLabel labelStyle={styles.label}>Post Title</FormLabel>
           <FormInput onChangeText={this.onChangeInputItemName}/>
           <View style = {{paddingVertical:10}}>
-            <FormLabel>Picture</FormLabel>
+            <FormLabel labelStyle={styles.label}>Picture</FormLabel>
           </View>
           <View style= {{alignItems: 'center',}}>
               <Image
@@ -86,7 +86,7 @@ class PostMain extends React.Component {
               />
           </View>
 
-          <FormLabel>Description</FormLabel>
+          <FormLabel labelStyle={styles.label}>Description</FormLabel>
           <TextInput
             style = {styles.description}
             multiline={true}
@@ -95,7 +95,7 @@ class PostMain extends React.Component {
             onChangeText={this.onChangeInputItemDescription}
           />
               <View>
-              <FormLabel>Group</FormLabel>
+              <FormLabel labelStyle={styles.label}>Group</FormLabel>
                   <View style={styles.picker}>
                   <Picker
                   selectedValue={this.state.inputGroupKey}
@@ -124,10 +124,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 5,
+    paddingHorizontal: Metrics.doubleBaseMargin,
   },
   fillout: {
     flex: 1,
-    margin: 10,
     backgroundColor: "white",
     borderRadius: 10,
     shadowColor: 'rgba(0, 0, 0, 0.08)',
@@ -158,8 +158,8 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.1
   },
   imagePreview: {
-    width: 200,
-    height: 200,
+    width: '100%',
+    height: 270,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: '#C1C1C1',
@@ -176,7 +176,8 @@ const styles = StyleSheet.create({
     height: 0.2
   },
   shadowRadius: 15,
-  shadowOpacity: 1.0
+  shadowOpacity: 1.0,
+  elevation: 1,
 },
     postView: {
       flexDirection: 'row',
@@ -188,6 +189,11 @@ const styles = StyleSheet.create({
   picker: {
       marginHorizontal: 10,
   },
+  label: {
+    fontWeight: 'normal',
+    color: Colors.dark,
+    fontSize: 18,
+  }
 
 })
 
