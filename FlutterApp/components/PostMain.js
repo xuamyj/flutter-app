@@ -88,28 +88,30 @@ class PostMain extends React.Component {
 
           <FormLabel>Description</FormLabel>
           <TextInput
-            style = {{margin: 20, paddingLeft: 8, height: 60, borderColor: '#C1C1C1', borderWidth: 1, borderRadius: 5,}}
+            style = {styles.description}
             multiline={true}
             placeholder = "Why is it meaningful to you? When did you last use it?"
             numberOfLines={4}
             onChangeText={this.onChangeInputItemDescription}
           />
-              <View >
+              <View>
               <FormLabel>Group</FormLabel>
-                <Picker
+                  <View style={styles.picker}>
+                  <Picker
                   selectedValue={this.state.inputGroupKey}
                   onValueChange={(itemValue, itemIndex) => this.setState({inputGroupKey: itemValue})}>
                   {
-                    this.state.groupList.map((l) => (
-                      <Picker.Item label={l.name} value={l.key} key={l.key} />
-                    ))
+                      this.state.groupList.map((l) => (
+                          <Picker.Item label={l.name} value={l.key} key={l.key} />
+                      ))
                   }
-                </Picker>
+                  </Picker>
+                  </View>
               </View>
               <View style={styles.postView}>
-              <TouchableOpacity style={styles.post} onPress={this.onPressPost}>
-                <Text style={{fontWeight:"bold", color: "white", fontSize: 16,}}>Give</Text>
-              </TouchableOpacity>
+                  <TouchableOpacity style={styles.post} onPress={this.onPressPost}>
+                    <Text style={{fontWeight:"bold", color: "white", fontSize: 16,}}>Give</Text>
+                  </TouchableOpacity>
               </View>
 
         </View>
@@ -125,11 +127,35 @@ const styles = StyleSheet.create({
   },
   fillout: {
     flex: 1,
+    margin: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    shadowColor: 'rgba(0, 0, 0, 0.08)',
+    shadowOffset: {
+      width: 0.2,
+      height: 0.2
+    },
+    shadowRadius: 15,
+    shadowOpacity: 1.0
   },
   centerSection: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  description: {
+      margin: 20,
+      paddingLeft: 8,
+      height: 60,
+      borderRadius: 10,
+      backgroundColor: "white",
+      shadowColor: '#49B6BB',
+      shadowOffset: {
+        width: 1,
+        height: 1
+      },
+      shadowRadius: 2,
+      shadowOpacity: 0.1
   },
   imagePreview: {
     width: 200,
@@ -144,6 +170,13 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: "center",
+    shadowColor: 'rgba(0, 0, 0, 0.08)',
+  shadowOffset: {
+    width: 0.2,
+    height: 0.2
+  },
+  shadowRadius: 15,
+  shadowOpacity: 1.0
 },
     postView: {
       flexDirection: 'row',
@@ -151,7 +184,11 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       marginTop: 10,
       marginBottom: 20,
-    }
+  },
+  picker: {
+      marginHorizontal: 10,
+  },
+
 })
 
 export default PostMain;

@@ -139,6 +139,16 @@ class Settings extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    margin: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    shadowColor: 'rgba(0, 0, 0, 0.08)',
+    shadowOffset: {
+      width: 0.2,
+      height: 0.2
+    },
+    shadowRadius: 15,
+    shadowOpacity: 1.0
   },
   imagePreview: {
     width: 80,
