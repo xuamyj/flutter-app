@@ -47,9 +47,11 @@ export default class TreasurePopup extends React.Component {
               <Text><Text style={styles.username}>{userName} </Text>{itemDescription}</Text>
             </View>
           </View>
-          <TouchableOpacity onPress={this._toggleModal} style={styles.post}>
-            <Text style={{fontWeight:"bold", color: "white", fontSize: 15,}}>I want this!</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity onPress={this._toggleModal} style={styles.post}>
+              <Text style={{fontWeight:"bold", color: "white", fontSize: 15,}}>I want this!</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     );
@@ -86,7 +88,6 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
     margin: Metrics.baseMargin,
-    alignItems: 'center',
   },
   cardTitle: {
     flexDirection: 'row',
@@ -137,4 +138,7 @@ const styles = StyleSheet.create({
     elevation: 1,
     marginBottom: Metrics.doubleBaseMargin,
   },
+  buttonContainer: {
+    alignItems: 'center',
+  }
 })
