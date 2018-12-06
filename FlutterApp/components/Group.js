@@ -1,6 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet, Dimensions, Image } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
+import { Icon } from 'react-native-elements';
 import { Metrics, Colors } from './Themes';
 
 import Stories from './subcomponents/Stories'
@@ -21,7 +22,17 @@ class Group extends React.Component {
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
-    }
+    },
+    headerRight: (
+      <View style={styles.headerButton}>
+        <TouchableOpacity>
+          <Icon
+            name='settings'
+            color='#49B6BB'
+            />
+        </TouchableOpacity>
+      </View>
+    ),
   });
 
   state = {
@@ -64,6 +75,9 @@ const styles = StyleSheet.create({
   },
   scene: {
     flex: 1,
+  },
+  headerButton:{
+    paddingHorizontal: Metrics.baseMargin * 1.5,
   },
 })
 

@@ -1,7 +1,9 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { ListItem, SearchBar, Icon } from 'react-native-elements';
 import { Metrics, Colors } from './Themes';
+import ChatItem from './subcomponents/ChatItem';
+import Search from './subcomponents/Search';
 
 class ChatMain extends React.Component {
   state = {
@@ -28,45 +30,37 @@ class ChatMain extends React.Component {
     this.props.navigation.navigate('Chat', { name: 'TODO fix chat' });
   }
 
-  onPressChat = () => {
-    this.props.navigation.navigate('Chat', { name: 'TODO fix chat' });
+  onPressChat = (name) => {
+    this.props.navigation.navigate('Chat', { name: name });
   }
 
   static navigationOptions = {
     title: 'Messages',
-    headerStyle: {backgroundColor: Colors.background },
+    headerStyle: {backgroundColor: Colors.background, shadowColor: 'transparent', elevation: 0},
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
     }
   };
 
+  renderChat = ({ item }) => (
+    <TouchableOpacity onPress={() => {this.onPressChat(item.name)}}>
+      <ChatItem chat={item} />
+    </TouchableOpacity>
+  )
+
   render() {
     return (
       <View style={styles.container}>
 
-      <SearchBar
-        round
-        lightTheme
-        containerStyle={styles.searchBarContainer}
-        inputStyle={styles.searchBar}
-        onChangeText={this.onChangeSearchText}
-        onClearText={this.onClearSearchText}
-        placeholder='Search chats...'
-        />
+      <Search />
 
       <ScrollView>
         {
-          this.state.chatList.map((l) => (
-            <ListItem
-              roundAvatar
-              key={l.key}
-              title={l.name}
-              subtitle={l.subtitle}
-              avatar={{uri:l.picUrl}}
-              onPress={this.onPressChat}
-            />
-          ))
+          <FlatList
+            data={this.state.chatList}
+            renderItem={this.renderChat}
+          />
         }
       </ScrollView>
       </View>
@@ -78,15 +72,6 @@ const offset = 24;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  searchBarContainer: {
-    backgroundColor: 'white',
-    borderTopWidth: 0,
-    borderBottomWidth: 0,
-  },
-  searchBar: {
-    backgroundColor: Colors.background,
-    fontSize: 15,
   },
 });
 

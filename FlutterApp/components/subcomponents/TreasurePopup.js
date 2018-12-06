@@ -30,7 +30,7 @@ export default class TreasurePopup extends React.Component {
              onBackdropPress={this._toggleModal}>
         <View style={styles.card}>
           <View style={styles.cardTitle}>
-            <Text style={styles.itemName}>{itemName}</Text>
+            <Text style={styles.itemName} ellipsizeMode={'tail'} numberOfLines={1}>{itemName}</Text>
             <View style={styles.cardTitleRight}>
               <Badge textStyle={styles.groupName} value={groupName} containerStyle={styles.badgeStyle}/>
               <TouchableOpacity onPress={this._toggleModal}>
@@ -43,7 +43,7 @@ export default class TreasurePopup extends React.Component {
           </View>
           <View style={styles.cardInfo}>
             <Avatar containerStyle={styles.propic} medium rounded source={{uri: userPicUrl}} />
-            <View style={styles.cardInfoText}>
+            <View style={styles.cardInfoText} ellipsizeMode={'tail'} numberOfLines={1}>
               <Text><Text style={styles.username}>{userName} </Text>{itemDescription}</Text>
             </View>
           </View>
@@ -64,6 +64,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: Colors.dark,
     fontFamily: 'NunitoSemiBold',
+    flex: 1,
+    marginRight: Metrics.smallMargin,
   },
   groupName: {
     fontSize: 14.5,
@@ -117,6 +119,6 @@ const styles = StyleSheet.create({
     padding: Metrics.baseMargin,
   },
   cardInfoText: {
-    width: width * 0.68,
+    flex: 1,
   }
 })

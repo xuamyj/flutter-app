@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Button, ScrollView, Dimensions, Image, Animated
 import { Card, Avatar, SearchBar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 import StoryCard from './StoryCard';
+import Search from './Search';
 
 
 const {height, width} = Dimensions.get('window');
@@ -52,15 +53,7 @@ class Stories extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <SearchBar
-          round
-          lightTheme
-          containerStyle={styles.searchBarContainer}
-          inputStyle={styles.searchBar}
-          onChangeText={this.onChangeSearchText}
-          onClearText={this.onClearSearchText}
-          placeholder='Search stories...'
-        />
+        <Search />
 
         <ScrollView>
           {
@@ -76,7 +69,7 @@ class Stories extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 50,
+    marginBottom: 60,
   },
   group: {
     flex: 1,
@@ -95,7 +88,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   card: {
-    backgroundColor: 'white',
+    backgroundColor: 'transparent',
     borderRadius: Metrics.doubleBaseMargin,
     borderColor: Colors.border,
     borderWidth: Metrics.borderWidth,
@@ -136,15 +129,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     margin: 5,
   },
-  searchBarContainer: {
-    backgroundColor: 'white',
-    borderTopWidth: 0,
-    borderBottomWidth: 0,
-  },
-  searchBar: {
-    backgroundColor: Colors.background,
-    fontSize: 15,
-  }
 })
 
 export default Stories;

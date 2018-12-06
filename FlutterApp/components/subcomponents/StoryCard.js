@@ -31,7 +31,7 @@ export default class StoryCard extends React.Component {
       toValue: 1,
       friction: 1000,
       tension: 40,
-    }).start()
+    }).start();
   }
 
   switch = () => {
@@ -59,7 +59,7 @@ export default class StoryCard extends React.Component {
       <TouchableWithoutFeedback onPress={this.switch} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
         <Animated.View style={[styles.card, animatedStyle]}>
           <View style={styles.cardTitle}>
-            <Text style={styles.itemName}>{itemName}</Text>
+            <Text style={styles.itemName} ellipsizeMode={'tail'} numberOfLines={1}>{itemName}</Text>
             <Badge textStyle={styles.groupName} value={groupName} containerStyle={styles.badgeStyle}/>
           </View>
           <View style={styles.imageContainer}>
@@ -89,13 +89,15 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: 'white',
-    borderRadius: Metrics.baseMargin,
+    borderRadius: Metrics.baseMargin * 1.5,
     shadowColor: Colors.dark,
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.3,
     shadowRadius: 2,
-    elevation: 5,
-    margin: Metrics.baseMargin,
+    elevation: 3,
+    marginHorizontal: Metrics.doubleBaseMargin * 1.25,
+    marginTop: Metrics.smallMargin,
+    marginBottom: Metrics.baseMargin * 1.5,
   },
   image: {
     width: '100%',
@@ -110,6 +112,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: Colors.dark,
     fontFamily: 'NunitoSemiBold',
+    flex: 1,
+    marginRight: Metrics.smallMargin,
   },
   groupName: {
     fontSize: 14.5,

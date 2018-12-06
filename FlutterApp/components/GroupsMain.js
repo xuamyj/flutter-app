@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { ListItem, SearchBar, Icon } from 'react-native-elements';
 import { Metrics, Colors } from './Themes';
+import Search from './subcomponents/Search';
 
 class GroupsMain extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -56,22 +57,14 @@ class GroupsMain extends React.Component {
     this.props.navigation.navigate('GroupCreate', {});
   }
 
-  onPressGroup = () => {
-    this.props.navigation.navigate('Group', { name: 'Disney' });
+  onPressGroup = (name) => {
+    this.props.navigation.navigate('Group', { name: name });
   }
 
   render() {
     return (
       <View style={styles.container}>
-      <SearchBar
-        round
-        lightTheme
-        containerStyle={styles.searchBarContainer}
-        inputStyle={styles.searchBar}
-        onChangeText={this.onChangeSearchText}
-        onClearText={this.onClearSearchText}
-        placeholder='Search groups...'
-        />
+      <Search />
 
         <ScrollView>
           {
@@ -80,7 +73,7 @@ class GroupsMain extends React.Component {
                 key={l.key}
                 title={l.name}
                 subtitle={l.subtitle}
-                onPress={this.onPressGroup}
+                onPress={() => {this.onPressGroup(l.name)}}
               />
             ))
           }
@@ -96,15 +89,6 @@ const styles = StyleSheet.create({
   },
   headerButton:{
     paddingHorizontal: Metrics.baseMargin * 1.5,
-  },
-  searchBarContainer: {
-    backgroundColor: 'white',
-    borderTopWidth: 0,
-    borderBottomWidth: 0,
-  },
-  searchBar: {
-    backgroundColor: Colors.background,
-    fontSize: 15,
   },
 })
 

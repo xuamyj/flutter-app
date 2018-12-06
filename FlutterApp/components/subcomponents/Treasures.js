@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Button, FlatList, TouchableOpacity } from 'reac
 import { Card, Avatar, SearchBar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 import TreasureCard from './TreasureCard';
+import Search from './Search';
 
 class Treasures extends React.Component {
 
@@ -73,7 +74,7 @@ class Treasures extends React.Component {
   onChangeSearchText = () => null; // search; do last
   onClearSearchText = () => null; // search; do last
 
-  renderItem({item, index}) {
+  renderItem({item}) {
     return (
       <TreasureCard treasure={item} />
     )
@@ -82,16 +83,7 @@ class Treasures extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <SearchBar
-          round
-          lightTheme
-          containerStyle={styles.searchBarContainer}
-          inputStyle={styles.searchBar}
-          onChangeText={this.onChangeSearchText}
-          onClearText={this.onClearSearchText}
-          placeholder='Search stories...'
-        />
-
+        <Search />
         <FlatList
           style={styles.cardsContainer}
           data={this.state.treasureList}
@@ -106,17 +98,9 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 50,
   },
-  searchBarContainer: {
-    backgroundColor: 'white',
-    borderTopWidth: 0,
-    borderBottomWidth: 0,
-  },
-  searchBar: {
-    backgroundColor: Colors.background,
-    fontSize: 15,
-  },
   cardsContainer: {
-    margin: Metrics.smallMargin,
+    paddingHorizontal: Metrics.baseMargin * 1.4,
+    marginBottom: Metrics.smallMargin,
   },
 })
 

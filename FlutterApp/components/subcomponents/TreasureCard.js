@@ -57,7 +57,7 @@ export default class TreasureCard extends React.Component {
 
         <Animated.View style={[styles.card, animatedStyle]}>
           <View style={styles.cardTitle}>
-            <Text style={styles.itemName}>{itemName}</Text>
+            <Text style={styles.itemName} ellipsizeMode={'tail'} numberOfLines={1}>{itemName}</Text>
             <Badge textStyle={styles.groupName} value={groupName} containerStyle={styles.badgeStyle}/>
           </View>
           <View>
@@ -83,28 +83,32 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: Metrics.baseMargin,
-    paddingVertical: Metrics.smallMargin,
+    paddingVertical: Metrics.baseMargin,
   },
   card: {
     backgroundColor: 'white',
-    borderRadius: Metrics.baseMargin * 0.75,
+    borderRadius: Metrics.baseMargin,
     shadowColor: Colors.dark,
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.3,
     shadowRadius: 1,
-    elevation: 5,
-    margin: Metrics.smallMargin,
-    width: width * 0.5 - Metrics.smallMargin * 3,
+    elevation: 3,
+    marginHorizontal: Metrics.baseMargin,
+    marginTop: Metrics.smallMargin,
+    marginBottom: Metrics.baseMargin * 1.25,
+    width: width * 0.5 - Metrics.doubleBaseMargin * 1.5 - Metrics.smallMargin * 0.8
   },
   image: {
     width: '100%',
-    height: 150,
+    height: 130,
     resizeMode: 'cover',
   },
   itemName: {
     fontSize: 16,
     color: Colors.dark,
     fontFamily: 'NunitoSemiBold',
+    flex: 1,
+    marginRight: Metrics.smallMargin,
   },
   groupName: {
     fontSize: 12,
