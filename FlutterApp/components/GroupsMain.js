@@ -74,7 +74,7 @@ class GroupsMain extends React.Component {
     this.props.navigation.navigate('Group', { name: name });
   }
 
-  renderItem({item}) {
+  renderItem = ({item}) => {
     return (
       <GroupItem group={item} openGroup={this.onPressGroup}/>
     )
