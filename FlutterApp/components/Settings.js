@@ -74,7 +74,7 @@ class Settings extends React.Component {
   }
 
   static navigationOptions = {
-      title: 'Settings',
+      title: 'Profile Settings',
       headerStyle: {backgroundColor: Colors.background },
       headerTitleStyle: {
         fontFamily: 'NunitoBold',

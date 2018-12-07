@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View, StyleSheet, Dimensions, TouchableOpacity, Picker, Image, Alert, ScrollView } from 'react-native';
+import { Text, TextInput, View, StyleSheet, Dimensions, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
 import { Icon } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
@@ -64,7 +64,6 @@ class PostMain extends React.Component {
         {text: 'OK'},
       ],
     );
-
     this.props.navigation.navigate('HOME'); //
   }
 
@@ -117,9 +116,8 @@ class PostMain extends React.Component {
             />
             <Text style={styles.label}>Description</Text>
             <TextInput
-              style = {styles.description}
+              style = {[styles.textInput]}
               multiline={true}
-              style={styles.textInput}
               placeholder = "Why is it meaningful to you?"
               onChangeText={this.onChangeInputItemDescription}
             />
@@ -188,7 +186,6 @@ const styles = StyleSheet.create({
     marginTop: Metrics.baseMargin * 3,
   },
   textInput: {
-    height: 40,
     width: '80%',
     borderColor: Colors.dark,
     borderWidth: 0,
@@ -218,7 +215,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'row',
     padding: Metrics.baseMargin,
-    bottom:height - width * 1 / 3 - Metrics.doubleBaseMargin,
+    top: width * 1 / 3 + Metrics.baseMargin * 3,
     right:0,
   }
 })

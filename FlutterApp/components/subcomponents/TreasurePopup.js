@@ -46,7 +46,7 @@ export default class TreasurePopup extends React.Component {
             <View>
               <View style={styles.cardInfo}>
                 <View style={styles.cardInfoText} >
-                  <Text>{itemDescription}</Text>
+                  <Text style={styles.text}>{itemDescription}</Text>
                 </View>
               </View>
               <View style={styles.buttonContainer}>
@@ -77,7 +77,7 @@ export default class TreasurePopup extends React.Component {
               <View style={styles.cardInfo}>
                 <Avatar containerStyle={styles.propic} medium rounded source={{uri: userPicUrl}} />
                 <View style={styles.cardInfoText}>
-                  <Text><Text style={styles.username}>{userName} </Text>{itemDescription}</Text>
+                  <Text style={styles.text}><Text style={styles.username}>{userName} </Text>{itemDescription}</Text>
                 </View>
               </View>
               <View style={styles.buttonContainer}>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     marginRight: Metrics.smallMargin,
   },
   groupName: {
-    fontSize: 14.5,
+    fontSize: 15,
     color: Colors.dark,
   },
   propic: {
@@ -178,5 +178,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: 'center',
+  },
+  text: {
+    fontSize: 15,
   }
 })

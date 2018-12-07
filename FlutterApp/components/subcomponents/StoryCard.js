@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Text, TextInput, View, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFeedback } from 'react-native';
 import { Avatar, Badge, Icon } from 'react-native-elements';
+import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from '../Themes';
 import RoundButtonSmall from '../subcomponents/RoundButtonSmall';
 
@@ -202,7 +203,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   textInput: {
-    height: 40,
     borderColor: Colors.dark,
     borderWidth: 0,
     borderBottomWidth: 1,
