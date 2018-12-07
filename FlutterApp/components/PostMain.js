@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, TextInput, View, StyleSheet, Dimensions, TouchableOpacity, Picker, Image, Alert, ScrollView } from 'react-native';
+import { Icon } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
 import RoundButton from './subcomponents/RoundButton';
@@ -100,12 +101,11 @@ class PostMain extends React.Component {
     return (
       <View style={{ flex:1, backgroundColor: 'transparent' }}>
         <View>
-          <TouchableOpacity onPress={this.selectPhoto}>
             <Image style={styles.imagePreview} source={{uri: this.state.inputItemPicUrl}} />
-          </TouchableOpacity>
         </View>
         <ScrollView style={{ flex:1 }}>
-          <View style={styles.imageContainer}>
+          <View style={styles.iconContainer}>
+            <Icon name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
           </View>
           <View style={styles.formContainer}>
             <Text style={styles.label}>Name</Text>
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     fontFamily: 'NunitoSemiBold',
     alignSelf: 'flex-start',
     marginLeft: '10%',
-    marginTop: Metrics.doubleBaseMargin,
+    marginTop: Metrics.baseMargin * 3,
   },
   textInput: {
     height: 40,
@@ -201,6 +201,26 @@ const styles = StyleSheet.create({
   button: {
     margin: Metrics.doubleBaseMargin * 3,
   },
+  icon: {
+    padding: Metrics.baseMargin,
+    borderRadius: 100,
+    backgroundColor: 'white',
+    margin: Metrics.baseMargin,
+    shadowColor: Colors.dark,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.6,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  iconContainer: {
+    flex: 1,
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    flexDirection: 'row',
+    padding: Metrics.baseMargin,
+    bottom:height - width * 1 / 3 - Metrics.doubleBaseMargin,
+    right:0,
+  }
 })
 
 export default PostMain;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TextInput, View, StyleSheet, TouchableOpacity, Button, Image, Dimensions } from 'react-native';
-import { FormLabel, FormInput, FormValidationMessage, Avatar } from 'react-native-elements'
+import { Icon, Avatar } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
 import RoundButton from './subcomponents/RoundButton';
@@ -88,12 +88,17 @@ class Settings extends React.Component {
     return (
         <View style={styles.container}>
           <View style={styles.heading}>
-            <Avatar
-              xlarge
-              rounded
-              source={{uri: this.state.inputPicUrl}}
-              onPress={this.onPressCamera}
-              />
+            <View>
+              <Avatar
+                xlarge
+                rounded
+                source={{uri: this.state.inputPicUrl}}
+                onPress={this.onPressCamera}
+                />
+              <View style={styles.iconContainer}>
+                <Icon name={'edit'} color={Colors.dark} onPress={this.onPressCamera} containerStyle={styles.icon} />
+              </View>
+            </View>
             <Text style={styles.text}>{this.state.userName}</Text>
           </View>
           <Text style={styles.label}>Change display name</Text>
@@ -174,6 +179,25 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginVertical: Metrics.baseMargin,
   },
+  icon: {
+    padding: Metrics.smallMargin,
+    borderRadius: 100,
+    backgroundColor: Colors.background,
+    margin: Metrics.smallMargin,
+    shadowColor: Colors.dark,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.6,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  iconContainer: {
+    flex: 1,
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    flexDirection: 'row',
+    bottom:0,
+    right:0,
+  }
 })
 
 export default Settings;
