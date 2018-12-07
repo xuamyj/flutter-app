@@ -156,7 +156,7 @@ class Fire {
 
   // get display name from uid
   getUserName(userId, successCallback) {
-    return firebase.database().ref('users/' + userId).once('value').then(function(snapshot) {
+    return firebase.database().ref('users/' + userId).on('value', function(snapshot) {
       var userName = (snapshot.val() && snapshot.val().display_name) || '';
       successCallback(userName);
     });
@@ -164,10 +164,14 @@ class Fire {
 
   // get profile picture from uid
   getUserPicUrl(userId, successCallback) {
-    return firebase.database().ref('users/' + userId).once('value').then(function(snapshot) {
+    return firebase.database().ref('users/' + userId).on('value', function(snapshot) {
       var userPicUrl = (snapshot.val() && snapshot.val().profile_picture) || '';
       successCallback(userPicUrl);
     });
+  }
+
+  offUsers(userId, returnedCallback) {
+    firebase.database().ref('users/' + userId).off('value', returnedCallback);
   }
 
   // // get uid from email

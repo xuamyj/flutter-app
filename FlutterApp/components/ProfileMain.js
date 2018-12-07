@@ -6,6 +6,8 @@ import { Metrics, Colors } from './Themes';
 
 import firebase from 'firebase';
 
+import Fire from '../Fire';
+
 const GivenRoute = () => (
   <View style={styles.scene} />
 );
@@ -19,7 +21,7 @@ const PostedRoute = () => (
 class ProfileMain extends React.Component {
   static navigationOptions = ({navigation}) => {
     return {
-      title: 'Amy',
+      title: navigation.getParam('userName'),
       headerStyle: {backgroundColor: Colors.background, borderBottomWidth: 0, elevation: 0},
       headerTitleStyle: {
         fontFamily: 'NunitoBold',
@@ -38,9 +40,8 @@ class ProfileMain extends React.Component {
     };z
   };
 
-  componentDidMount() {
-    this.props.navigation.setParams({ onPressSettings: this.onPressSettings });
-  }
+  callbackGetUserName = null;
+  callbackgetUserPicUrl = null;
 
   state = {
     index: 0,
@@ -49,8 +50,8 @@ class ProfileMain extends React.Component {
       { key: 'received', title: 'Received' },
       { key: 'posted', title: 'Posted' },
     ],
-    userName: 'Amy',
-    userPicUrl: 'http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg',
+    userName: '',
+    userPicUrl: '',
   };
 
   onPressSettings = () => {
@@ -91,6 +92,27 @@ class ProfileMain extends React.Component {
         />
       </View>
     );
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({ onPressSettings: this.onPressSettings });
+
+    this.callbackGetUserName = Fire.shared.getUserName(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userName: result,
+      }))
+      this.props.navigation.setParams({userName: result})
+    })
+    this.callbackgetUserPicUrl = Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userPicUrl: result
+      }))
+    })
+  }
+
+  componentWillUnmount() {
+    Fire.shared.offUsers(Fire.shared.uid, this.callbackGetUserName);
+    Fire.shared.offUsers(Fire.shared.uid, this.callbackgetUserPicUrl);
   }
 }
 
