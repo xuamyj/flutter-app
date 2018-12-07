@@ -39,13 +39,13 @@ class Settings extends React.Component {
   }
 
   onSignout = () => {
-    // // amy side note: ahh, javascript without arrows... i missed you!
-    // firebase.auth().signOut().then(function() {
-    //   // Sign-out successful.
-    //   // don't need to do anything because firebase.auth().onAuthStateChanged() in AuthLoading.js
-    // }).catch(function(error) {
-    //   // TODO toast
-    // })
+    // amy side note: ahh, javascript without arrows... i missed you!
+    firebase.auth().signOut().then(function() {
+      // Sign-out successful.
+      // don't need to do anything because firebase.auth().onAuthStateChanged() in AuthLoading.js
+    }).catch(function(error) {
+      // TODO toast
+    })
   }
 
   onPressCamera = async () => {

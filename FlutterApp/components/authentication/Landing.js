@@ -13,22 +13,22 @@ class Landing extends React.Component {
         <View style={styles.buttons}>
           <RoundButton
             containerStyle={styles.button}
-            label="LOG IN"
-            backgroundColor={'white'}
-            color={Colors.dark}
+            label="LOGIN"
+            backgroundColor={Colors.teal}
+            color={'white'}
             size={14}
             onPress={() => this.props.navigation.navigate('Login')} />
           <RoundButton
             containerStyle={styles.button}
             label="LOGIN WITH FACEBOOK"
-            backgroundColor={'#2883D8'}
+            backgroundColor={'#3b5998'}
             color={'white'}
             size={14} />
           <RoundButton
             containerStyle={styles.button}
             label="SIGN UP"
-            backgroundColor={Colors.dark}
-            color={Colors.background}
+            backgroundColor={'white'}
+            color={Colors.dark}
             size={14}
             onPress={() => this.props.navigation.navigate('SignUp')} />
         </View>
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   text: {
-    fontSize: 19,
+    fontSize: 20,
     fontFamily: 'Nunito',
     marginVertical: Metrics.baseMargin,
   },

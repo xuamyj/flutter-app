@@ -5,6 +5,7 @@ const colors = {
   lightText: '#959595',
   buttonTint: '#C5C5C5',
   dark: '#484848',
+  teal: '#49B6BB',
 }
 
 export default colors
