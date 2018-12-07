@@ -50,6 +50,18 @@ class Stories extends React.Component {
   onChangeSearchText = () => null; // search; do last
   onClearSearchText = () => null; // search; do last
 
+  changeRecvDescription = ({description, index}) => {
+    this.setState({
+      storyList: update(this.state.storyList, {index: {recvItemDescription: {$set: description}}})
+    });
+  }
+
+  changeRecvImage = ({url, index}) => {
+    this.setState({
+      storyList: update(this.state.storyList, {index: {recvItemPicUrl: {$set: url}}})
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -57,8 +69,8 @@ class Stories extends React.Component {
 
         <ScrollView>
           {
-            this.state.storyList.map((l) => (
-              <StoryCard story={l} />
+            this.state.storyList.map((l, i) => (
+              <StoryCard story={l} index={i} changeRecvDescription={this.changeRecvDescription} changeRecvImage={this.changeRecvImage}/>
             ))
           }
         </ScrollView>
