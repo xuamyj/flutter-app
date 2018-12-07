@@ -45,7 +45,7 @@ export default class StoryCard extends React.Component {
 
   }
 
-  onPressCamera = async () => {
+  selectPhoto = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status === 'granted') {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -87,7 +87,6 @@ export default class StoryCard extends React.Component {
     var recvUserPicStyle = this.state.isGiver ? styles.inactivePicStyle : styles.activePicStyle;
 
     return  (
-      <View>
       <TouchableWithoutFeedback onPress={this.switch} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
         <Animated.View style={[styles.card, animatedStyle]}>
           <View style={styles.cardTitle}>
@@ -128,13 +127,17 @@ export default class StoryCard extends React.Component {
           </View>
         </Animated.View>
       </TouchableWithoutFeedback>
-      </View>
     );
   }
 
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+  },
   cardTitle: {
     flex: 1,
     flexDirection: 'row',
@@ -233,8 +236,8 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'absolute',
     alignSelf: 'flex-end',
-    flexDirection: 'row',
     bottom:Metrics.baseMargin,
     right:Metrics.baseMargin,
+    zIndex: 1,
   }
 })
