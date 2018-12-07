@@ -1,10 +1,14 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, TouchableOpacity, Alert, Image } from 'react-native';
-import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
+import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Alert, Image, Dimensions, ScrollView } from 'react-native';
+import { Icon } from 'react-native-elements'
+import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
 import AutoTags from 'react-native-tag-autocomplete';
+import RoundButton from './subcomponents/RoundButton';
 
 import Fire from '../Fire';
+
+const {height, width} = Dimensions.get('window');
 
 class GroupCreate extends React.Component {
   state = {
@@ -12,6 +16,7 @@ class GroupCreate extends React.Component {
     inputGroupMembers: '',
     errorMsgName: 'Error message placeholder: name',
     errorMsgMembers: 'Error message placeholder: members',
+    inputGroupPicUrl: '',
 
     suggestions : [ {name:''}, ],
     tagsSelected : []
@@ -31,6 +36,7 @@ class GroupCreate extends React.Component {
         {text: 'OK'},
       ],
     );
+    this.props.navigation.navigate('GROUPS'); //
   }
 
   static navigationOptions = {
@@ -41,6 +47,20 @@ class GroupCreate extends React.Component {
       fontWeight: '200',
     }
   };
+
+  selectPhoto = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status === 'granted') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [5,2],
+      });
+      if (!result.cancelled) {
+        this.setState({ inputGroupPicUrl: result.uri });
+      }
+    }
+  }
 
   handleDelete = index => {
     let tagsSelected = this.state.tagsSelected;
@@ -54,37 +74,41 @@ class GroupCreate extends React.Component {
 
   render() {
     return (
-        <View style={styles.container}>
-            <View style={styles.fillout}>
-                <FormLabel labelStyle={styles.label}>Group name</FormLabel>
-                <FormInput onChangeText={this.onChangeInputGroupName}/>
-                <View style= {{marginTop: 30, marginBottom: 10, justifyContent: 'center', alignItems: 'center',}}>
-                    <Image
-                    style={styles.imagePreview}
-                    source={{uri: this.state.inputItemPicUrl}}
-                    />
-                </View>
-                <Button
-                title="Upload Photo"
-                color="#49B6BB"
-                onPress={this.onPressCamera}
-                />
-                <FormLabel labelStyle={styles.label}>Members</FormLabel>
-                <View style = {{justifyContent: 'center', alignItems: 'center', padding: 20,}}>
-                    <AutoTags
-                    suggestions={this.state.suggestions}
-                    tagsSelected={this.state.tagsSelected}
-                    handleAddition={this.handleAddition}
-                    handleDelete={this.handleDelete}
-                    placeholder="Add a member.." />
-                </View>
-            </View>
-            <View style={styles.postView}>
-                <TouchableOpacity style={styles.post} onPress={this.onPressPost}>
-                <Text style={{fontWeight:"bold", color: "white", fontSize: 16,}}>Create Group</Text>
-                </TouchableOpacity>
-            </View>
+      <View style={{ flex:1, backgroundColor: 'transparent' }}>
+        <View style={{ backgroundColor: Colors.teal }}>
+            <Image style={styles.imagePreview} source={{uri: this.state.inputItemPicUrl}} />
         </View>
+        <ScrollView style={{ flex:1 }}>
+          <View style={styles.iconContainer}>
+            <Icon name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
+          </View>
+          <View style={styles.formContainer}>
+            <Text style={styles.label}>Name</Text>
+            <TextInput
+              placeholder="What group is this?"
+              autoCapitalize="none"
+              style={styles.textInput}
+              onChangeText={this.onChangeInputGroupName}
+            />
+            <Text style={styles.label}>Members</Text>
+            <View style = {{marginVertical: Metrics.baseMargin}}>
+                <AutoTags
+                suggestions={this.state.suggestions}
+                tagsSelected={this.state.tagsSelected}
+                handleAddition={this.handleAddition}
+                handleDelete={this.handleDelete}
+                placeholder="Add a member.." />
+            </View>
+            <RoundButton
+              containerStyle={styles.button}
+              label="CREATE GROUP"
+              backgroundColor={Colors.teal}
+              color={'white'}
+              size={15}
+              onPress={this.onPressCreate} />
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 
@@ -118,54 +142,87 @@ class GroupCreate extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20,
-    paddingHorizontal: Metrics.doubleBaseMargin,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.teal,
+  },
+  imagePreview: {
+    height: width * 2 / 5,
+    width: width,
+    position: 'absolute',
+    resizeMode: 'cover',
+    top:0,
+    left:0,
+    backgroundColor: Colors.teal,
+  },
+  formContainer: {
+    width: '100%',
+    marginTop: width * 2 / 5 - Metrics.doubleBaseMargin,
+    shadowColor: Colors.dark,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.7,
+    shadowRadius: 5,
+    elevation: 3,
+    borderTopLeftRadius: Metrics.doubleBaseMargin,
+    borderTopRightRadius: Metrics.doubleBaseMargin,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+  label: {
+    fontWeight: 'normal',
+    color: Colors.dark,
+    fontSize: 19,
+    fontFamily: 'NunitoSemiBold',
+    alignSelf: 'flex-start',
+    marginLeft: '10%',
+    marginTop: Metrics.baseMargin * 3,
+  },
+  textInput: {
+    height: 40,
+    width: '80%',
+    borderColor: Colors.dark,
+    borderWidth: 0,
+    borderBottomWidth: 1,
+    fontSize: 16,
+  },
+  groups: {
+    marginTop: Metrics.doubleBaseMargin,
+  },
+  button: {
+    margin: Metrics.doubleBaseMargin * 3,
+  },
+  icon: {
+    padding: Metrics.baseMargin,
+    borderRadius: 100,
+    backgroundColor: 'white',
+    margin: Metrics.baseMargin,
+    shadowColor: Colors.dark,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.6,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  iconContainer: {
+    flex: 1,
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    flexDirection: 'row',
+    padding: Metrics.baseMargin,
+    top: width / 6 - Metrics.baseMargin,
+    right:0,
   },
   fillout: {
     borderRadius: 15,
     backgroundColor: "white",
     shadowColor: 'rgba(0, 0, 0, 0.08)',
-  shadowOffset: {
-    width: 0.5,
-    height: 0.5
-  },
-  shadowRadius: 15,
-  shadowOpacity: 1,
-  },
-  post: {
-      borderRadius: 30,
-      backgroundColor: "#49B6BB",
-      width: "60%",
-      height: 50,
-      justifyContent: 'center',
-      alignItems: "center",
-      shadowColor: 'rgba(0, 0, 0, 0.2)',
     shadowOffset: {
       width: 0.5,
       height: 0.5
     },
-    shadowRadius: 10,
-    shadowOpacity: 1.0,
-    elevation: 1,
-  },
-      postView: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 20,
-        marginBottom: 20,
-    },
-    label: {
-      fontWeight: 'normal',
-      color: Colors.dark,
-      fontSize: 18,
-    },
-    imagePreview: {
-      width: '80%',
-      height: 160,
-      borderRadius: 10,
-      borderWidth: 1,
-      borderColor: '#C1C1C1',
+    shadowRadius: 15,
+    shadowOpacity: 1,
   },
 })
 
