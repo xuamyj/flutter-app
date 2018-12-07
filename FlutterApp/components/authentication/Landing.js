@@ -8,8 +8,9 @@ class Landing extends React.Component {
 
   static navigationOptions = {
     header: null,
+    headerBackTitle: null,
   }
-  
+
   render() {
     return (
       <View style={styles.container}>

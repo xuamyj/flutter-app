@@ -23,6 +23,7 @@ class SignUp extends React.Component {
 
   static navigationOptions = {
     headerStyle: {backgroundColor: Colors.background, borderBottomWidth: 0, elevation: 0},
+    headerTintColor: Colors.teal,
   }
 
   render() {

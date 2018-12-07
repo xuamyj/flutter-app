@@ -31,10 +31,11 @@ class Group extends React.Component {
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
+      color: Colors.dark,
     },
     headerRight: (
       <View style={styles.headerButton}>
-        <TouchableOpacity onPress={navigation.getParam("onPressGroupSettings")}>
+        <TouchableOpacity onPress={navigation.getParam("onPressGroupSettings", {name: (navigation.state.params || {}).name || 'Group'})}>
           <Icon
             name='settings'
             color='#49B6BB'
@@ -42,6 +43,8 @@ class Group extends React.Component {
         </TouchableOpacity>
       </View>
     ),
+    headerBackTitle: null,
+    headerTintColor: Colors.teal,
   });
 
   onPressGroupSettings = () => {

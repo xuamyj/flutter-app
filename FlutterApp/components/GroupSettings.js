@@ -24,7 +24,7 @@ class GroupSettings extends React.Component {
 
   onChangeInputGroupName = (inputGroupName) => {this.setState({ inputGroupName: inputGroupName })}
 
-  onPressCreate = async () => {
+  onPressSave = async () => {
     memberList = []
     this.state.tagsSelected.forEach((tag) => {
       memberList.push(tag['userId']);
@@ -54,12 +54,14 @@ class GroupSettings extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Settings',
+    title: 'Group Settings',
     headerStyle: {backgroundColor: Colors.background },
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
-    }
+      color: Colors.dark,
+    },
+    headerTintColor: Colors.teal,
   };
 
   selectPhoto = async () => {
@@ -90,23 +92,23 @@ class GroupSettings extends React.Component {
     return (
       <View style={{ flex:1, backgroundColor: 'transparent' }}>
         <View style={{ backgroundColor: Colors.teal }}>
-            <Image style={styles.imagePreview} source={{uri: this.state.inputItemPicUrl}} />
+            <Image style={styles.imagePreview} source={{uri: this.state.inputGroupPicUrl}} />
         </View>
         <ScrollView style={{ flex:1 }}>
           <View style={styles.iconContainer}>
             <Icon name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
           </View>
           <View style={styles.formContainer}>
-            <Text style={styles.label}>Name</Text>
+            <Text style={styles.label}>Change Name</Text>
             <TextInput
               placeholder="What group is this?"
               autoCapitalize="none"
               style={styles.textInput}
               onChangeText={this.onChangeInputGroupName}
             />
-            <Text style={styles.label}>Members</Text>
+            <Text style={styles.label}>Manage Members</Text>
             <View style = {{marginVertical: Metrics.baseMargin}}>
-                <AutoTags
+              <AutoTags
                 suggestions={this.state.suggestions}
                 tagsSelected={this.state.tagsSelected}
                 handleAddition={this.handleAddition}
@@ -115,11 +117,11 @@ class GroupSettings extends React.Component {
             </View>
             <RoundButton
               containerStyle={styles.button}
-              label="CREATE GROUP"
+              label="SAVE"
               backgroundColor={Colors.teal}
               color={'white'}
               size={15}
-              onPress={this.onPressCreate} />
+              onPress={this.onPressSave} />
           </View>
         </ScrollView>
       </View>
@@ -218,7 +220,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'row',
     padding: Metrics.baseMargin,
-    top: width / 6 - Metrics.baseMargin,
+    top: width / 6 - Metrics.baseMargin * 3,
     right:0,
   },
   fillout: {

@@ -28,7 +28,10 @@ class HomeMain extends React.Component {
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
-    }
+      color: Colors.dark,
+    },
+    headerBackTitle: null,
+    headerTintColor: Colors.teal,
   };
 
   render() {
