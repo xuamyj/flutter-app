@@ -43,6 +43,27 @@ class ProfileMain extends React.Component {
   callbackGetUserName = null;
   callbackgetUserPicUrl = null;
 
+  componentDidMount() {
+    this.props.navigation.setParams({ onPressSettings: this.onPressSettings });
+
+    this.callbackGetUserName = Fire.shared.getUserName(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userName: result,
+      }))
+      this.props.navigation.setParams({userName: result})
+    })
+    this.callbackgetUserPicUrl = Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userPicUrl: result
+      }))
+    })
+  }
+
+  componentWillUnmount() {
+    Fire.shared.offUsers(Fire.shared.uid, this.callbackGetUserName);
+    Fire.shared.offUsers(Fire.shared.uid, this.callbackgetUserPicUrl);
+  }
+
   state = {
     index: 0,
     routes: [
@@ -94,26 +115,6 @@ class ProfileMain extends React.Component {
     );
   }
 
-  componentDidMount() {
-    this.props.navigation.setParams({ onPressSettings: this.onPressSettings });
-
-    this.callbackGetUserName = Fire.shared.getUserName(Fire.shared.uid, result => {
-      this.setState(previousState => ({
-        userName: result,
-      }))
-      this.props.navigation.setParams({userName: result})
-    })
-    this.callbackgetUserPicUrl = Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
-      this.setState(previousState => ({
-        userPicUrl: result
-      }))
-    })
-  }
-
-  componentWillUnmount() {
-    Fire.shared.offUsers(Fire.shared.uid, this.callbackGetUserName);
-    Fire.shared.offUsers(Fire.shared.uid, this.callbackgetUserPicUrl);
-  }
 }
 
 const styles = StyleSheet.create({
