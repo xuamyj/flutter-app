@@ -26,6 +26,8 @@ Tutorial: "React Native & Firebase: Authentication" - https://medium.com/react-n
   * Sign up with Facebook
   * Change email/password for logging in
   * Forgot password reset for logging in
+  * Phone number for signing up
+    * Search users by phone number
   * Search functionality
   * Edit functionality
     * Edit stories/treasures

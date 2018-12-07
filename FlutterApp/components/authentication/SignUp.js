@@ -5,14 +5,19 @@ import RoundButton from '../subcomponents/RoundButton';
 
 import firebase from 'firebase';
 
+import Fire from '../../Fire';
+
 class SignUp extends React.Component {
-  state = { username: '', phone: 0, email: '', password: '', errorMessage: null }
+  state = { userName: '', phone: 0, email: '', password: '', errorMessage: null }
 
   handleSignUp = () => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(() => this.props.navigation.navigate('Main'))
+      .then((userCredential) => {
+        Fire.shared.writeUserData(userCredential.user.uid, this.state.email, this.state.userName);
+        this.props.navigation.navigate('Main');
+      })
       .catch(error => this.setState({ errorMessage: error.message }))
   }
 
@@ -29,24 +34,17 @@ class SignUp extends React.Component {
             {this.state.errorMessage}
           </Text>}
         <TextInput
-          placeholder="Username"
+          placeholder="Display name"
           autoCapitalize="none"
           style={styles.textInput}
-          onChangeText={email => this.setState({ username })}
-          value={this.state.email}
+          onChangeText={userName => this.setState({ userName })}
+          value={this.state.userName}
         />
         <TextInput
           placeholder="Email"
           autoCapitalize="none"
           style={styles.textInput}
           onChangeText={email => this.setState({ email })}
-          value={this.state.email}
-        />
-        <TextInput
-          placeholder="Phone Number"
-          autoCapitalize="none"
-          style={styles.textInput}
-          onChangeText={email => this.setState({ phone })}
           value={this.state.email}
         />
         <TextInput
