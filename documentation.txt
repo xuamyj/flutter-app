@@ -294,13 +294,13 @@ Copied code from someone else's example [https://github.com/expo/firebase-storag
 
 Fetch didn't work -> https://github.com/expo/firebase-storage-upload-example/issues/13
 
+--------------------------------
 
+MANY THINGS HAPPENED
 
+--------------------------------
 
-
-
-
-
+testing branching on git to understand better
 
 
 
