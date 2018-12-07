@@ -16,6 +16,15 @@ const TreasuresRoute = () => (
 
 class Group extends React.Component {
 
+  state = {
+    index: 0,
+    routes: [
+      { key: 'stories', title: 'Stories' },
+      { key: 'treasures', title: 'Treasures' },
+    ],
+    groupName: 'Disney',
+  };
+
   static navigationOptions = ({ navigation }) => ({
     title: (navigation.state.params || {}).name || 'Group!',
     headerStyle: {backgroundColor: Colors.background, borderBottomWidth: 0, elevation: 0},
@@ -25,7 +34,7 @@ class Group extends React.Component {
     },
     headerRight: (
       <View style={styles.headerButton}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={navigation.getParam("onPressGroupSettings")}>
           <Icon
             name='settings'
             color='#49B6BB'
@@ -35,14 +44,13 @@ class Group extends React.Component {
     ),
   });
 
-  state = {
-    index: 0,
-    routes: [
-      { key: 'stories', title: 'Stories' },
-      { key: 'treasures', title: 'Treasures' },
-    ],
-    groupName: 'Disney',
-  };
+  onPressGroupSettings = () => {
+    this.props.navigation.navigate('GroupSettings', {});
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({ onPressGroupSettings: this.onPressGroupSettings });
+  }
 
   render() {
     return (

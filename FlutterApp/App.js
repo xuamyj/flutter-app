@@ -5,6 +5,7 @@ import HomeMain from './components/HomeMain';
 import GroupsMain from './components/GroupsMain';
 import Group from './components/Group';
 import GroupCreate from './components/GroupCreate';
+import GroupSettings from './components/GroupSettings';
 import PostMain from './components/PostMain';
 import ChatMain from './components/ChatMain';
 import Chat from './components/Chat';
@@ -38,6 +39,7 @@ const GroupsStack = createStackNavigator({
   GroupsMain: { screen: GroupsMain },
   Group: { screen: Group },
   GroupCreate: { screen: GroupCreate },
+  GroupSettings: { screen: GroupSettings },
 });
 
 // Create the Post navigator
