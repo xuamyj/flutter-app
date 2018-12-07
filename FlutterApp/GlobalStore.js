@@ -202,8 +202,11 @@ const UserStore = store({
     userName: "Amy",
     setUserName(newUserName){
         UserStore.userName = newUserName;
-        UserListStore.getUserObject(UserStore.userId).userName = newUserName;
-        UserListStore.users = UserListStore.users;// trigger rerender
+        let userObj = UserListStore.getUserObject(UserStore.userId);
+        let index = UserListStore.users.indexOf(userObj);
+        UserListStore.users[index].displayName = newUserName;
+        console.log(UserListStore.users);
+        // UserListStore.users = UserListStore.users;// trigger rerender
     },
     setUserPicUrl(newUserPicUrl){
         UserStore.userPicUrl = newUserPicUrl;

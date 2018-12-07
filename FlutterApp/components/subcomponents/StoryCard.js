@@ -35,7 +35,6 @@ class StoryCard extends React.Component {
     this.state={
       isGiver: true,
       // receiverIsComplete: false,
-      myName: props.myName,
       inputText: "",
       inputGroupPicUrl: "",
     }
@@ -98,15 +97,19 @@ class StoryCard extends React.Component {
     var inactiveUserName = (this.state.isGiver === true) ? this.props.story.recvUserName : this.props.story.giveUserName;
     var itemDescription;
     var itemName;
+    var subjectName;
     var receiverIsComplete = this.props.story.recvItemPicUrl !== "";
-    if (!receiverIsComplete && this.props.story.giverUserName === this.state.myName && !this.state.isGiver) {
+    if (!receiverIsComplete && this.props.story.giverUserName === this.props.myName && !this.state.isGiver) {
       itemName = this.props.story.recvUserName;
+      subjectName = itemName;
       itemDescription = "is busy making memories with your object and hasn't shared their stories yet. Check back later!"
-    } else if (!receiverIsComplete && this.props.story.recvUserName === this.state.myName && !this.state.isGiver) {
-      itemName = this.props.story.giveUserName;
+    } else if (!receiverIsComplete && this.props.story.recvUserName === this.props.myName && !this.state.isGiver) {
+      itemName = this.props.story.recvUserName;
+      subjectName = this.props.story.giveUserName;
       itemDescription = "is waiting for your stories with their object!";
     } else {
       itemName = this.state.isGiver ? this.props.story.giveUserName : this.props.story.recvUserName
+      subjectName = itemName;
       itemDescription = this.state.isGiver ? this.props.story.giveItemDescription : this.props.story.recvItemDescription;
     }
     var itemPicUrl;
@@ -138,14 +141,14 @@ class StoryCard extends React.Component {
               <Avatar avatarStyle={styles.propicBorder} containerStyle={[styles.propic, giveUserPicStyle]} medium rounded source={{uri: giveUserPicUrl}} />
               <Avatar avatarStyle={styles.propicBorder} containerStyle={[styles.propic, recvUserPicStyle]} medium rounded source={{uri: recvUserPicUrl}} />
             </View>
-            {receiverIsComplete === false && activeUserName === this.state.myName && !this.state.isGiver &&
+            {receiverIsComplete === false && activeUserName === this.props.myName && !this.state.isGiver &&
               <View style={styles.iconContainer}>
                 <Icon name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
               </View>
             }
           </View>
           <View style={styles.cardInfo}>
-            <Text style={styles.description}><Text style={styles.username}>{itemName}</Text> {itemDescription}</Text>
+            <Text style={styles.description}><Text style={styles.username}>{subjectName}</Text> {itemDescription}</Text>
             {itemDescription.substring(0, 10) === "is waiting"  &&
               <View>
                 <TextInput
