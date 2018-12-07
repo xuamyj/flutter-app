@@ -15,6 +15,8 @@ export default class Fonts extends React.Component {
         'Nunito': require('../../assets/fonts/Nunito/Nunito-Regular.ttf'),
         'NunitoSemiBold': require('../../assets/fonts/Nunito/Nunito-SemiBold.ttf'),
         'NunitoBold': require('../../assets/fonts/Nunito/Nunito-Bold.ttf'),
+        'NunitoExtraBold': require('../../assets/fonts/Nunito/Nunito-ExtraBold.ttf'),
+        'NunitoBoldItalic': require('../../assets/fonts/Nunito/Nunito-BoldItalic.ttf'),
       });
 
       this.setState({ fontLoaded: true });

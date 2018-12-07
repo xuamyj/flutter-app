@@ -13,6 +13,7 @@ import Settings from './components/Settings';
 
 // Import the authentication screens
 import AuthLoading from './components/authentication/AuthLoading';
+import Landing from './components/authentication/Landing';
 import SignUp from './components/authentication/SignUp';
 import Login from './components/authentication/Login';
 import Icons from './components/Themes/Icons';
@@ -101,6 +102,7 @@ const AppNavigator = createBottomTabNavigator({
 const AppContainer = createAppContainer(createSwitchNavigator(
   {
     AuthLoading: AuthLoading,
+    Landing: Landing,
     SignUp: SignUp,
     Login: Login,
     App: AppNavigator,
