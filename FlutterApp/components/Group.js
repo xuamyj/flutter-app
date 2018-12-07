@@ -34,7 +34,7 @@ class Group extends React.Component {
     },
     headerRight: (
       <View style={styles.headerButton}>
-        <TouchableOpacity onPress={navigation.getParam("onPressGroupSettings")}>
+        <TouchableOpacity onPress={navigation.getParam("onPressGroupSettings", {name: (navigation.state.params || {}).name || 'Group'})}>
           <Icon
             name='settings'
             color='#49B6BB'

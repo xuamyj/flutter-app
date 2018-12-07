@@ -35,7 +35,7 @@ class GroupCreate extends React.Component {
 
     uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputGroupPicUrl);
     Fire.shared.writeGroupData(this.state.inputGroupName, uploadUrl, memberList, () => {
-      this.props.navigation.navigate('GroupsMain');
+      this.props.navigation.navigate('Group', {name: this.state.inputGroupName});
     }, () => {
       // TODO toast
     });
@@ -94,7 +94,7 @@ class GroupCreate extends React.Component {
             />
             <Text style={styles.label}>Members</Text>
             <View style = {{marginVertical: Metrics.baseMargin}}>
-                <AutoTags
+              <AutoTags
                 suggestions={this.state.suggestions}
                 tagsSelected={this.state.tagsSelected}
                 handleAddition={this.handleAddition}

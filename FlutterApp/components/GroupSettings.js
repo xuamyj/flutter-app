@@ -54,7 +54,7 @@ class GroupSettings extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Settings',
+    title: 'Group Settings',
     headerStyle: {backgroundColor: Colors.background },
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
@@ -106,7 +106,7 @@ class GroupSettings extends React.Component {
             />
             <Text style={styles.label}>Manage Members</Text>
             <View style = {{marginVertical: Metrics.baseMargin}}>
-                <AutoTags
+              <AutoTags
                 suggestions={this.state.suggestions}
                 tagsSelected={this.state.tagsSelected}
                 handleAddition={this.handleAddition}
