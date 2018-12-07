@@ -125,6 +125,7 @@ class Fire {
 
   // save uid + email + display name the first time
   writeUserData(userId, email, userName) {
+    console.log('got here at all');
     firebase.database().ref('users/' + userId).set({
       email: email,
       display_name: userName,
@@ -174,10 +175,20 @@ class Fire {
     firebase.database().ref('users/' + userId).off('value', returnedCallback);
   }
 
-  // // get uid from email
-  // function getUserIdFromEmail(email) {
+  // get uid from email
+  getUserIdFromEmail(email, successCallback) {
+    return firebase.database().ref('users/').orderByChild('email').equalTo(email).once('value').then(function(snapshot) {
+      var userId = (snapshot.val() && snapshot.val().uid) || '';
+      successCallback(userId);
+    });
+  }
 
-  // }
+  // get all uid/email pairs
+  getAllUsers(successCallback) {
+    return firebase.database().ref('users/').once('value').then(function(snapshot) {
+      successCallback(snapshot);
+    });
+  }
 
   // ----------------
   // DATABASE: GROUPS
