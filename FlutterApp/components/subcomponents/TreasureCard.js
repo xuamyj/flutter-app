@@ -8,7 +8,9 @@ const {height, width} = Dimensions.get('window');
 
 export default class TreasureCard extends React.Component {
   state = {
-    isModalVisible: false
+    isModalVisible: false,
+    isProfile: false,
+    isActive: true,
   };
 
   _toggleModal = () => {
@@ -61,14 +63,16 @@ export default class TreasureCard extends React.Component {
             <Badge textStyle={styles.groupName} value={groupName} containerStyle={styles.badgeStyle}/>
           </View>
           <View>
-            <Image style={styles.image} source={{uri:itemPicURL}} />
+            <Image style={[styles.image,this.state.isProfile === true && styles.profileImages]} source={{uri:itemPicURL}} />
           </View>
-          <View style={styles.cardInfo}>
-            <Avatar containerStyle={styles.propic} small rounded source={{uri: userPicUrl}} />
-            <Text style={styles.username}>{userName}</Text>
-          </View>
+          {this.state.isProfile === false &&
+            <View style={styles.cardInfo}>
+              <Avatar avatarStyle={styles.propicBorder} containerStyle={styles.propic} small rounded source={{uri: userPicUrl}} />
+              <Text style={styles.username}>{userName}</Text>
+            </View>
+          }
 
-          <TreasurePopup isVisible={this.state.isModalVisible} toggle={this._toggleModal} treasure={this.props.treasure} />
+          <TreasurePopup isVisible={this.state.isModalVisible} toggle={this._toggleModal} treasure={this.props.treasure} isProfile={this.state.isProfile} isActive={this.state.isActive}/>
         </Animated.View>
       </TouchableWithoutFeedback>
     );
@@ -127,14 +131,13 @@ const styles = StyleSheet.create({
     paddingTop: 2,
     paddingBottom: Metrics.smallMargin * 1.5,
   },
+  propicBorder: {
+    borderColor: 'white',
+    borderWidth: 2.5,
+  },
   propic: {
     marginRight: Metrics.baseMargin,
     marginTop: Metrics.baseMargin * -1.5,
-    shadowColor: Colors.dark,
-    shadowOffset: {width: 0, height: 0},
-    shadowOpacity: 0.6,
-    shadowRadius: 2,
-    elevation: 2,
   },
   username: {
     fontWeight: 'bold',
@@ -142,4 +145,8 @@ const styles = StyleSheet.create({
     fontSize: 12.5,
     marginLeft: -Metrics.smallMargin,
   },
+  profileImages: {
+    borderBottomLeftRadius: Metrics.baseMargin,
+    borderBottomRightRadius: Metrics.baseMargin,
+  }
 })
