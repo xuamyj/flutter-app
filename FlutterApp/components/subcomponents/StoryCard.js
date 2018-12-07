@@ -13,7 +13,7 @@ export default class StoryCard extends React.Component {
     super(props);
     this.state={
       isGiver: true,
-      receiverIsComplete: false,
+      receiverIsComplete: true,
       myName: 'Amy',
     }
     this.handlePressIn = this.handlePressIn.bind(this);

@@ -81,7 +81,7 @@ class Stories extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 50,
+    marginBottom: 40,
   },
   group: {
     flex: 1,

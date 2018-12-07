@@ -36,10 +36,6 @@ class PostMain extends React.Component {
     errorMsgDescription: 'Error message placeholder: description',
   }
 
-  componentWillMount() {
-    {this.selectPhoto()}
-  }
-
   onChangeInputItemName = (inputItemName) => {this.setState({ inputItemName: inputItemName })}
   onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })}
   onChangeGroup = (inputGroupKey) => {this.setState({inputGroupKey: inputGroupKey})}
