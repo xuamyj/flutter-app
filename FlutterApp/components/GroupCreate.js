@@ -98,7 +98,7 @@ class GroupCreate extends React.Component {
               onChangeText={this.onChangeInputGroupName}
             />
             <Text style={styles.label}>Members</Text>
-            <View style = {{marginVertical: Metrics.baseMargin}}>
+            <View style = {{marginLeft: '10%', marginVertical: Metrics.baseMargin}}>
               <AutoTags
                 suggestions={this.state.suggestions}
                 tagsSelected={this.state.tagsSelected}

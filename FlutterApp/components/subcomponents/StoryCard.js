@@ -34,7 +34,6 @@ class StoryCard extends React.Component {
     super(props);
     this.state={
       isGiver: true,
-      // isGiver: true,
       // receiverIsComplete: false,
       myName: props.myName,
       inputText: "",
