@@ -10,7 +10,7 @@ import Fire from '../Fire';
 
 const {height, width} = Dimensions.get('window');
 
-class GroupCreate extends React.Component {
+class GroupSettings extends React.Component {
   state = {
     inputGroupName: '',
     inputGroupPicUrl: '',
@@ -41,8 +41,20 @@ class GroupCreate extends React.Component {
     });
   }
 
+  onPressCamera = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status === 'granted') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [5,2],
+      });
+      {this.setState({ inputGroupPicUrl: result.uri })}
+    }
+  }
+
   static navigationOptions = {
-    title: 'Create New Group',
+    title: 'Settings',
     headerStyle: {backgroundColor: Colors.background },
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
@@ -78,7 +90,7 @@ class GroupCreate extends React.Component {
     return (
       <View style={{ flex:1, backgroundColor: 'transparent' }}>
         <View style={{ backgroundColor: Colors.teal }}>
-            <Image style={styles.imagePreview} source={{uri: this.state.inputGroupPicUrl}} />
+            <Image style={styles.imagePreview} source={{uri: this.state.inputItemPicUrl}} />
         </View>
         <ScrollView style={{ flex:1 }}>
           <View style={styles.iconContainer}>
@@ -222,4 +234,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default GroupCreate;
+export default GroupSettings;
