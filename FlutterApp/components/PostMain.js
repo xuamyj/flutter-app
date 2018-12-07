@@ -29,7 +29,7 @@ class PostMain extends React.Component {
     ],
     inputItemName: '',
     inputItemDescription: '',
-    inputItemPicUrl: '',
+    inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
     inputGroupKey: '28327298',
     errorMsgName: 'Error message placeholder: name',
     errorMsgDescription: 'Error message placeholder: description',
@@ -48,6 +48,14 @@ class PostMain extends React.Component {
     console.log(this.state.inputItemDescription);
     console.log(this.state.inputItemPicUrl);
     console.log(this.state.inputGroupKey);
+    this.setState({
+      inputItemName: '',
+      inputItemDescription: '',
+      inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
+      inputGroupKey: '28327298',
+      errorMsgName: 'Error message placeholder: name',
+      errorMsgDescription: 'Error message placeholder: description',
+    })
     Alert.alert(
       'Item posted!',
       ('You have posted ' + this.state.inputItemName + '!'),
@@ -55,6 +63,8 @@ class PostMain extends React.Component {
         {text: 'OK'},
       ],
     );
+
+    this.props.navigation.navigate('HOME'); //
   }
 
   selectPhoto = async () => {
@@ -87,78 +97,80 @@ class PostMain extends React.Component {
   };
 
   render() {
-    if (this.state.inputItemPicUrl === '') return null;
     return (
-      <ScrollView>
-        <View style={styles.container}>
-          <View style={styles.imageContainer}>
-            <TouchableOpacity onPress={this.selectPhoto}>
-              <Image style={styles.imagePreview} source={{uri: this.state.inputItemPicUrl}} />
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.label}>Name</Text>
-          <TextInput
-            placeholder="What are you giving away?"
-            autoCapitalize="none"
-            style={styles.textInput}
-            onChangeText={this.onChangeInputItemName}
-          />
-          <Text style={styles.label}>Description</Text>
-          <TextInput
-            style = {styles.description}
-            multiline={true}
-            style={styles.textInput}
-            placeholder = "Why is it meaningful to you?"
-            onChangeText={this.onChangeInputItemDescription}
-          />
-          <Text style={styles.label}>Group</Text>
-          <Carousel
-              ref={(c) => { this._carousel = c; }}
-              data={this.state.groupList}
-              renderItem={this.renderItem}
-              sliderWidth={width}
-              itemWidth={width * 0.65}
-              enableMomentum={true}
-              onSnapToItem={this.onChangeGroup}
-              containerCustomStyle={styles.groups}
-            />
-          <RoundButton
-            containerStyle={styles.button}
-            label="GIVE ITEM"
-            backgroundColor={Colors.teal}
-            color={'white'}
-            size={15}
-            onPress={this.onPressPost} />
+      <View style={{ flex:1, backgroundColor: 'transparent' }}>
+        <View>
+          <TouchableOpacity onPress={this.selectPhoto}>
+            <Image style={styles.imagePreview} source={{uri: this.state.inputItemPicUrl}} />
+          </TouchableOpacity>
         </View>
-      </ScrollView>
+        <ScrollView style={{ flex:1 }}>
+          <View style={styles.imageContainer}>
+          </View>
+          <View style={styles.formContainer}>
+            <Text style={styles.label}>Name</Text>
+            <TextInput
+              placeholder="What are you giving away?"
+              autoCapitalize="none"
+              style={styles.textInput}
+              onChangeText={this.onChangeInputItemName}
+            />
+            <Text style={styles.label}>Description</Text>
+            <TextInput
+              style = {styles.description}
+              multiline={true}
+              style={styles.textInput}
+              placeholder = "Why is it meaningful to you?"
+              onChangeText={this.onChangeInputItemDescription}
+            />
+            <Text style={styles.label}>Group</Text>
+            <Carousel
+                ref={(c) => { this._carousel = c; }}
+                data={this.state.groupList}
+                renderItem={this.renderItem}
+                sliderWidth={width}
+                itemWidth={width * 0.65}
+                enableMomentum={true}
+                onSnapToItem={this.onChangeGroup}
+                containerCustomStyle={styles.groups}
+              />
+            <RoundButton
+              containerStyle={styles.button}
+              label="GIVE ITEM"
+              backgroundColor={Colors.teal}
+              color={'white'}
+              size={15}
+              onPress={this.onPressPost} />
+          </View>
+        </ScrollView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  imagePreview: {
+    height: width * 3 / 4,
+    width: width,
+    position: 'absolute',
+    resizeMode: 'cover',
+    top:0,
+    left:0
+  },
+  formContainer: {
+    width: '100%',
+    marginTop: width * 3 / 4 - Metrics.doubleBaseMargin,
+    shadowColor: Colors.dark,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.7,
+    shadowRadius: 5,
+    elevation: 5,
+    borderTopLeftRadius: Metrics.doubleBaseMargin,
+    borderTopRightRadius: Metrics.doubleBaseMargin,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-  },
-  imageContainer: {
-    width: '100%',
-    height: width * 3 / 4,
-    shadowColor: Colors.dark,
-    shadowOffset: {width: 0, height: 0},
-    shadowOpacity: 0.3,
-    shadowRadius: 2,
-    elevation: 3,
-    borderBottomLeftRadius: Metrics.baseMargin,
-    borderBottomRightRadius: Metrics.baseMargin,
-  },
-  imagePreview: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-    borderBottomLeftRadius: Metrics.baseMargin,
-    borderBottomRightRadius: Metrics.baseMargin,
   },
   label: {
     fontWeight: 'normal',
@@ -182,6 +194,23 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: Metrics.doubleBaseMargin * 3,
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  welcome: {
+    fontSize: 28,
+    textAlign: 'center',
+    margin: 10,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    fontSize: 19,
+    marginBottom: 5,
   },
 })
 
