@@ -5,6 +5,11 @@ import { Colors, Metrics } from '../Themes'
 import RoundButton from '../subcomponents/RoundButton';
 
 class Landing extends React.Component {
+
+  static navigationOptions = {
+    header: null,
+  }
+  
   render() {
     return (
       <View style={styles.container}>
