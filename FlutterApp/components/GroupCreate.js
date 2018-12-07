@@ -45,7 +45,9 @@ class GroupCreate extends React.Component {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status === 'granted') {
       let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [3,1],
       });
       {this.setState({ inputGroupPicUrl: result.uri })}
     }

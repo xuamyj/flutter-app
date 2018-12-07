@@ -13,7 +13,7 @@ export default class StoryCard extends React.Component {
     super(props);
     this.state={
       isGiver: true,
-      receiverIsComplete: true,
+      receiverIsComplete: false,
       myName: 'Amy',
     }
     this.handlePressIn = this.handlePressIn.bind(this);
@@ -45,6 +45,18 @@ export default class StoryCard extends React.Component {
 
   }
 
+  onPressCamera = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status === 'granted') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [3,2],
+      });
+      {this.setState({ inputGroupPicUrl: result.uri })}
+    }
+  }
+
   render() {
     const animatedStyle = {
       transform: [{scale: this.animatedValue}]
@@ -54,27 +66,28 @@ export default class StoryCard extends React.Component {
     var activeUserName = (this.state.isGiver === true) ? this.props.story.giveUserName : this.props.story.recvUserName;
     var inactiveUserName = (this.state.isGiver === true) ? this.props.story.recvUserName : this.props.story.giveUserName;
     var itemDescription;
-    if (this.state.receiverIsComplete === false && activeUserName != this.state.myName) {
+    if (!this.state.receiverIsComplete && activeUserName != this.state.myName && !this.state.isGiver) {
       itemDescription = "is busy making memories with your object and hasn't shared their stories yet. Check back later!"
-    } else if (this.state.receiverIsComplete === false && activeUserName === this.state.myName) {
-      itemDescription = "is waiting for your stories with their object!"
+    } else if (this.state.receiverIsComplete === false && activeUserName === this.state.myName && !this.state.isGiver) {
+      itemDescription = "is waiting for your stories with their object!";
     } else {
-      itemDescription = (this.state.isGiver === true) ? this.props.story.giveItemDescription : this.props.story.recvItemDescription;
+      itemDescription = this.state.isGiver ? this.props.story.giveItemDescription : this.props.story.recvItemDescription;
     }
     var itemPicUrl;
-    if (this.state.isGiver === true) {
+    if (this.state.isGiver) {
       itemPicUrl = this.props.story.giveItemPicUrl;
-    } else if (this.state.receiverIsComplete === true) {
+    } else if (!this.state.isGiver && this.state.receiverIsComplete) {
       itemPicUrl = this.props.story.recvItemPicUrl;
-    } else {
+    } else if (!this.state.isGiver){
       itemPicUrl = 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640';
     }
     var giveUserPicUrl = this.props.story.giveUserPicUrl;
     var recvUserPicUrl = this.props.story.recvUserPicUrl;
-    var giveUserPicStyle = (this.state.isGiver === true) ? styles.activePicStyle : styles.inactivePicStyle;
-    var recvUserPicStyle = (this.state.isGiver === true) ? styles.inactivePicStyle : styles.activePicStyle;
+    var giveUserPicStyle = this.state.isGiver ? styles.activePicStyle : styles.inactivePicStyle;
+    var recvUserPicStyle = this.state.isGiver ? styles.inactivePicStyle : styles.activePicStyle;
 
     return  (
+      <View>
       <TouchableWithoutFeedback onPress={this.switch} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
         <Animated.View style={[styles.card, animatedStyle]}>
           <View style={styles.cardTitle}>
@@ -87,15 +100,15 @@ export default class StoryCard extends React.Component {
               <Avatar avatarStyle={styles.propicBorder} containerStyle={[styles.propic, giveUserPicStyle]} medium rounded source={{uri: giveUserPicUrl}} />
               <Avatar avatarStyle={styles.propicBorder} containerStyle={[styles.propic, recvUserPicStyle]} medium rounded source={{uri: recvUserPicUrl}} />
             </View>
-            {this.state.receiverIsComplete === false && activeUserName === this.state.myName &&
+            {this.state.receiverIsComplete === false && activeUserName === this.state.myName && !this.state.isGiver &&
               <View style={styles.iconContainer}>
-                <Icon name={'photo'} color={Colors.dark} containerStyle={styles.icon} size={30} />
+                <Icon name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
               </View>
             }
           </View>
           <View style={styles.cardInfo}>
             <Text style={styles.description}><Text style={styles.username}>{activeUserName}</Text> {itemDescription}</Text>
-            {this.state.receiverIsComplete === false && activeUserName === this.state.myName &&
+            {itemDescription.substring(0, 10) === "is waiting"  &&
               <View>
                 <TextInput
                   placeholder="Share your new adventures!"
@@ -115,6 +128,7 @@ export default class StoryCard extends React.Component {
           </View>
         </Animated.View>
       </TouchableWithoutFeedback>
+      </View>
     );
   }
 
@@ -178,7 +192,7 @@ const styles = StyleSheet.create({
   },
   propicBorder: {
     borderColor: 'white',
-    borderWidth: 4,
+    borderWidth: 3.5,
    },
   propic: {
     marginRight: Metrics.baseMargin,

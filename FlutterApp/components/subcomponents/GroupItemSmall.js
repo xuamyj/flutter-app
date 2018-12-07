@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: width * 0.2,
+    height: width * 0.25,
     resizeMode: 'cover',
     borderRadius: Metrics.baseMargin,
     opacity: 0.7,
