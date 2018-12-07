@@ -7,31 +7,18 @@ import RoundButton from './subcomponents/RoundButton';
 import Carousel from 'react-native-snap-carousel';
 import GroupItemSmall from './subcomponents/GroupItemSmall';
 
+
+import { view } from 'react-easy-state'
+import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../GlobalStore'
+
 const {height, width} = Dimensions.get('window');
 
 class PostMain extends React.Component {
   state = {
-    groupList: [
-      {
-        name: 'CS147',
-        key: '28327298',
-        picUrl: 'http://web.stanford.edu/class/cs147/projects/TransformingLivingSpace/Flutter/images/need.jpg',
-      },
-      {
-        name: 'Disney',
-        key: '56755554',
-        picUrl: 'https://nerdist.com/wp-content/uploads/2015/03/maxresdefault-970x545.jpg',
-      },
-      {
-        name: 'Camping',
-        key: '90057000',
-        picUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyM_i7rIKIc-wHw_VeW8lAyc68-zA3VcdT8zx97bG_QccOWLkt3w',
-      },
-    ],
     inputItemName: '',
     inputItemDescription: '',
     inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
-    inputGroupKey: '28327298',
+    inputGroupKey: GroupListStore.groups[0].groupId,
     errorMsgName: 'Error message placeholder: name',
     errorMsgDescription: 'Error message placeholder: description',
   }
@@ -42,20 +29,27 @@ class PostMain extends React.Component {
 
   onChangeInputItemName = (inputItemName) => {this.setState({ inputItemName: inputItemName })}
   onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })}
-  onChangeGroup = (inputGroupKey) => {this.setState({inputGroupKey: inputGroupKey})}
+  onChangeGroup = (inputGroupKey) => {
+    console.log('onchangegroup', this.groups[inputGroupKey].key);
+    this.setState({inputGroupKey: this.groups[inputGroupKey].key})
+  }
 
   onPressPost = () => {
     console.log(this.state.inputItemName);
     console.log(this.state.inputItemDescription);
     console.log(this.state.inputItemPicUrl);
     console.log(this.state.inputGroupKey);
-    this.setState({
-      inputItemName: '',
-      inputItemDescription: '',
-      inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
-      inputGroupKey: '28327298',
-      errorMsgName: 'Error message placeholder: name',
-      errorMsgDescription: 'Error message placeholder: description',
+
+    ItemListStore.items.push({
+      itemId: this.state.inputItemName,
+      itemName: this.state.inputItemName,
+      groupId: this.state.inputGroupKey,
+      state: "POSTED",
+      giver: {
+        id: UserStore.userId,
+        itemDescription: this.state.inputItemDescription,
+        itemPicUrl: this.state.inputItemPicUrl,
+      }
     })
     Alert.alert(
       'Item posted!',
@@ -64,6 +58,15 @@ class PostMain extends React.Component {
         {text: 'OK'},
       ],
     );
+
+    this.setState({
+      inputItemName: '',
+      inputItemDescription: '',
+      inputItemPicUrl: '',
+      inputGroupKey: '',
+      errorMsgName: 'Error message placeholder: name',
+      errorMsgDescription: 'Error message placeholder: description',
+    })
     this.props.navigation.navigate('HOME'); //
   }
 
@@ -97,6 +100,21 @@ class PostMain extends React.Component {
   };
 
   render() {
+    let groupResultList = [];
+    console.log(GroupListStore.groups);
+    GroupListStore.groups.forEach((group) => {
+      console.log(group);
+      if (group['memberList'].indexOf(UserStore.userId) != -1) {
+        tempGroupResult = {
+          name: group['groupName'],
+          key: group['groupId'],
+          picUrl: group['groupPicUrl'],
+        }
+        groupResultList.push(tempGroupResult);
+      }
+    });
+    this.groups = groupResultList;
+
     return (
       <View style={{ flex:1, backgroundColor: 'transparent' }}>
         <View>
@@ -124,7 +142,7 @@ class PostMain extends React.Component {
             <Text style={styles.label}>Group</Text>
             <Carousel
                 ref={(c) => { this._carousel = c; }}
-                data={this.state.groupList}
+                data={groupResultList}
                 renderItem={this.renderItem}
                 sliderWidth={width}
                 itemWidth={width * 0.65}
@@ -220,4 +238,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default PostMain;
+export default view(PostMain);

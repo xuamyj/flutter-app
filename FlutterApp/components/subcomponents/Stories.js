@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Text, View, StyleSheet, Button, ScrollView, Dimensions, Image, Animated } from 'react-native';
+import { Text, View, StyleSheet, Button, ScrollView, Dimensions, Image, Animated, Alert } from 'react-native';
 import { Card, Avatar, SearchBar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 import StoryCard from './StoryCard';
@@ -27,12 +27,17 @@ class Stories extends React.Component {
   }
 
   onPressShareStory = (text, newImage, index) => {
-    console.log(text)
-    console.log(newImage)
-    console.log(ItemListStore.items[index])
     this.changeRecvDescription({description: text, index: index})
     this.changeRecvImage({url:newImage, index: index})
-    console.log(ItemListStore.items[index])
+
+    Alert.alert(
+      'Story shared!',
+      ('You have shared ' + text + '!'),
+      [
+        {text: 'OK'},
+      ],
+    );
+
   }
 
   render() {
