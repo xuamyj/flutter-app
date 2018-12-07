@@ -5,10 +5,12 @@ import { Metrics, Colors } from '../Themes';
 import Icons from '../Themes/Icons';
 import Modal from 'react-native-modal';
 import RoundButtonSmall from '../subcomponents/RoundButtonSmall';
+import { withNavigation } from 'react-navigation';
+
 
 const {height, width} = Dimensions.get('window');
 
-export default class TreasurePopup extends React.Component {
+class TreasurePopup extends React.Component {
 
   constructor(props) {
     super(props);
@@ -16,6 +18,11 @@ export default class TreasurePopup extends React.Component {
 
   _toggleModal = () => {
     this.props.toggle();
+  }
+
+  onPressMessage = () => {
+    this.props.navigation.navigate('Chat', { name: this.props.treasure.userName });
+    this._toggleModal();
   }
 
   render() {
@@ -88,7 +95,7 @@ export default class TreasurePopup extends React.Component {
                     backgroundColor={Colors.teal}
                     color={'white'}
                     size={14}
-                    onPress={this._toggleModal}
+                    onPress={this.onPressMessage}
                     isActive={this.props.isActive} />
                 }
                 {this.props.isActive === false &&
@@ -109,6 +116,8 @@ export default class TreasurePopup extends React.Component {
   }
 
 }
+
+export default withNavigation(TreasurePopup);
 
 const styles = StyleSheet.create({
   itemName: {

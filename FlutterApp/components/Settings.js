@@ -50,7 +50,9 @@ class Settings extends React.Component {
   onSave = () => {
     this.onPressUpdateProfilePicture();
     this.onPressUpdateDisplayName();
-    this.props.navigation.navigate('Profile');
+    // AMY note: i took this out because i couldn't fix the top header and it looked too awkward as a result
+    // once we fix top header we can put it back in
+    // this.props.navigation.navigate('Profile');
   }
 
 

@@ -41,7 +41,14 @@ class GroupCreate extends React.Component {
       memberList,
       groupPicUrl: this.state.inputGroupPicUrl
     })
-    this.props.navigation.navigate('Group', {name: this.state.inputGroupName});
+    Alert.alert(
+      'Group created!',
+      ('You have created ' + this.state.inputGroupName + '!'),
+      [
+        {text: 'OK'},
+      ],
+    );
+    this.props.navigation.navigate('GroupsMain');
   }
 
   static navigationOptions = {

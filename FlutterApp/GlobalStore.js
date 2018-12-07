@@ -5,7 +5,7 @@ itemInfo = [
 {
     itemId: '11',
     itemName: 'Cactus cup',
-    groupId: 'Disney',
+    groupId: 'CS147',
     state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
     giver: {
         id: '3',
@@ -20,13 +20,13 @@ itemInfo = [
 },
 {
     itemId: '13',
-    itemName: 'Cactus cup 2',
-    groupId: 'Disney',
-    state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
+    itemName: 'Silk scarf',
+    groupId: 'CS147',
+    state: 'GIVEN', // POSTED, GIVEN, COMPLETE
     giver: {
-        id: '3',
-        itemDescription: 'I went to buy a set of glass dolphin paperweights, but accidentally came home with birds instead! They\'re q nice and I would only really give them to a friend. Anyone want to be their new nest?',
-        itemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0289/st-jude-glass-bird-paperweight-c.jpg'
+        id: '4',
+        itemDescription: 'I\'m cleaning out my closet, and this silk scarf (passed down from my family) needs a home!',
+        itemPicUrl: 'https://66.media.tumblr.com/efeffdfb2e3100550e1f91aa423e2d62/tumblr_pck2dplZRQ1roj277o1_500.jpg'
     },
     receiver: {
         id: '1',
@@ -144,12 +144,12 @@ userInfo = [
             email: "cc@m.com",
             userPicUrl: "http://web.stanford.edu/class/cs147/projects/TransformingLivingSpace/Flutter/images/cynthia.png",
         },
-        // {
-        //     displayName: "jenny",
-        //     userId: "4",
-        //     email: "j@m.com",
-        //     userPicUrl: "http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg",
-        // }
+        {
+            displayName: "Jenny",
+            userId: "4",
+            email: "j@m.com",
+            userPicUrl: "http://web.stanford.edu/class/cs147/projects/TransformingLivingSpace/Flutter/images/jenny.png",
+        },
         {
             displayName: "Belle",
             userId: "5",
@@ -175,7 +175,7 @@ groupInfo = [
     groupName: 'CS147',
     groupId: 'CS147',
     memberList: [
-        '1', '2', '3', '7'
+        '1', '2', '3', '4'
     ],
     groupPicUrl: 'http://web.stanford.edu/class/cs147/projects/TransformingLivingSpace/Flutter/images/need.jpg',
 },
