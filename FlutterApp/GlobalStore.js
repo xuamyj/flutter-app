@@ -1,6 +1,130 @@
 import { store } from 'react-easy-state'
 import moment from 'moment'
 
+itemInfo = [
+{
+    itemId: '11',
+    itemName: 'Cactus cup',
+    groupId: 'Disney',
+    state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
+    giver: {
+        id: '3',
+        itemDescription: 'I went to buy a set of glass dolphin paperweights, but accidentally came home with birds instead! They\'re q nice and I would only really give them to a friend. Anyone want to be their new nest?',
+        itemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0289/st-jude-glass-bird-paperweight-c.jpg'
+    },
+    receiver: {
+        id: '1',
+        itemDescription: 'These are even more lovely in person :) Look how pretty they are on my desk!',
+        itemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0313/st-jude-glass-bird-paperweight-c.jpg'
+    },
+},
+{
+    itemId: '13',
+    itemName: 'Cactus cup 2',
+    groupId: 'Disney',
+    state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
+    giver: {
+        id: '3',
+        itemDescription: 'I went to buy a set of glass dolphin paperweights, but accidentally came home with birds instead! They\'re q nice and I would only really give them to a friend. Anyone want to be their new nest?',
+        itemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0289/st-jude-glass-bird-paperweight-c.jpg'
+    },
+    receiver: {
+        id: '1',
+        itemDescription: "",
+        itemPicUrl: ""
+    },
+},
+{
+    itemId: '12',
+    itemName: 'Handmade pillow',
+    groupId: 'Disney',
+    state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
+    giver: {
+        id: '1',
+        itemDescription: 'My aunt made this pillow by hand :) but I\'m about to move to the Netherlands and can\'t take it with me :(',
+        itemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/79440_XXX_v1.tif&wid=650&cvt=jpeg'
+    },
+    receiver: {
+        id: '5',
+        itemDescription: 'Thanks Amy--With a bit of magic I made my bed to match!',
+        itemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/79440_XXX_v3.tif&wid=650&cvt=jpeg'
+    },
+},
+{
+    itemId: '11',
+    itemName: 'Cactus cup',
+    groupId: 'Disney',
+    state: 'POSTED', // POSTED, GIVEN, COMPLETE
+    giver: {
+        id: '1',
+        itemDescription: 'My ex gave me this cup. Too many memories :( Someone take it please?',
+        itemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/80878_XXX_v1.tif&wid=650&cvt=jpeg'
+    },
+    receiver: null,
+},
+{
+    itemId: '24',
+    itemName: 'Pusheen pillow',
+    groupId: 'CS147',
+    state: 'POSTED',
+    giver:{
+        id: '3',
+        itemDescription: 'Looking to give away this pillow, which is very important to me--would be great to chat in person about why!',
+        itemPicUrl: 'https://cdn.shopify.com/s/files/1/0057/8182/products/large-plush-front_700x700.png',
+    },
+    receiver: null,
+},
+{
+    itemId: '32',
+    itemName: 'Magic books',
+    state: 'POSTED',
+    groupId: 'Disney',
+    giver: {
+        itemDescription: 'I have too many magic books in my house, but can\'t bear to throw any away. Does anyone want to adopt these? They come in a set.',
+        itemPicUrl: 'https://thenypost.files.wordpress.com/2018/10/old-books.jpg',
+        id: '5',
+    },
+    userPicUrl: 'https://vignette.wikia.nocookie.net/disneyheroines/images/7/7c/Belle.jpg',
+    receiver: null,
+},
+{
+    itemId: '87',
+    itemName: 'Watercolor painting',
+    state: 'POSTED',
+    groupId: 'Disney',
+    giver: {
+        itemDescription: 'Hey guys, trying this app out. Does anyone want this painting I made?',
+        itemPicUrl: 'https://render.fineartamerica.com/images/rendered/search/print/images/artworkimages/medium/1/colorful-rooster-hailey-e-herrera.jpg',
+        id: '6',
+    },
+    receiver: null,
+},
+{
+    itemId: '92',
+    itemName: 'Spear',
+    state: 'POSTED',
+    groupId: 'Camping',
+    giver: {
+        itemDescription: 'This broken spear has seen me through many battles. Does anyone want it for hanging/framing in their house?',
+        itemPicUrl: 'https://store.ubi.com/on/demandware.static/-/Sites-masterCatalog/default/dwe92f8ae1/images/large/5afda8ad6b54a4271407a8e3-collectible-5_Assassins_Creed_odyssey_spear.jpg',
+        id: '7',
+    },
+    receiver: null,
+},
+{
+    itemId: '113',
+    itemName: 'Nostalgic bar of soap',
+    state: 'POSTED',
+    groupId: 'Camping',
+    giver: {
+        itemDescription: 'My father gave me this bar of soap, and I don\'t want to throw it away, but I\'m about to go on a journey across the Mediterranean, so hoping someone will take it.',
+        itemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/65377_XXX_v1.tif&wid=650&cvt=jpeg',
+        id: '7',
+    },
+    receiver: null,
+},
+]
+
 userInfo = [
         {
             displayName: "Amy",
@@ -49,15 +173,15 @@ userInfo = [
 groupInfo = [
 {
     groupName: 'CS147',
-    groupId: '2832789',
+    groupId: 'CS147',
     memberList: [
-        '1', '2', '3'
+        '1', '2', '3', '7'
     ],
     groupPicUrl: 'http://web.stanford.edu/class/cs147/projects/TransformingLivingSpace/Flutter/images/need.jpg',
 },
 {
     groupName: 'Disney',
-    groupId: '5894549',
+    groupId: 'Disney',
     memberList: [
         '1', '5', '6'
     ],
@@ -65,9 +189,9 @@ groupInfo = [
 },
 {
     groupName: 'Camping',
-    groupId: '9005600',
+    groupId: 'Camping',
     memberList: [
-        '1', '6', '7'
+        '1', '7'
     ],
     groupPicUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyM_i7rIKIc-wHw_VeW8lAyc68-zA3VcdT8zx97bG_QccOWLkt3w',
 },
@@ -103,10 +227,22 @@ const UserListStore = store({
 
 const GroupListStore = store({
     groups: groupInfo,
-    getUserObject(groupId){
+    getGroup(groupId){
         for(var i = 0; i < GroupListStore.groups.length;++i){
             if (GroupListStore.groups[i].groupId == groupId) {
                 return GroupListStore.groups[i];
+            }
+        }
+        return undefined; // this should not happen :O
+    }
+})
+
+const ItemListStore = store({
+    items: itemInfo,
+    getItem(itemId){
+        for(var i = 0; i < ItemListStore.items.length;++i){
+            if (ItemListStore.items[i].itemId == itemId) {
+                return ItemListStore.items[i];
             }
         }
         return undefined; // this should not happen :O
@@ -118,4 +254,5 @@ export {
     UserStore,
     UserListStore,
     GroupListStore,
+    ItemListStore,
 }

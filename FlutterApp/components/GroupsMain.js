@@ -86,7 +86,6 @@ class GroupsMain extends React.Component {
         groupResultList.push(tempGroupResult);
       }
     });
-    // console.log('ughrerender');
 
     return (
       <View style={styles.container}>

@@ -5,72 +5,81 @@ import { Metrics, Colors } from '../Themes';
 import StoryCard from './StoryCard';
 import Search from './Search';
 
+import { view } from 'react-easy-state'
+import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../../GlobalStore'
 
 const {height, width} = Dimensions.get('window');
 
 class Stories extends React.Component {
 
-  state = {
-    storyList: [
-      {
-        itemName: 'Glass birds',
-        groupName: 'CS147',
-
-        giveItemDescription: 'I went to buy a set of glass dolphin paperweights, but accidentally came home with birds instead! They\'re q nice and I would only really give them to a friend. Anyone want to be their new nest?',
-        giveItemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0289/st-jude-glass-bird-paperweight-c.jpg',
-        giveUserName: 'Cynthia',
-        giveUserPicUrl: 'https://i.imgur.com/z7fgB60.jpg',
-
-        recvItemDescription: 'These are even more lovely in person :) Look how pretty they are on my desk!',
-        recvItemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0313/st-jude-glass-bird-paperweight-c.jpg',
-        recvUserName: 'Amy',
-        recvUserPicUrl: 'http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg',
-
-        key: '7002',
-      },
-      {
-        itemName: 'Handmade pillow',
-        groupName: 'Disney',
-
-        giveItemDescription: 'My aunt made this pillow by hand :) but I\'m about to move to the Netherlands and can\'t take it with me :(',
-        giveItemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/79440_XXX_v1.tif&wid=650&cvt=jpeg',
-        giveUserName: 'Amy',
-        giveUserPicUrl: 'http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg',
-
-        recvItemDescription: 'Thanks Amy--With a bit of magic I made my bed to match!',
-        recvItemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/79440_XXX_v3.tif&wid=650&cvt=jpeg',
-        recvUserName: 'Belle',
-        recvUserPicUrl: 'https://vignette.wikia.nocookie.net/disneyheroines/images/7/7c/Belle.jpg',
-
-        key: '7008',
-      },
-    ],
-  }
 
   onChangeSearchText = () => null; // search; do last
   onClearSearchText = () => null; // search; do last
 
   changeRecvDescription = ({description, index}) => {
-    this.setState({
-      storyList: update(this.state.storyList, {index: {recvItemDescription: {$set: description}}})
-    });
+    ItemListStore.items[index].receiver.itemDescription = description;
+    ItemListStore.items = ItemListStore.items;
   }
 
   changeRecvImage = ({url, index}) => {
-    this.setState({
-      storyList: update(this.state.storyList, {index: {recvItemPicUrl: {$set: url}}})
-    });
+    ItemListStore.items[index].receiver.itemPicUrl = url;
+    ItemListStore.items = ItemListStore.items;
+  }
+
+  onPressShareStory = (text, newImage, index) => {
+    console.log(text)
+    console.log(newImage)
+    console.log(ItemListStore.items[index])
+    this.changeRecvDescription({description: text, index: index})
+    this.changeRecvImage({url:newImage, index: index})
+    console.log(ItemListStore.items[index])
   }
 
   render() {
+    let treasureList = [];
+    ItemListStore.items.forEach((item)=>{
+      // if it belongs to a group that I am a part of
+      let groupObj = GroupListStore.getGroup(item.groupId)
+      if (item.state !== "POSTED"
+        && groupObj.memberList.indexOf(UserStore.userId) !== -1){
+        let giverObj = UserListStore.getUserObject(item.giver.id);
+        let receiverObj = UserListStore.getUserObject(item.receiver.id);
+        treasureList.push({
+          itemName: item.itemName,
+          itemDescription: item.giver.itemDescription,
+          itemPicUrl: item.giver.itemPicUrl,
+          groupName: item.groupId,
+          userName: giverObj.displayName,
+          userPicUrl: giverObj.userPicUrl,
+          key: item.itemId,
+
+          giveItemDescription: item.giver.itemDescription,
+          giveItemPicUrl: item.giver.itemPicUrl,
+          giveUserName: giverObj.displayName,
+          giveUserPicUrl: giverObj.userPicUrl,
+
+          recvItemDescription: item.receiver.itemDescription,
+          recvItemPicUrl: item.receiver.itemPicUrl,
+          recvUserName: receiverObj.displayName,
+          recvUserPicUrl: receiverObj.userPicUrl,
+        })
+      }
+    })
+
     return (
       <View style={styles.container}>
         <Search />
 
         <ScrollView>
           {
-            this.state.storyList.map((l, i) => (
-              <StoryCard story={l} index={i} changeRecvDescription={this.changeRecvDescription} changeRecvImage={this.changeRecvImage}/>
+            treasureList.map((l, i) => (
+              <StoryCard story={l}
+                key={l.key}
+                myName={UserStore.userName}
+                index={i}
+                changeRecvDescription={this.changeRecvDescription}
+                changeRecvImage={this.changeRecvImage}
+                onPressShareStory={this.onPressShareStory}/>
             ))
           }
         </ScrollView>
@@ -143,4 +152,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Stories;
+export default view(Stories);

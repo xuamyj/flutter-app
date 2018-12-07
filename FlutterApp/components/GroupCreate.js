@@ -6,7 +6,9 @@ import { Metrics, Colors } from './Themes';
 import AutoTags from 'react-native-tag-autocomplete';
 import RoundButton from './subcomponents/RoundButton';
 
-import Fire from '../Fire';
+import { view } from 'react-easy-state'
+import { UserStore, UserListStore, GroupListStore } from '../GlobalStore'
+
 
 const {height, width} = Dimensions.get('window');
 
@@ -24,21 +26,22 @@ class GroupCreate extends React.Component {
 
   onChangeInputGroupName = (inputGroupName) => {this.setState({ inputGroupName: inputGroupName })}
 
-  onPressCreate = async () => {
+  onPressCreate = () => {
     memberList = []
     this.state.tagsSelected.forEach((tag) => {
       memberList.push(tag['userId']);
     });
-    if (memberList.indexOf(Fire.shared.uid) == -1) {
-      memberList.push(Fire.shared.uid);
+    if (memberList.indexOf(UserStore.userId) == -1) {
+      memberList.push(UserStore.userId);
     }
 
-    uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputGroupPicUrl);
-    Fire.shared.writeGroupData(this.state.inputGroupName, uploadUrl, memberList, () => {
-      this.props.navigation.navigate('Group', {name: this.state.inputGroupName});
-    }, () => {
-      // TODO toast
-    });
+    GroupListStore.groups.push({
+      groupName: this.state.inputGroupName,
+      groupId: this.state.inputGroupName,
+      memberList,
+      groupPicUrl: this.state.inputGroupPicUrl
+    })
+    this.props.navigation.navigate('Group', {name: this.state.inputGroupName});
   }
 
   static navigationOptions = {
@@ -117,23 +120,20 @@ class GroupCreate extends React.Component {
   }
 
   componentDidMount() {
-    Fire.shared.getAllUsers((result) => {
-      // create resultList
-      let resultList = [];
-      result.forEach((childResult) => {
-        let userObj = {}
-        let userId = childResult.key;
-        let userEmail = childResult.val()['email'];
-        userObj['name'] = userEmail;
-        userObj['userId'] = userId;
-        resultList.push(userObj);
-      });
+    let resultList = [];
+    UserListStore.users.forEach((user) => {
+      let userObj = {};
+      let userId = user.userId;
+      let userEmail = user.email;
+      userObj['name'] = userEmail;
+      userObj['userId'] = userId;
+      resultList.push(userObj);
+    });
 
-      // update suggestions (resultList)
-      this.setState(previousState => ({
-        suggestions: resultList,
-      }))
-    })
+    // update suggestions (resultList)
+    this.setState(previousState => ({
+      suggestions: resultList,
+    }))
   }
 }
 
