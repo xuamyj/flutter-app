@@ -125,6 +125,7 @@ class Fire {
 
   // save uid + email + display name the first time
   writeUserData(userId, email, userName) {
+    console.log('got here at all');
     firebase.database().ref('users/' + userId).set({
       email: email,
       display_name: userName,
