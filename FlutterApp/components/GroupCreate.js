@@ -2,6 +2,9 @@ import React from 'react';
 import { Text, View, StyleSheet, Button, TouchableOpacity, Alert, Image } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import { Metrics, Colors } from './Themes';
+import AutoTags from 'react-native-tag-autocomplete';
+
+import Fire from '../Fire';
 
 class GroupCreate extends React.Component {
   state = {
@@ -9,6 +12,9 @@ class GroupCreate extends React.Component {
     inputGroupMembers: '',
     errorMsgName: 'Error message placeholder: name',
     errorMsgMembers: 'Error message placeholder: members',
+
+    suggestions : [ {name:''}, ],
+    tagsSelected : []
   }
 
   onChangeInputGroupName = (inputGroupName) => {this.setState({ inputGroupName: inputGroupName })}
@@ -36,6 +42,16 @@ class GroupCreate extends React.Component {
     }
   };
 
+  handleDelete = index => {
+    let tagsSelected = this.state.tagsSelected;
+    tagsSelected.splice(index, 1);
+    this.setState({ tagsSelected });
+  }
+
+  handleAddition = suggestion => {
+    this.setState({ tagsSelected: this.state.tagsSelected.concat([suggestion]) });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -57,6 +73,12 @@ class GroupCreate extends React.Component {
         <View style={styles.fillout}>
           <FormLabel labelStyle={styles.label}>Members</FormLabel>
           <FormInput onChangeText={this.onChangeInputGroupMembers}/>
+          <AutoTags
+            suggestions={this.state.suggestions}
+            tagsSelected={this.state.tagsSelected}
+            handleAddition={this.handleAddition}
+            handleDelete={this.handleDelete}
+            placeholder="Add a member.." />
         </View>
         <View style={styles.postView}>
         <TouchableOpacity style={styles.post} onPress={this.onPressPost}>
@@ -65,6 +87,32 @@ class GroupCreate extends React.Component {
         </View>
       </View>
     );
+  }
+
+  componentDidMount() {
+    Fire.shared.getAllUsers((result) => {
+      // create resultList
+      let resultList = [];
+      result.forEach((childResult) => {
+        let userObj = {}
+        let userId = childResult.key;
+        let userEmail = childResult.val()['email'];
+        userObj['name'] = userEmail;
+        userObj['userId'] = userId;
+        resultList.push(userObj);
+      });
+
+      console.log('hello there');
+      console.log(resultList);
+
+      // update suggestions (resultList)
+      this.setState(previousState => ({
+        suggestions: resultList,
+      }))
+
+      console.log(this.state.suggestions);
+
+    })
   }
 }
 
