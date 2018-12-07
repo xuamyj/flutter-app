@@ -4,9 +4,8 @@ import { Icon, Avatar } from 'react-native-elements';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import { Metrics, Colors } from './Themes';
 
-import firebase from 'firebase';
-
-import Fire from '../Fire';
+import { view } from 'react-easy-state'
+import { UserStore } from '../GlobalStore'
 
 const GivenRoute = () => (
   <View style={styles.scene} />
@@ -37,31 +36,12 @@ class ProfileMain extends React.Component {
           </TouchableOpacity>
         </View>
       ),
-    };z
+    };
   };
 
-  callbackGetUserName = null;
-  callbackgetUserPicUrl = null;
-
   componentDidMount() {
+    this.props.navigation.setParams({userName: UserStore.userName})
     this.props.navigation.setParams({ onPressSettings: this.onPressSettings });
-
-    this.callbackGetUserName = Fire.shared.getUserName(Fire.shared.uid, result => {
-      this.setState(previousState => ({
-        userName: result,
-      }))
-      this.props.navigation.setParams({userName: result})
-    })
-    this.callbackgetUserPicUrl = Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
-      this.setState(previousState => ({
-        userPicUrl: result
-      }))
-    })
-  }
-
-  componentWillUnmount() {
-    Fire.shared.offUsers(Fire.shared.uid, this.callbackGetUserName);
-    Fire.shared.offUsers(Fire.shared.uid, this.callbackgetUserPicUrl);
   }
 
   state = {
@@ -71,8 +51,6 @@ class ProfileMain extends React.Component {
       { key: 'received', title: 'Received' },
       { key: 'posted', title: 'Posted' },
     ],
-    userName: '',
-    userPicUrl: '',
   };
 
   onPressSettings = () => {
@@ -86,12 +64,10 @@ class ProfileMain extends React.Component {
             <Avatar
             large
             rounded
-            source={{uri: this.state.userPicUrl}}
+            source={{uri: UserStore.userPicUrl}}
             style={styles.icon}
             />
           </View>
-
-
 
         <TabView
           navigationState={this.state}
@@ -114,7 +90,6 @@ class ProfileMain extends React.Component {
       </View>
     );
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -140,4 +115,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileMain;
+export default view(ProfileMain);

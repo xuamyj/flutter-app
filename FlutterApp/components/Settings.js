@@ -9,12 +9,13 @@ import firebase from 'firebase';
 
 import Fire from '../Fire';
 
+import { view } from 'react-easy-state'
+import { UserStore } from '../GlobalStore'
+
 const {height, width} = Dimensions.get('window');
 
 class Settings extends React.Component {
   state = {
-    userName: '',
-    userPicUrl: '',
     inputName: '',
     inputPicUrl: '',
     errorMsg: 'Error message placeholder',
@@ -22,28 +23,18 @@ class Settings extends React.Component {
 
   onPressUpdateDisplayName = () => {
     if (this.state.inputName != '') {
-      Fire.shared.updateUserName(Fire.shared.uid, this.state.inputName, () => {
-          this.setState({
-            userName: this.state.inputName,
-            inputName: '',
-           });
-        // TODO toast
-      }, () => {
-        // TODO toast
+      UserStore.setUserName(this.state.inputName);
+      this.setState({
+        inputName: '',
       });
     }
   }
 
-  onPressUpdateProfilePicture = async () => {
-    uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputPicUrl);
-    Fire.shared.updateUserPicUrl(Fire.shared.uid, uploadUrl, () => {
-      this.setState({
-        userPicUrl: this.state.inputPicUrl,
-      });
-      // TODO toast
-    }, () => {
-      // TODO toast
-    });
+  onPressUpdateProfilePicture = () => {
+    if (this.state.inputPicUrl == undefined) {
+      return;
+    }
+    UserStore.setUserPicUrl(this.state.inputPicUrl);
   }
 
   onSignout = () => {
@@ -59,6 +50,11 @@ class Settings extends React.Component {
   onSave = () => {
     this.onPressUpdateProfilePicture();
     this.onPressUpdateDisplayName();
+  }
+
+
+  componentDidMount() {
+    this.setState({inputPicUrl: UserStore.userPicUrl});
   }
 
   onPressCamera = async () => {
@@ -99,7 +95,7 @@ class Settings extends React.Component {
                 <Icon name={'edit'} color={Colors.dark} onPress={this.onPressCamera} containerStyle={styles.icon} />
               </View>
             </View>
-            <Text style={styles.text}>{this.state.userName}</Text>
+            <Text style={styles.text}>{UserStore.userName}</Text>
           </View>
           <Text style={styles.label}>Change display name</Text>
           <TextInput
@@ -125,20 +121,6 @@ class Settings extends React.Component {
             onPress={this.onSignout} />
         </View>
     );
-  }
-
-  componentDidMount() {
-    Fire.shared.getUserName(Fire.shared.uid, result => {
-      this.setState(previousState => ({
-        userName: result,
-      }))
-    })
-    Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
-      this.setState(previousState => ({
-        userPicUrl: result,
-        inputPicUrl: result,
-      }))
-    })
   }
 }
 
@@ -200,4 +182,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Settings;
+export default view(Settings);

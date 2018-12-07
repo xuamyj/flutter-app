@@ -5,7 +5,9 @@ import { Metrics, Colors } from './Themes';
 import Search from './subcomponents/Search';
 import GroupItem from './subcomponents/GroupItem';
 
-import Fire from '../Fire';
+import { view } from 'react-easy-state'
+import { UserStore, UserListStore, GroupListStore } from '../GlobalStore'
+
 
 class GroupsMain extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -33,57 +35,7 @@ class GroupsMain extends React.Component {
 
   componentDidMount() {
     this.props.navigation.setParams({ onPressCreateGroup: this.onPressCreateGroup });
-
-    this.callbackGetAllGroups = Fire.shared.getAllGroups(groupResult => {
-      Fire.shared.getAllUsersOn(userResult => {
-        // create map {userId: userPicUrl}
-        let userPicUrlMap = {};
-        userResult.forEach((childResult) => {
-          userPicUrlMap[childResult.key] = childResult.val()['profile_picture']
-        })
-
-        console.log('userPicUrlMap', userPicUrlMap);
-
-        // loop through groups, keep only the ones with current user in them
-        let groupResultList = [];
-        groupResult.forEach((childResult) => {
-          let childResultObj = childResult.val();
-
-          if (childResultObj['memberList'].indexOf(Fire.shared.uid) != -1) {
-            tempGroupResult = {
-              name: childResultObj['groupName'],
-              key: childResultObj['groupId'],
-              size: childResultObj['memberList'].length,
-              picUrl: childResultObj['groupPicUrl'],
-            }
-
-            // add all those prof pics
-            for (let i = 0; i < childResultObj['memberList'].length; i++) {
-              tempGroupResult['user' + (i+1)] = userPicUrlMap[childResultObj['memberList'][i]];
-            }
-
-            console.log('tempGroupResult', tempGroupResult);
-
-            groupResultList.push(tempGroupResult);
-          }
-        });
-
-        this.setState(previousState => ({
-          groupList: groupResultList,
-        }))
-      });
-    })
   }
-
-  componentWillUnmount() {
-    Fire.shared.offAllUsers(this.callbackGetAllGroups);
-    Fire.shared.offGroups(this.callbackGetAllGroups);
-  }
-
-  state = {
-    groupList: [
-    ]
-  };
 
   onChangeSearchText = () => null; // search; do last
   onClearSearchText = () => null; // search; do last
@@ -103,12 +55,42 @@ class GroupsMain extends React.Component {
   }
 
   render() {
+    let userPicUrlMap = {};
+    UserListStore.users.forEach((user) => {
+      userPicUrlMap[user.userId] = user['userPicUrl']
+    })
+
+    console.log('userPicUrlMap', userPicUrlMap);
+
+    // loop through groups, keep only the ones with current user in them
+    let groupResultList = [];
+    GroupListStore.groups.forEach((group) => {
+      if (group['memberList'].indexOf(UserStore.userId) != -1) {
+        tempGroupResult = {
+          name: group['groupName'],
+          key: group['groupId'],
+          size: group['memberList'].length,
+          picUrl: group['groupPicUrl'],
+        }
+
+        // add all those prof pics
+        for (let i = 0; i < group['memberList'].length; i++) {
+          tempGroupResult['user' + (i+1)] = userPicUrlMap[group['memberList'][i]];
+        }
+
+        console.log('tempGroupResult', tempGroupResult);
+
+        groupResultList.push(tempGroupResult);
+      }
+    });
+    // console.log('ughrerender');
+
     return (
       <View style={styles.container}>
         <Search />
         <FlatList
           style={styles.cardsContainer}
-          data={this.state.groupList}
+          data={groupResultList}
           renderItem={this.renderItem} />
       </View>
     );
@@ -127,4 +109,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default GroupsMain;
+export default view(GroupsMain);
