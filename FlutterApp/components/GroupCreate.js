@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet, Button, TouchableOpacity, Alert, Image } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import { Metrics, Colors } from './Themes';
+import { ImagePicker, Permissions } from 'expo';
 import AutoTags from 'react-native-tag-autocomplete';
 
 import Fire from '../Fire';
@@ -9,7 +10,7 @@ import Fire from '../Fire';
 class GroupCreate extends React.Component {
   state = {
     inputGroupName: '',
-    inputGroupMembers: '',
+    inputGroupPicUrl: '',
     errorMsgName: 'Error message placeholder: name',
     errorMsgMembers: 'Error message placeholder: members',
 
@@ -18,19 +19,32 @@ class GroupCreate extends React.Component {
   }
 
   onChangeInputGroupName = (inputGroupName) => {this.setState({ inputGroupName: inputGroupName })}
-  onChangeInputGroupMembers = (inputGroupMembers) => {this.setState({ inputGroupMembers: inputGroupMembers })}
 
-  onPressCreate = () => {
-    // TODO backend
-    console.log(this.state.inputGroupName);
-    console.log(this.state.inputGroupMembers);
-    Alert.alert(
-      'Group created!',
-      ('You have created the group ' + this.state.inputGroupName + '!'),
-      [
-        {text: 'OK'},
-      ],
-    );
+  onPressCreate = async () => {
+    memberList = []
+    this.state.tagsSelected.forEach((tag) => {
+      memberList.push(tag['userId']);
+    });
+    if (memberList.indexOf(Fire.shared.uid) == -1) {
+      memberList.push(Fire.shared.uid);
+    }
+
+    uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputGroupPicUrl);
+    Fire.shared.writeGroupData(this.state.inputGroupName, uploadUrl, memberList, () => {
+      this.props.navigation.navigate('GroupsMain');
+    }, () => {
+      // TODO toast
+    });
+  }
+
+  onPressCamera = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status === 'granted') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images
+      });
+      {this.setState({ inputGroupPicUrl: result.uri })}
+    }
   }
 
   static navigationOptions = {
@@ -61,7 +75,7 @@ class GroupCreate extends React.Component {
                 <View style= {{marginTop: 30, marginBottom: 10, justifyContent: 'center', alignItems: 'center',}}>
                     <Image
                     style={styles.imagePreview}
-                    source={{uri: this.state.inputItemPicUrl}}
+                    source={{uri: this.state.inputGroupPicUrl}}
                     />
                 </View>
                 <Button
@@ -80,7 +94,7 @@ class GroupCreate extends React.Component {
                 </View>
             </View>
             <View style={styles.postView}>
-                <TouchableOpacity style={styles.post} onPress={this.onPressPost}>
+                <TouchableOpacity style={styles.post} onPress={this.onPressCreate}>
                 <Text style={{fontWeight:"bold", color: "white", fontSize: 16,}}>Create Group</Text>
                 </TouchableOpacity>
             </View>
@@ -101,16 +115,10 @@ class GroupCreate extends React.Component {
         resultList.push(userObj);
       });
 
-      console.log('hello there');
-      console.log(resultList);
-
       // update suggestions (resultList)
       this.setState(previousState => ({
         suggestions: resultList,
       }))
-
-      console.log(this.state.suggestions);
-
     })
   }
 }

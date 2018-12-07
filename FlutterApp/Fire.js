@@ -194,6 +194,16 @@ class Fire {
   // DATABASE: GROUPS
   // ----------------
 
+  // save groupId + group name + group image + member list the first time
+  writeGroupData(groupName, groupPicUrl, memberList) {
+    var newGroupKey = firebase.database().ref('/groups').push().key;
+    firebase.database().ref('groups/' + newGroupKey).set({
+      groupId: newGroupKey,
+      groupName: groupName,
+      groupPicUrl: groupPicUrl,
+      memberList: memberList,
+    });
+  }
 }
 
 Fire.shared = new Fire();
