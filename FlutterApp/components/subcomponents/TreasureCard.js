@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     marginRight: Metrics.smallMargin,
   },
   groupName: {
-    fontSize: 12,
+    fontSize: 13,
     color: Colors.dark,
   },
   badgeStyle: {
@@ -136,13 +136,13 @@ const styles = StyleSheet.create({
     borderWidth: 2.5,
   },
   propic: {
-    marginRight: Metrics.baseMargin,
+    marginRight: Metrics.baseMargin * 1.25,
     marginTop: Metrics.baseMargin * -1.5,
   },
   username: {
     fontWeight: 'bold',
     color: Colors.dark,
-    fontSize: 12.5,
+    fontSize: 13,
     marginLeft: -Metrics.smallMargin,
   },
   profileImages: {
