@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, TextInput, View, StyleSheet, Dimensions, TouchableOpacity, Picker, Image, Alert, ScrollView } from 'react-native';
+import { Icon } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
 import RoundButton from './subcomponents/RoundButton';
@@ -73,7 +74,7 @@ class PostMain extends React.Component {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4,3],
+        aspect: [3,2],
       });
       if (!result.cancelled) {
         this.setState({ inputItemPicUrl: result.uri });
@@ -100,12 +101,11 @@ class PostMain extends React.Component {
     return (
       <View style={{ flex:1, backgroundColor: 'transparent' }}>
         <View>
-          <TouchableOpacity onPress={this.selectPhoto}>
             <Image style={styles.imagePreview} source={{uri: this.state.inputItemPicUrl}} />
-          </TouchableOpacity>
         </View>
         <ScrollView style={{ flex:1 }}>
-          <View style={styles.imageContainer}>
+          <View style={styles.iconContainer}>
+            <Icon name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
           </View>
           <View style={styles.formContainer}>
             <Text style={styles.label}>Name</Text>
@@ -149,8 +149,14 @@ class PostMain extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
   imagePreview: {
-    height: width * 3 / 4,
+    height: width * 2 / 3,
     width: width,
     position: 'absolute',
     resizeMode: 'cover',
@@ -159,12 +165,12 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '100%',
-    marginTop: width * 3 / 4 - Metrics.doubleBaseMargin,
+    marginTop: width * 2 / 3 - Metrics.doubleBaseMargin,
     shadowColor: Colors.dark,
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.7,
     shadowRadius: 5,
-    elevation: 5,
+    elevation: 3,
     borderTopLeftRadius: Metrics.doubleBaseMargin,
     borderTopRightRadius: Metrics.doubleBaseMargin,
     flex: 1,
@@ -179,7 +185,7 @@ const styles = StyleSheet.create({
     fontFamily: 'NunitoSemiBold',
     alignSelf: 'flex-start',
     marginLeft: '10%',
-    marginTop: Metrics.doubleBaseMargin,
+    marginTop: Metrics.baseMargin * 3,
   },
   textInput: {
     height: 40,
@@ -195,23 +201,26 @@ const styles = StyleSheet.create({
   button: {
     margin: Metrics.doubleBaseMargin * 3,
   },
-  container: {
+  icon: {
+    padding: Metrics.baseMargin,
+    borderRadius: 100,
+    backgroundColor: 'white',
+    margin: Metrics.baseMargin,
+    shadowColor: Colors.dark,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.6,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  iconContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 28,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    fontSize: 19,
-    marginBottom: 5,
-  },
+    position: 'absolute',
+    alignSelf: 'flex-end',
+    flexDirection: 'row',
+    padding: Metrics.baseMargin,
+    bottom:height - width * 1 / 3 - Metrics.doubleBaseMargin,
+    right:0,
+  }
 })
 
 export default PostMain;

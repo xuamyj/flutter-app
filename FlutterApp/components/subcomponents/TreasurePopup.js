@@ -4,6 +4,7 @@ import { Avatar, Badge} from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 import Icons from '../Themes/Icons';
 import Modal from 'react-native-modal';
+import RoundButtonSmall from '../subcomponents/RoundButtonSmall';
 
 const {height, width} = Dimensions.get('window');
 
@@ -41,17 +42,67 @@ export default class TreasurePopup extends React.Component {
           <View>
             <Image style={styles.image} source={{uri:itemPicURL}} />
           </View>
-          <View style={styles.cardInfo}>
-            <Avatar containerStyle={styles.propic} medium rounded source={{uri: userPicUrl}} />
-            <View style={styles.cardInfoText} ellipsizeMode={'tail'} numberOfLines={1}>
-              <Text><Text style={styles.username}>{userName} </Text>{itemDescription}</Text>
+          {this.props.isProfile === true &&
+            <View>
+              <View style={styles.cardInfo}>
+                <View style={styles.cardInfoText} >
+                  <Text>{itemDescription}</Text>
+                </View>
+              </View>
+              <View style={styles.buttonContainer}>
+                {this.props.isActive === true &&
+                  <RoundButtonSmall
+                    containerStyle={styles.button}
+                    label="GIVE!"
+                    backgroundColor={Colors.teal}
+                    color={'white'}
+                    size={14}
+                    onPress={this._toggleModal}
+                    isActive={this.props.isActive} />
+                }
+                {this.props.isActive === false &&
+                  <RoundButtonSmall
+                    containerStyle={styles.button}
+                    label="ALREADY GIVEN"
+                    backgroundColor={Colors.background}
+                    color={Colors.lightText}
+                    size={14}
+                    isActive={this.props.isActive} />
+                }
+              </View>
             </View>
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity onPress={this._toggleModal} style={styles.post}>
-              <Text style={{fontWeight:"bold", color: "white", fontSize: 15,}}>I want this!</Text>
-            </TouchableOpacity>
-          </View>
+          }
+          {this.props.isProfile === false &&
+            <View>
+              <View style={styles.cardInfo}>
+                <Avatar containerStyle={styles.propic} medium rounded source={{uri: userPicUrl}} />
+                <View style={styles.cardInfoText}>
+                  <Text><Text style={styles.username}>{userName} </Text>{itemDescription}</Text>
+                </View>
+              </View>
+              <View style={styles.buttonContainer}>
+                {this.props.isActive === true &&
+                  <RoundButtonSmall
+                    containerStyle={styles.button}
+                    label={"MESSAGE " + userName.toUpperCase()}
+                    backgroundColor={Colors.teal}
+                    color={'white'}
+                    size={14}
+                    onPress={this._toggleModal}
+                    isActive={this.props.isActive} />
+                }
+                {this.props.isActive === false &&
+                  <RoundButtonSmall
+                    containerStyle={styles.button}
+                    label="ALREADY GIVEN"
+                    backgroundColor={Colors.background}
+                    color={Colors.lightText}
+                    size={14}
+                    isActive={this.props.isActive} />
+                }
+              </View>
+            </View>
+          }
         </View>
       </Modal>
     );
@@ -121,21 +172,8 @@ const styles = StyleSheet.create({
   cardInfoText: {
     flex: 1,
   },
-  post: {
-    borderRadius: 15,
-    backgroundColor: "#49B6BB",
-    width: "60%",
-    height: 30,
-    justifyContent: 'center',
-    alignItems: "center",
-    shadowColor: 'rgba(0, 0, 0, 0.2)',
-    shadowOffset: {
-      width: 0.5,
-      height: 0.5
-    },
-    shadowRadius: 10,
-    shadowOpacity: 1.0,
-    elevation: 1,
+  button: {
+    marginTop: Metrics.baseMargin,
     marginBottom: Metrics.doubleBaseMargin,
   },
   buttonContainer: {
