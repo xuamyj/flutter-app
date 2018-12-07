@@ -5,6 +5,8 @@ import { Metrics, Colors } from './Themes';
 import Search from './subcomponents/Search';
 import GroupItem from './subcomponents/GroupItem';
 
+import Fire from '../Fire';
+
 class GroupsMain extends React.Component {
   static navigationOptions = ({navigation}) => {
     return {
@@ -27,39 +29,59 @@ class GroupsMain extends React.Component {
     };
   };
 
+  callbackGetAllGroups = null;
+
   componentDidMount() {
     this.props.navigation.setParams({ onPressCreateGroup: this.onPressCreateGroup });
+
+    this.callbackGetAllGroups = Fire.shared.getAllGroups(groupResult => {
+      Fire.shared.getAllUsersOn(userResult => {
+        // create map {userId: userPicUrl}
+        let userPicUrlMap = {};
+        userResult.forEach((childResult) => {
+          userPicUrlMap[childResult.key] = childResult.val()['profile_picture']
+        })
+
+        console.log('userPicUrlMap', userPicUrlMap);
+
+        // loop through groups, keep only the ones with current user in them
+        let groupResultList = [];
+        groupResult.forEach((childResult) => {
+          let childResultObj = childResult.val();
+
+          if (childResultObj['memberList'].indexOf(Fire.shared.uid) != -1) {
+            tempGroupResult = {
+              name: childResultObj['groupName'],
+              key: childResultObj['groupId'],
+              size: childResultObj['memberList'].length,
+              picUrl: childResultObj['groupPicUrl'],
+            }
+
+            // add all those prof pics
+            for (let i = 0; i < childResultObj['memberList'].length; i++) {
+              tempGroupResult['user' + (i+1)] = userPicUrlMap[childResultObj['memberList'][i]];
+            }
+
+            console.log('tempGroupResult', tempGroupResult);
+
+            groupResultList.push(tempGroupResult);
+          }
+        });
+
+        this.setState(previousState => ({
+          groupList: groupResultList,
+        }))
+      });
+    })
+  }
+
+  componentWillUnmount() {
+    Fire.shared.offAllUsers(this.callbackGetAllGroups);
+    Fire.shared.offGroups(this.callbackGetAllGroups);
   }
 
   state = {
     groupList: [
-      {
-        name: 'CS147',
-        key: '28327298',
-        size: 4,
-        picUrl: 'http://web.stanford.edu/class/cs147/projects/TransformingLivingSpace/Flutter/images/need.jpg',
-        user1: 'http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg',
-        user2: 'http://web.stanford.edu/class/cs147/projects/TransformingLivingSpace/Flutter/images/chloe.png',
-        user3: 'http://web.stanford.edu/class/cs147/projects/TransformingLivingSpace/Flutter/images/cynthia.png',
-      },
-      {
-        name: 'Disney',
-        key: '56755554',
-        size: 3,
-        picUrl: 'https://nerdist.com/wp-content/uploads/2015/03/maxresdefault-970x545.jpg',
-        user1: 'http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg',
-        user2: 'https://vignette.wikia.nocookie.net/disneyheroines/images/7/7c/Belle.jpg',
-        user3: 'https://www.gannett-cdn.com/-mm-/09a7c94119fde38af582f9f815d623e4ee8d3ba2/c=0-64-2758-1622/local/-/media/2017/11/29/USATODAY/USATODAY/636475571371921197-XXX-IMG-XXX-IA01G1REAR09-8P-1-1-ELILBTVF-91704861.JPG',
-      },
-      {
-        name: 'Camping',
-        key: '90057000',
-        size: 3,
-        picUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyM_i7rIKIc-wHw_VeW8lAyc68-zA3VcdT8zx97bG_QccOWLkt3w',
-        user1: 'http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg',
-        user2: 'https://i.ytimg.com/vi/ClvjENmquG4/maxresdefault.jpg',
-        user3: 'https://www.gannett-cdn.com/-mm-/09a7c94119fde38af582f9f815d623e4ee8d3ba2/c=0-64-2758-1622/local/-/media/2017/11/29/USATODAY/USATODAY/636475571371921197-XXX-IMG-XXX-IA01G1REAR09-8P-1-1-ELILBTVF-91704861.JPG',
-      },
     ]
   };
 

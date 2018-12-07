@@ -190,19 +190,41 @@ class Fire {
     });
   }
 
+  // get all uid/email pairs
+  getAllUsersOn(successCallback) {
+    return firebase.database().ref('users/').on('value', function(snapshot) {
+      successCallback(snapshot);
+    });
+  }
+
+  offAllUsers(returnedCallback) {
+    firebase.database().ref('users/').off('value', returnedCallback);
+  }
+
   // ----------------
   // DATABASE: GROUPS
   // ----------------
 
   // save groupId + group name + group image + member list the first time
   writeGroupData(groupName, groupPicUrl, memberList) {
-    var newGroupKey = firebase.database().ref('/groups').push().key;
+    var newGroupKey = firebase.database().ref('groups/').push().key;
     firebase.database().ref('groups/' + newGroupKey).set({
       groupId: newGroupKey,
       groupName: groupName,
       groupPicUrl: groupPicUrl,
       memberList: memberList,
     });
+  }
+
+  // get all groups for a certain uid
+  getAllGroups(successCallback) {
+    return firebase.database().ref('groups/').on('value', function(snapshot) {
+      successCallback(snapshot);
+    });
+  }
+
+  offGroups(userId, returnedCallback) {
+    firebase.database().ref('groups/').off('value', returnedCallback);
   }
 }
 
