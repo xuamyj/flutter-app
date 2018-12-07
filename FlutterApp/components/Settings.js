@@ -1,12 +1,15 @@
 import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, Button, Image } from 'react-native';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Button, Image, Dimensions } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage, Avatar } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
+import RoundButton from './subcomponents/RoundButton';
 
 import firebase from 'firebase';
 
 import Fire from '../Fire';
+
+const {height, width} = Dimensions.get('window');
 
 class Settings extends React.Component {
   state = {
@@ -17,21 +20,26 @@ class Settings extends React.Component {
     errorMsg: 'Error message placeholder',
   }
 
-  onChangeInputName = (inputName) => {this.setState({ inputName: inputName })}
-
   onPressUpdateDisplayName = () => {
-    Fire.shared.updateUserName(Fire.shared.uid, this.state.inputName, () => {
-      this.setState({ userName: this.state.inputName });
-      // TODO toast
-    }, () => {
-      // TODO toast
-    });
+    if (this.state.inputName != '') {
+      Fire.shared.updateUserName(Fire.shared.uid, this.state.inputName, () => {
+          this.setState({
+            userName: this.state.inputName,
+            inputName: '',
+           });
+        // TODO toast
+      }, () => {
+        // TODO toast
+      });
+    }
   }
 
   onPressUpdateProfilePicture = async () => {
     uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputPicUrl);
     Fire.shared.updateUserPicUrl(Fire.shared.uid, uploadUrl, () => {
-      this.setState({userPicUrl: uploadUrl});
+      this.setState({
+        userPicUrl: this.state.inputPicUrl,
+      });
       // TODO toast
     }, () => {
       // TODO toast
@@ -48,13 +56,20 @@ class Settings extends React.Component {
     })
   }
 
+  onSave = () => {
+    this.onPressUpdateProfilePicture();
+    this.onPressUpdateDisplayName();
+  }
+
   onPressCamera = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status === 'granted') {
       let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1,1],
       });
-      {this.setState({ inputPicUrl: result.uri })}
+      if (!result.cancelled) {this.setState({ inputPicUrl: result.uri })}
     }
   }
 
@@ -72,52 +87,37 @@ class Settings extends React.Component {
 
     return (
         <View style={styles.container}>
-            <View style={{position: 'absolute', top: 10, right: 10}}>
-                <Button
-                title="Logout"
-                color="grey"
-                onPress={this.onSignout}
-                />
-            </View>
-            <View style={styles.heading}>
-                <Avatar
-                large
-                rounded
-                source={{uri: this.state.userPicUrl}}
-                activeOpacity={0.7}
-                />
-                <Text style = {styles.text}>
-                {this.state.userName}
-                </Text>
-            </View>
-            <FormLabel>Display name</FormLabel>
-            <View style={styles.displayName}>
-                <FormInput onChangeText={this.onChangeInputName} inputStyle = {{color: 'black'}} containerStyle= {{width: "80%"}}/>
-                <TouchableOpacity onPress={this.onPressUpdateDisplayName} style={{marginRight: 20,}}>
-                    <Image style={styles.image} source={require("../assets/confirm.png")}/>
-                </TouchableOpacity>
-            </View>
-            <FormValidationMessage>{this.state.errorMsg}</FormValidationMessage>
-            <FormLabel containerStyle= {{marginTop: 15}}>Profile picture</FormLabel>
-            <View style={styles.photoPreview}>
-                <View style={{marginLeft: 10,}}>
-                <Button
-                title="Change Photo"
-                color="#49B6BB"
-                onPress={this.onPressCamera}
-                />
-                </View>
-                {
-                    this.state.inputPicUrl != '' &&
-                    <Image
-                    style={styles.imagePreview}
-                    source={{uri: this.state.inputPicUrl}}
-                    />
-                }
-                <TouchableOpacity onPress={this.onPressUpdateProfilePicture} style={{marginRight: 20, marginLeft: 20,}}>
-                    <Image style={styles.image} source={require("../assets/confirm.png")}/>
-                </TouchableOpacity>
-            </View>
+          <View style={styles.heading}>
+            <Avatar
+              xlarge
+              rounded
+              source={{uri: this.state.inputPicUrl}}
+              onPress={this.onPressCamera}
+              />
+            <Text style={styles.text}>{this.state.userName}</Text>
+          </View>
+          <Text style={styles.label}>Change display name</Text>
+          <TextInput
+            placeholder="This is the name people will be seeing!"
+            autoCapitalize="none"
+            style={styles.textInput}
+            onChangeText={inputName => this.setState({ inputName })}
+            value={this.state.inputName}
+          />
+          <RoundButton
+            containerStyle={styles.button}
+            label="SAVE"
+            backgroundColor={Colors.teal}
+            color={'white'}
+            size={14}
+            onPress={this.onSave} />
+          <RoundButton
+            containerStyle={styles.button}
+            label="LOGOUT"
+            backgroundColor={Colors.background}
+            color={Colors.dark}
+            size={14}
+            onPress={this.onSignout} />
         </View>
     );
   }
@@ -125,12 +125,13 @@ class Settings extends React.Component {
   componentDidMount() {
     Fire.shared.getUserName(Fire.shared.uid, result => {
       this.setState(previousState => ({
-        userName: result
+        userName: result,
       }))
     })
     Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
       this.setState(previousState => ({
-        userPicUrl: result
+        userPicUrl: result,
+        inputPicUrl: result,
       }))
     })
   }
@@ -139,45 +140,39 @@ class Settings extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 10,
-    backgroundColor: "white",
-    borderRadius: 10,
-    shadowColor: 'rgba(0, 0, 0, 0.08)',
-    shadowOffset: {
-      width: 0.2,
-      height: 0.2
-    },
-    shadowRadius: 15,
-    shadowOpacity: 1.0
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
-  imagePreview: {
-    width: 80,
-    height: 80,
-    borderRadius:40,
+  label: {
+    fontWeight: 'normal',
+    color: Colors.dark,
+    fontSize: 17,
+    fontFamily: 'NunitoSemiBold',
+    alignSelf: 'flex-start',
+    marginLeft: '10%',
+    marginTop: Metrics.doubleBaseMargin,
+  },
+  textInput: {
+    height: 40,
+    width: '80%',
+    borderColor: Colors.dark,
+    borderWidth: 0,
+    borderBottomWidth: 1,
+    fontSize: 15,
+    marginBottom: Metrics.doubleBaseMargin * 2,
+  },
+  button: {
+    marginVertical: Metrics.smallMargin * 1.5,
   },
   heading:{
-      marginTop: 50,
-      justifyContent: 'center',
-      alignItems: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
-      fontWeight: 'bold',
-      fontSize: 20,
-      marginTop: 10,
-  },
-  displayName: {
-      flexDirection: "row",
-      justifyContent: "space-evenly",
-  },
-  image: {
-      width: 30,
-      height: 30,
-  },
-  photoPreview: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: 'center',
-      marginTop: 15,
+    fontFamily: 'NunitoBold',
+    fontSize: 24,
+    marginVertical: Metrics.baseMargin,
   },
 })
 
