@@ -13,7 +13,7 @@ const {height, width} = Dimensions.get('window');
 class GroupCreate extends React.Component {
   state = {
     inputGroupName: '',
-    inputGroupMembers: '',
+    inputGroupPicUrl: '',
     errorMsgName: 'Error message placeholder: name',
     errorMsgMembers: 'Error message placeholder: members',
     inputGroupPicUrl: '',
@@ -23,20 +23,32 @@ class GroupCreate extends React.Component {
   }
 
   onChangeInputGroupName = (inputGroupName) => {this.setState({ inputGroupName: inputGroupName })}
-  onChangeInputGroupMembers = (inputGroupMembers) => {this.setState({ inputGroupMembers: inputGroupMembers })}
 
-  onPressCreate = () => {
-    // TODO backend
-    console.log(this.state.inputGroupName);
-    console.log(this.state.inputGroupMembers);
-    Alert.alert(
-      'Group created!',
-      ('You have created the group ' + this.state.inputGroupName + '!'),
-      [
-        {text: 'OK'},
-      ],
-    );
-    this.props.navigation.navigate('GROUPS'); //
+  onPressCreate = async () => {
+    memberList = []
+    this.state.tagsSelected.forEach((tag) => {
+      memberList.push(tag['userId']);
+    });
+    if (memberList.indexOf(Fire.shared.uid) == -1) {
+      memberList.push(Fire.shared.uid);
+    }
+
+    uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputGroupPicUrl);
+    Fire.shared.writeGroupData(this.state.inputGroupName, uploadUrl, memberList, () => {
+      this.props.navigation.navigate('GroupsMain');
+    }, () => {
+      // TODO toast
+    });
+  }
+
+  onPressCamera = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status === 'granted') {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images
+      });
+      {this.setState({ inputGroupPicUrl: result.uri })}
+    }
   }
 
   static navigationOptions = {
@@ -125,16 +137,10 @@ class GroupCreate extends React.Component {
         resultList.push(userObj);
       });
 
-      console.log('hello there');
-      console.log(resultList);
-
       // update suggestions (resultList)
       this.setState(previousState => ({
         suggestions: resultList,
       }))
-
-      console.log(this.state.suggestions);
-
     })
   }
 }
