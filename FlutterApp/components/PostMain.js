@@ -73,7 +73,7 @@ class PostMain extends React.Component {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4,3],
+        aspect: [3,2],
       });
       if (!result.cancelled) {
         this.setState({ inputItemPicUrl: result.uri });
@@ -149,8 +149,14 @@ class PostMain extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
   imagePreview: {
-    height: width * 3 / 4,
+    height: width * 2 / 3,
     width: width,
     position: 'absolute',
     resizeMode: 'cover',
@@ -159,12 +165,12 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '100%',
-    marginTop: width * 3 / 4 - Metrics.doubleBaseMargin,
+    marginTop: width * 2 / 3 - Metrics.doubleBaseMargin,
     shadowColor: Colors.dark,
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.7,
     shadowRadius: 5,
-    elevation: 5,
+    elevation: 3,
     borderTopLeftRadius: Metrics.doubleBaseMargin,
     borderTopRightRadius: Metrics.doubleBaseMargin,
     flex: 1,
@@ -194,23 +200,6 @@ const styles = StyleSheet.create({
   },
   button: {
     margin: Metrics.doubleBaseMargin * 3,
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 28,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    fontSize: 19,
-    marginBottom: 5,
   },
 })
 
