@@ -30,7 +30,7 @@ import {
 
 // Create the Home navigator
 const HomeStack = createStackNavigator({
-  Home: { screen: HomeMain },
+  Home: { screen: HomeMain }
 });
 
 // Create the Groups navigator
@@ -55,6 +55,12 @@ const ChatStack = createStackNavigator({
 const ProfileStack = createStackNavigator({
   Profile: { screen: ProfileMain },
   Settings: { screen: Settings },
+});
+
+const AuthStack = createStackNavigator({
+  Landing: {screen: Landing },
+  Login: {screen: Login},
+  SignUp: {screen: SignUp},
 });
 
 // Bottom tab
@@ -102,9 +108,7 @@ const AppNavigator = createBottomTabNavigator({
 const AppContainer = createAppContainer(createSwitchNavigator(
   {
     AuthLoading: AuthLoading,
-    Landing: Landing,
-    SignUp: SignUp,
-    Login: Login,
+    Landing: AuthStack,
     App: AppNavigator,
   },
   {
@@ -121,3 +125,5 @@ export default class App extends React.Component {
     );
   }
 }
+
+console.disableYellowBox = true;

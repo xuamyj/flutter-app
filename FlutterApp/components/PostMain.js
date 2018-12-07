@@ -1,8 +1,12 @@
 import React from 'react';
-import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Picker, Image, Alert, ScrollView } from 'react-native';
-import { FormLabel, FormInput, FormValidationMessage, CheckBox } from 'react-native-elements'
+import { Text, TextInput, View, StyleSheet, Dimensions, TouchableOpacity, Picker, Image, Alert, ScrollView } from 'react-native';
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
+import RoundButton from './subcomponents/RoundButton';
+import Carousel from 'react-native-snap-carousel';
+import GroupItemSmall from './subcomponents/GroupItemSmall';
+
+const {height, width} = Dimensions.get('window');
 
 class PostMain extends React.Component {
   state = {
@@ -10,14 +14,17 @@ class PostMain extends React.Component {
       {
         name: 'CS147',
         key: '28327298',
+        picUrl: 'http://web.stanford.edu/class/cs147/projects/TransformingLivingSpace/Flutter/images/need.jpg',
       },
       {
         name: 'Disney',
         key: '56755554',
+        picUrl: 'https://nerdist.com/wp-content/uploads/2015/03/maxresdefault-970x545.jpg',
       },
       {
         name: 'Camping',
         key: '90057000',
+        picUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyM_i7rIKIc-wHw_VeW8lAyc68-zA3VcdT8zx97bG_QccOWLkt3w',
       },
     ],
     inputItemName: '',
@@ -28,11 +35,15 @@ class PostMain extends React.Component {
     errorMsgDescription: 'Error message placeholder: description',
   }
 
+  componentWillMount() {
+    {this.selectPhoto()}
+  }
+
   onChangeInputItemName = (inputItemName) => {this.setState({ inputItemName: inputItemName })}
   onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })}
+  onChangeGroup = (inputGroupKey) => {this.setState({inputGroupKey: inputGroupKey})}
 
   onPressPost = () => {
-    // TODO backend
     console.log(this.state.inputItemName);
     console.log(this.state.inputItemDescription);
     console.log(this.state.inputItemPicUrl);
@@ -46,14 +57,24 @@ class PostMain extends React.Component {
     );
   }
 
-  onPressCamera = async () => {
+  selectPhoto = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     if (status === 'granted') {
       let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4,3],
       });
-      {this.setState({ inputItemPicUrl: result.uri })}
+      if (!result.cancelled) {
+        this.setState({ inputItemPicUrl: result.uri });
+      }
     }
+  }
+
+  renderItem = ({item}) => {
+    return (
+      <GroupItemSmall group={item}/>
+    )
   }
 
   static navigationOptions = {
@@ -66,54 +87,48 @@ class PostMain extends React.Component {
   };
 
   render() {
+    if (this.state.inputItemPicUrl === '') return null;
     return (
-      <ScrollView style={styles.container}>
-        <View style={styles.fillout}>
-          <FormLabel labelStyle={styles.label}>Post Title</FormLabel>
-          <FormInput onChangeText={this.onChangeInputItemName}/>
-          <View style = {{paddingVertical:10}}>
-            <FormLabel labelStyle={styles.label}>Picture</FormLabel>
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.imageContainer}>
+            <TouchableOpacity onPress={this.selectPhoto}>
+              <Image style={styles.imagePreview} source={{uri: this.state.inputItemPicUrl}} />
+            </TouchableOpacity>
           </View>
-          <View style= {{alignItems: 'center',}}>
-              <Image
-                style={styles.imagePreview}
-                source={{uri: this.state.inputItemPicUrl}}
-              />
-              <Button
-                title="Upload Photo"
-                color="#49B6BB"
-                onPress={this.onPressCamera}
-              />
-          </View>
-
-          <FormLabel labelStyle={styles.label}>Description</FormLabel>
+          <Text style={styles.label}>Name</Text>
+          <TextInput
+            placeholder="What are you giving away?"
+            autoCapitalize="none"
+            style={styles.textInput}
+            onChangeText={this.onChangeInputItemName}
+          />
+          <Text style={styles.label}>Description</Text>
           <TextInput
             style = {styles.description}
             multiline={true}
-            placeholder = "Why is it meaningful to you? When did you last use it?"
-            numberOfLines={4}
+            style={styles.textInput}
+            placeholder = "Why is it meaningful to you?"
             onChangeText={this.onChangeInputItemDescription}
           />
-              <View>
-              <FormLabel labelStyle={styles.label}>Group</FormLabel>
-                  <View style={styles.picker}>
-                  <Picker
-                  selectedValue={this.state.inputGroupKey}
-                  onValueChange={(itemValue, itemIndex) => this.setState({inputGroupKey: itemValue})}>
-                  {
-                      this.state.groupList.map((l) => (
-                          <Picker.Item label={l.name} value={l.key} key={l.key} />
-                      ))
-                  }
-                  </Picker>
-                  </View>
-              </View>
-              <View style={styles.postView}>
-                  <TouchableOpacity style={styles.post} onPress={this.onPressPost}>
-                    <Text style={{fontWeight:"bold", color: "white", fontSize: 16,}}>Give</Text>
-                  </TouchableOpacity>
-              </View>
-
+          <Text style={styles.label}>Group</Text>
+          <Carousel
+              ref={(c) => { this._carousel = c; }}
+              data={this.state.groupList}
+              renderItem={this.renderItem}
+              sliderWidth={width}
+              itemWidth={width * 0.65}
+              enableMomentum={true}
+              onSnapToItem={this.onChangeGroup}
+              containerCustomStyle={styles.groups}
+            />
+          <RoundButton
+            containerStyle={styles.button}
+            label="GIVE ITEM"
+            backgroundColor={Colors.teal}
+            color={'white'}
+            size={15}
+            onPress={this.onPressPost} />
         </View>
       </ScrollView>
     );
@@ -123,78 +138,51 @@ class PostMain extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 5,
-    paddingHorizontal: Metrics.doubleBaseMargin,
-  },
-  fillout: {
-    flex: 1,
-    backgroundColor: "white",
-    borderRadius: 10,
-    shadowColor: 'rgba(0, 0, 0, 0.08)',
-    shadowOffset: {
-      width: 0.2,
-      height: 0.2
-    },
-    shadowRadius: 15,
-    shadowOpacity: 1.0
-  },
-  centerSection: {
-    flex: 1,
-    flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
-  description: {
-      margin: 20,
-      paddingLeft: 8,
-      height: 60,
-      borderRadius: 10,
-      backgroundColor: "white",
-      shadowColor: '#49B6BB',
-      shadowOffset: {
-        width: 1,
-        height: 1
-      },
-      shadowRadius: 2,
-      shadowOpacity: 0.1
+  imageContainer: {
+    width: '100%',
+    height: width * 3 / 4,
+    shadowColor: Colors.dark,
+    shadowOffset: {width: 0, height: 0},
+    shadowOpacity: 0.3,
+    shadowRadius: 2,
+    elevation: 3,
+    borderBottomLeftRadius: Metrics.baseMargin,
+    borderBottomRightRadius: Metrics.baseMargin,
   },
   imagePreview: {
     width: '100%',
-    height: 270,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#C1C1C1',
-}, post: {
-    borderRadius: 20,
-    backgroundColor: "#49B6BB",
-    width: "60%",
-    height: 40,
-    justifyContent: 'center',
-    alignItems: "center",
-    shadowColor: 'rgba(0, 0, 0, 0.08)',
-  shadowOffset: {
-    width: 0.2,
-    height: 0.2
-  },
-  shadowRadius: 15,
-  shadowOpacity: 1.0,
-  elevation: 1,
-},
-    postView: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 10,
-      marginBottom: 20,
-  },
-  picker: {
-      marginHorizontal: 10,
+    height: '100%',
+    resizeMode: 'cover',
+    borderBottomLeftRadius: Metrics.baseMargin,
+    borderBottomRightRadius: Metrics.baseMargin,
   },
   label: {
     fontWeight: 'normal',
     color: Colors.dark,
-    fontSize: 18,
-  }
-
+    fontSize: 19,
+    fontFamily: 'NunitoSemiBold',
+    alignSelf: 'flex-start',
+    marginLeft: '10%',
+    marginTop: Metrics.doubleBaseMargin,
+  },
+  textInput: {
+    height: 40,
+    width: '80%',
+    borderColor: Colors.dark,
+    borderWidth: 0,
+    borderBottomWidth: 1,
+    fontSize: 16,
+  },
+  groups: {
+    marginTop: Metrics.doubleBaseMargin,
+  },
+  button: {
+    margin: Metrics.doubleBaseMargin * 3,
+  },
 })
 
 export default PostMain;

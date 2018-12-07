@@ -17,6 +17,10 @@ class Login extends React.Component {
       .catch(error => this.setState({ errorMessage: error.message }))
   }
 
+  static navigationOptions = {
+    headerStyle: {backgroundColor: Colors.background, borderBottomWidth: 0, elevation: 0},
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -47,7 +51,7 @@ class Login extends React.Component {
         </View>
         <RoundButton
           containerStyle={styles.button}
-          label="LET'S GO"
+          label="LET'S GO!"
           backgroundColor={Colors.teal}
           color={'white'}
           size={14}
