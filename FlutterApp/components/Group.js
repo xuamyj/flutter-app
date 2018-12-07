@@ -31,6 +31,7 @@ class Group extends React.Component {
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
+      color: Colors.dark,
     },
     headerRight: (
       <View style={styles.headerButton}>
@@ -42,6 +43,8 @@ class Group extends React.Component {
         </TouchableOpacity>
       </View>
     ),
+    headerBackTitle: null,
+    headerTintColor: Colors.teal,
   });
 
   onPressGroupSettings = () => {

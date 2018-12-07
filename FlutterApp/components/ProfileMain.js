@@ -26,6 +26,7 @@ class ProfileMain extends React.Component {
       headerTitleStyle: {
         fontFamily: 'NunitoBold',
         fontWeight: '200',
+        color: Colors.dark,
       },
       headerRight: (
         <View style={styles.headerButton}>
@@ -37,7 +38,8 @@ class ProfileMain extends React.Component {
           </TouchableOpacity>
         </View>
       ),
-    };z
+      headerBackTitle: null,
+    };
   };
 
   callbackGetUserName = null;

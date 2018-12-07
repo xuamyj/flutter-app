@@ -59,6 +59,7 @@ class Settings extends React.Component {
   onSave = () => {
     this.onPressUpdateProfilePicture();
     this.onPressUpdateDisplayName();
+    this.props.navigation.navigate('Profile');
   }
 
   onPressCamera = async () => {
@@ -79,7 +80,9 @@ class Settings extends React.Component {
       headerTitleStyle: {
         fontFamily: 'NunitoBold',
         fontWeight: '200',
-      }
+        color: Colors.dark,
+      },
+      headerTintColor: Colors.teal,
     };
 
   render() {

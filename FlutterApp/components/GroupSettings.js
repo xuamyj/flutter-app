@@ -59,7 +59,9 @@ class GroupSettings extends React.Component {
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
-    }
+      color: Colors.dark,
+    },
+    headerTintColor: Colors.teal,
   };
 
   selectPhoto = async () => {
@@ -218,7 +220,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'row',
     padding: Metrics.baseMargin,
-    top: width / 6 - Metrics.baseMargin,
+    top: width / 6 - Metrics.baseMargin * 3,
     right:0,
   },
   fillout: {

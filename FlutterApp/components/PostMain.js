@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'row',
     padding: Metrics.baseMargin,
-    top: width * 1 / 3 + Metrics.baseMargin * 3,
+    top: width * 1 / 3,
     right:0,
   }
 })

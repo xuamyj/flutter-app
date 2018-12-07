@@ -11,7 +11,9 @@ class Chat extends Component {
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
-    }
+      color: Colors.dark,
+    },
+    headerTintColor: Colors.teal,
   });
 
   state = {
