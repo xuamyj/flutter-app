@@ -4,17 +4,20 @@ import { Icon, Avatar } from 'react-native-elements';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import { Metrics, Colors } from './Themes';
 
+import Stories from './subcomponents/Stories'
+import Treasures from './subcomponents/Treasures'
+
 import { view } from 'react-easy-state'
 import { UserStore } from '../GlobalStore'
 
+const PostedRoute = () => (
+  <Treasures isProfile/>
+);
 const GivenRoute = () => (
-  <View style={styles.scene} />
+  <Stories isProfile isMineGiven/>
 );
 const ReceivedRoute = () => (
-  <View style={styles.scene} />
-);
-const PostedRoute = () => (
-  <View style={styles.scene} />
+  <Stories isProfile isMineReceived/>
 );
 
 class ProfileMain extends React.Component {
@@ -49,9 +52,9 @@ class ProfileMain extends React.Component {
   state = {
     index: 0,
     routes: [
+      { key: 'posted', title: 'Posted' },
       { key: 'given', title: 'Given' },
       { key: 'received', title: 'Received' },
-      { key: 'posted', title: 'Posted' },
     ],
   };
 
@@ -74,9 +77,9 @@ class ProfileMain extends React.Component {
         <TabView
           navigationState={this.state}
           renderScene={SceneMap({
+            posted: PostedRoute,
             given: GivenRoute,
-            received: ReceivedRoute,
-            posted: PostedRoute
+            received: ReceivedRoute
           })}
           onIndexChange={index => this.setState({ index })}
           initialLayout={{width: Dimensions.get('window').width}}

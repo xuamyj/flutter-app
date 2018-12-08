@@ -7,10 +7,10 @@ import Treasures from './subcomponents/Treasures';
 import { Colors } from '../components/Themes';
 
 const StoriesRoute = () => (
-  <Stories />
+  <Stories isHome />
 );
 const TreasuresRoute = () => (
-  <Treasures />
+  <Treasures isHome />
 );
 
 class HomeMain extends React.Component {

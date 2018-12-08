@@ -8,10 +8,10 @@ import Stories from './subcomponents/Stories'
 import Treasures from './subcomponents/Treasures'
 
 const StoriesRoute = () => (
-  <Stories />
+  <Stories isGroup />
 );
 const TreasuresRoute = () => (
-  <Treasures />
+  <Treasures isGroup />
 );
 
 class Group extends React.Component {

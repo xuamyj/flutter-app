@@ -33,7 +33,7 @@ class StoryCard extends React.Component {
   constructor(props) {
     super(props);
     this.state={
-      isGiver: true,
+      isGiver: this.props.story.state !== "GIVEN",
       // receiverIsComplete: false,
       inputText: "",
       inputGroupPicUrl: "",
@@ -64,8 +64,6 @@ class StoryCard extends React.Component {
   }
 
   onPressShareStory = () => {
-    console.log(this.props);
-    console.log(this.state);
     this.props.onPressShareStory(this.state.inputText, this.state.inputGroupPicUrl, this.props.index);
   }
 

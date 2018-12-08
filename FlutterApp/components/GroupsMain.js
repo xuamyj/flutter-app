@@ -63,8 +63,6 @@ class GroupsMain extends React.Component {
       userPicUrlMap[user.userId] = user['userPicUrl']
     })
 
-    console.log('userPicUrlMap', userPicUrlMap);
-
     // loop through groups, keep only the ones with current user in them
     let groupResultList = [];
     GroupListStore.groups.forEach((group) => {
@@ -80,8 +78,6 @@ class GroupsMain extends React.Component {
         for (let i = 0; i < group['memberList'].length; i++) {
           tempGroupResult['user' + (i+1)] = userPicUrlMap[group['memberList'][i]];
         }
-
-        console.log('tempGroupResult', tempGroupResult);
 
         groupResultList.push(tempGroupResult);
       }

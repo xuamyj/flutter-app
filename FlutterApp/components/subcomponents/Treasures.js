@@ -5,6 +5,8 @@ import { Metrics, Colors } from '../Themes';
 import TreasureCard from './TreasureCard';
 import Search from './Search';
 
+import { withNavigation } from 'react-navigation';
+
 import { view } from 'react-easy-state'
 import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../../GlobalStore'
 
@@ -26,22 +28,35 @@ class Treasures extends React.Component {
     )
   }
 
+  createTreasureObj(item) {
+    let giverObj = UserListStore.getUserObject(item.giver.id);
+
+    return {
+      itemName: item.itemName,
+      itemDescription: item.giver.itemDescription,
+      itemPicUrl: item.giver.itemPicUrl,
+      groupName: item.groupId,
+      userName: giverObj.displayName,
+      userPicUrl: giverObj.userPicUrl,
+      key: item.itemId,
+    }
+  }
+
 
   render() {
     let treasureList = [];
     ItemListStore.items.forEach((item)=>{
-      // if it belongs to a group that I am a part of
-      if (item.state === "POSTED" && GroupListStore.getGroup(item.groupId).memberList.indexOf(UserStore.userId) !== -1){
-        let giverObj = UserListStore.getUserObject(item.giver.id);
-        treasureList.push({
-          itemName: item.itemName,
-          itemDescription: item.giver.itemDescription,
-          itemPicUrl: item.giver.itemPicUrl,
-          groupName: item.groupId,
-          userName: giverObj.displayName,
-          userPicUrl: giverObj.userPicUrl,
-          key: item.itemId,
-        })
+      let groupObj = GroupListStore.getGroup(item.groupId)
+
+      // if it is a treasure
+      if (item.state === "POSTED") {
+        if (this.props.isHome) {
+          treasureList.push(this.createTreasureObj(item))
+        } else if (this.props.isGroup && groupObj.groupName === this.props.navigation.state.params.name) {
+          treasureList.push(this.createTreasureObj(item))
+        } else if (this.props.isProfile && item.giver.id === UserStore.userId) {
+          treasureList.push(this.createTreasureObj(item))
+        }
       }
     })
 
@@ -68,4 +83,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default view(Treasures);
+export default withNavigation(view(Treasures));

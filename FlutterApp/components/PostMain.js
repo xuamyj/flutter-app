@@ -31,11 +31,6 @@ class PostMain extends React.Component {
   }
 
   onPressPost = () => {
-    console.log(this.state.inputItemName);
-    console.log(this.state.inputItemDescription);
-    console.log(this.state.inputItemPicUrl);
-    console.log(this.state.inputGroupKey);
-
     ItemListStore.items.push({
       itemId: this.state.inputItemName,
       itemName: this.state.inputItemName,
@@ -97,9 +92,7 @@ class PostMain extends React.Component {
 
   render() {
     let groupResultList = [];
-    console.log(GroupListStore.groups);
     GroupListStore.groups.forEach((group) => {
-      console.log(group);
       if (group['memberList'].indexOf(UserStore.userId) != -1) {
         tempGroupResult = {
           name: group['groupName'],

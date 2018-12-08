@@ -4,6 +4,7 @@ import { Card, Avatar, SearchBar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 import StoryCard from './StoryCard';
 import Search from './Search';
+import { withNavigation } from 'react-navigation';
 
 import { view } from 'react-easy-state'
 import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../../GlobalStore'
@@ -40,34 +41,60 @@ class Stories extends React.Component {
 
   }
 
+  createStoryObj = (item) => {
+    let giverObj = UserListStore.getUserObject(item.giver.id);
+    let receiverObj = UserListStore.getUserObject(item.receiver.id);
+
+    return {
+      itemName: item.itemName,
+      itemDescription: item.giver.itemDescription,
+      itemPicUrl: item.giver.itemPicUrl,
+      groupName: item.groupId,
+      userName: giverObj.displayName,
+      userPicUrl: giverObj.userPicUrl,
+      key: item.itemId,
+      state: item.state,
+
+      giveItemDescription: item.giver.itemDescription,
+      giveItemPicUrl: item.giver.itemPicUrl,
+      giveUserName: giverObj.displayName,
+      giveUserPicUrl: giverObj.userPicUrl,
+
+      recvItemDescription: item.receiver.itemDescription,
+      recvItemPicUrl: item.receiver.itemPicUrl,
+      recvUserName: receiverObj.displayName,
+      recvUserPicUrl: receiverObj.userPicUrl,
+    };
+  }
+
+  isTreasure = (item) => {
+    return item.state === "POSTED";
+  }
+
+  isMineGiven = (item) => {
+    return item.giver.id === UserStore.userId;
+  }
+  isMineReceived = (item) => {
+    return item.receiver.id === UserStore.userId;
+  }
+
   render() {
-    let treasureList = [];
+    let storiesList = [];
     ItemListStore.items.forEach((item)=>{
       // if it belongs to a group that I am a part of
       let groupObj = GroupListStore.getGroup(item.groupId)
-      if (item.state !== "POSTED"
-        && groupObj.memberList.indexOf(UserStore.userId) !== -1){
-        let giverObj = UserListStore.getUserObject(item.giver.id);
-        let receiverObj = UserListStore.getUserObject(item.receiver.id);
-        treasureList.push({
-          itemName: item.itemName,
-          itemDescription: item.giver.itemDescription,
-          itemPicUrl: item.giver.itemPicUrl,
-          groupName: item.groupId,
-          userName: giverObj.displayName,
-          userPicUrl: giverObj.userPicUrl,
-          key: item.itemId,
 
-          giveItemDescription: item.giver.itemDescription,
-          giveItemPicUrl: item.giver.itemPicUrl,
-          giveUserName: giverObj.displayName,
-          giveUserPicUrl: giverObj.userPicUrl,
-
-          recvItemDescription: item.receiver.itemDescription,
-          recvItemPicUrl: item.receiver.itemPicUrl,
-          recvUserName: receiverObj.displayName,
-          recvUserPicUrl: receiverObj.userPicUrl,
-        })
+      if (!this.isTreasure(item)){
+        if (this.props.isHome && item.state === "COMPLETE") {
+          storiesList.push(this.createStoryObj(item));
+        } else if (this.props.isGroup
+          && item.state === "COMPLETE"
+          && groupObj.groupName === this.props.navigation.state.params.name) {
+          storiesList.push(this.createStoryObj(item));
+        } else if ((this.props.isMineGiven && this.isMineGiven(item))
+          || (this.props.isMineReceived && this.isMineReceived(item))) {
+          storiesList.push(this.createStoryObj(item));
+        }
       }
     })
 
@@ -77,7 +104,7 @@ class Stories extends React.Component {
 
         <ScrollView>
           {
-            treasureList.map((l, i) => (
+            storiesList.map((l, i) => (
               <StoryCard story={l}
                 key={l.key}
                 myName={UserStore.userName}
@@ -157,4 +184,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default view(Stories);
+export default withNavigation(view(Stories));

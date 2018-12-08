@@ -3,22 +3,6 @@ import moment from 'moment'
 
 itemInfo = [
 {
-    itemId: '11',
-    itemName: 'Cactus cup',
-    groupId: 'CS147',
-    state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
-    giver: {
-        id: '3',
-        itemDescription: 'I went to buy a set of glass dolphin paperweights, but accidentally came home with birds instead! They\'re q nice and I would only really give them to a friend. Anyone want to be their new nest?',
-        itemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0289/st-jude-glass-bird-paperweight-c.jpg'
-    },
-    receiver: {
-        id: '1',
-        itemDescription: 'These are even more lovely in person :) Look how pretty they are on my desk!',
-        itemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0313/st-jude-glass-bird-paperweight-c.jpg'
-    },
-},
-{
     itemId: '13',
     itemName: 'Silk scarf',
     groupId: 'CS147',
@@ -32,6 +16,22 @@ itemInfo = [
         id: '1',
         itemDescription: "",
         itemPicUrl: ""
+    },
+},
+{
+    itemId: '11',
+    itemName: 'Cactus cup',
+    groupId: 'CS147',
+    state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
+    giver: {
+        id: '3',
+        itemDescription: 'I went to buy a set of glass dolphin paperweights, but accidentally came home with birds instead! They\'re q nice and I would only really give them to a friend. Anyone want to be their new nest?',
+        itemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0289/st-jude-glass-bird-paperweight-c.jpg'
+    },
+    receiver: {
+        id: '1',
+        itemDescription: 'These are even more lovely in person :) Look how pretty they are on my desk!',
+        itemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0313/st-jude-glass-bird-paperweight-c.jpg'
     },
 },
 {
@@ -191,7 +191,7 @@ groupInfo = [
     groupName: 'Camping',
     groupId: 'Camping',
     memberList: [
-        '1', '7'
+        '1', '7', '6'
     ],
     groupPicUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyM_i7rIKIc-wHw_VeW8lAyc68-zA3VcdT8zx97bG_QccOWLkt3w',
 },
