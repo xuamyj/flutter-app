@@ -9,7 +9,7 @@ const {height, width} = Dimensions.get('window');
 export default class TreasureCard extends React.Component {
   state = {
     isModalVisible: false,
-    isProfile: false,
+    isProfile: this.props.isProfile,
     isActive: true,
   };
 

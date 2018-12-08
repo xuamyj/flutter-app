@@ -5,13 +5,13 @@ import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import { Metrics, Colors } from './Themes';
 
 import Stories from './subcomponents/Stories'
-import Treasures from './subcomponents/Treasures'
+import ProfileTreasures from './subcomponents/ProfileTreasures'
 
 import { view } from 'react-easy-state'
 import { UserStore } from '../GlobalStore'
 
 const PostedRoute = () => (
-  <Treasures isProfile/>
+  <ProfileTreasures isProfile/>
 );
 const GivenRoute = () => (
   <Stories isProfile isMineGiven/>

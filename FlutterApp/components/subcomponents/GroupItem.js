@@ -63,7 +63,7 @@ export default class GroupItem extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: Colors.darkTeal,
     borderRadius: Metrics.baseMargin,
     shadowColor: Colors.dark,
     shadowOffset: {width: 0, height: 0},
@@ -76,16 +76,20 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 120,
+    height: width * 0.3,
     resizeMode: 'cover',
     borderRadius: Metrics.baseMargin,
-    opacity: 0.25,
+    opacity: 0.6,
   },
   groupName: {
     position: 'absolute',
     flex: 1,
     flexDirection: 'row',
-    padding: Metrics.baseMargin,
+    fontFamily: 'NunitoSemiBold',
+    color: 'white',
+    fontSize: 24,
+    paddingHorizontal: Metrics.doubleBaseMargin,
+    paddingVertical: Metrics.baseMargin * 1.5,
   },
   groupMembersContainer: {
     position: 'absolute',
@@ -107,17 +111,4 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
   },
-  nameContainer: {
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-  },
-  groupName: {
-    position: 'absolute',
-    flex: 1,
-    fontFamily: 'NunitoSemiBold',
-    color: Colors.dark,
-    fontSize: 23,
-    paddingHorizontal: Metrics.doubleBaseMargin,
-    paddingVertical: Metrics.baseMargin * 1.5,
-  }
 })

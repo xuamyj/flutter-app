@@ -11,7 +11,7 @@ import { view } from 'react-easy-state'
 import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../../GlobalStore'
 
 
-class Treasures extends React.Component {
+class ProfileTreasures extends React.Component {
   state = {
     isModalVisible: false,
   }
@@ -24,7 +24,7 @@ class Treasures extends React.Component {
 
   renderItem({item}) {
     return (
-      <TreasureCard treasure={item} isProfile={false} />
+      <TreasureCard treasure={item} isProfile={true} />
     )
   }
 
@@ -83,4 +83,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default withNavigation(view(Treasures));
+export default withNavigation(view(ProfileTreasures));
