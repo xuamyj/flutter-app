@@ -98,16 +98,16 @@ class StoryCard extends React.Component {
     var subjectName;
     var receiverIsComplete = this.props.story.recvItemPicUrl !== "";
     if (!receiverIsComplete && this.props.story.giverUserName === this.props.myName && !this.state.isGiver) {
-      itemName = this.props.story.recvUserName;
-      subjectName = itemName;
+      activeUserName = this.props.story.recvUserName;
+      subjectName = activeUserName;
       itemDescription = "is busy making memories with your object and hasn't shared their stories yet. Check back later!"
     } else if (!receiverIsComplete && this.props.story.recvUserName === this.props.myName && !this.state.isGiver) {
-      itemName = this.props.story.recvUserName;
+      activeUserName = this.props.story.recvUserName;
       subjectName = this.props.story.giveUserName;
       itemDescription = "is waiting for your stories with their object!";
     } else {
-      itemName = this.state.isGiver ? this.props.story.giveUserName : this.props.story.recvUserName
-      subjectName = itemName;
+      activeUserName = this.state.isGiver ? this.props.story.giveUserName : this.props.story.recvUserName
+      subjectName = activeUserName;
       itemDescription = this.state.isGiver ? this.props.story.giveItemDescription : this.props.story.recvItemDescription;
     }
     var itemPicUrl;
