@@ -3,24 +3,31 @@ import { Text, View, StyleSheet, Button, FlatList, TouchableOpacity } from 'reac
 import { Card, Avatar, SearchBar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 import TreasureCard from './TreasureCard';
-import Search from './Search';
+import SearchInput, { createFilter } from 'react-native-search-filter';
 
 import { withNavigation } from 'react-navigation';
 
-import { view } from 'react-easy-state'
-import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../../GlobalStore'
+import { view } from 'react-easy-state';
+import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../../GlobalStore';
 
+const KEYS_TO_FILTERS = ['itemName', 'itemDescription', 'groupName', 'userName'];
 
 class Treasures extends React.Component {
+   constructor(props) {
+    super(props);
+    this.state = {
+      searchTerm: ''
+    }
+  }
+  searchUpdated(term) {
+    this.setState({ searchTerm: term })
+  }
   state = {
     isModalVisible: false,
-  }
+  };
 
   _toggleModal = () =>
     this.setState({ isModalVisible: !this.state.isModalVisible });
-
-  onChangeSearchText = () => null; // search; do last
-  onClearSearchText = () => null; // search; do last
 
   renderItem({item}) {
     return (
@@ -58,14 +65,23 @@ class Treasures extends React.Component {
           treasureList.push(this.createTreasureObj(item))
         }
       }
-    })
+    });
+
+    filteredTreasureList = treasureList.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
 
     return (
       <View style={styles.container}>
-        <Search />
+        <SearchBar
+          round
+          lightTheme
+          containerStyle={styles.searchBarContainer}
+          inputStyle={styles.searchBar}
+          onChangeText={(term) => { this.searchUpdated(term) }} 
+          placeholder='Search...'
+        />
         <FlatList
           style={styles.cardsContainer}
-          data={treasureList}
+          data={filteredTreasureList}
           renderItem={this.renderItem}
           numColumns={2} />
       </View>
@@ -81,6 +97,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: Metrics.baseMargin * 1.5,
     marginBottom: Metrics.smallMargin,
   },
-})
+});
 
 export default withNavigation(view(Treasures));

@@ -3,19 +3,28 @@ import { Text, View, StyleSheet, Button, ScrollView, Dimensions, Image, Animated
 import { Card, Avatar, SearchBar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 import StoryCard from './StoryCard';
-import Search from './Search';
+
+import SearchInput, { createFilter } from 'react-native-search-filter';
 import { withNavigation } from 'react-navigation';
 
 import { view } from 'react-easy-state'
 import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../../GlobalStore'
 
+const KEYS_TO_FILTERS = ['itemName', 'itemDescription', 'groupName', 'userName'];
+
 const {height, width} = Dimensions.get('window');
 
 class Stories extends React.Component {
 
-
-  onChangeSearchText = () => null; // search; do last
-  onClearSearchText = () => null; // search; do last
+ constructor(props) {
+    super(props);
+    this.state = {
+      searchTerm: ''
+    }
+  }
+  searchUpdated(term) {
+    this.setState({ searchTerm: term })
+  }
 
   changeRecvDescription = ({description, index}) => {
     ItemListStore.items[index].receiver.itemDescription = description;
@@ -98,13 +107,22 @@ class Stories extends React.Component {
       }
     })
 
+    filteredStoriesList = storiesList.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS))
+
     return (
       <View style={styles.container}>
-        <Search />
+          <SearchBar
+          round
+          lightTheme
+          containerStyle={styles.searchBarContainer}
+          inputStyle={styles.searchBar}
+          onChangeText={(term) => { this.searchUpdated(term) }} 
+          placeholder='Search...'
+        />
 
         <ScrollView>
           {
-            storiesList.map((l, i) => (
+            filteredStoriesList.map((l, i) => (
               <StoryCard story={l}
                 key={l.key}
                 myName={UserStore.userName}
@@ -172,6 +190,15 @@ const styles = StyleSheet.create({
   },
   groupheader: {
     fontSize: 24,
+  },
+  searchBarContainer: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+  },
+  searchBar: {
+    backgroundColor: Colors.background,
+    fontSize: 15,
   },
   smallImageWrapper: {
     alignItems: 'center',
