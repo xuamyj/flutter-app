@@ -88,7 +88,7 @@ class Stories extends React.Component {
           storiesList.push(this.createStoryObj(item));
         } else if (this.props.isGroup
           && item.state === "COMPLETE"
-          && groupObj.groupName === this.props.navigation.state.params.name) {
+          && groupObj.groupId === this.props.navigation.state.params.group.groupId) {
           storiesList.push(this.createStoryObj(item));
         } else if ((this.props.isMineGiven && this.isMineGiven(item))
           || (this.props.isMineReceived && this.isMineReceived(item))) {

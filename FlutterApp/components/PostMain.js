@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '100%',
-    marginTop: width * 2 / 3 - Metrics.doubleBaseMargin,
+    marginTop: height / 2 - width * 5 / 24,
     shadowColor: Colors.dark,
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.7,

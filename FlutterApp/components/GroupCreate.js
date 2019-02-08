@@ -131,8 +131,8 @@ class GroupCreate extends React.Component {
     UserListStore.users.forEach((user) => {
       let userObj = {};
       let userId = user.userId;
-      let userEmail = user.email;
-      userObj['name'] = userEmail;
+      let userDisplayName = user.displayName;
+      userObj['name'] = userDisplayName;
       userObj['userId'] = userId;
       resultList.push(userObj);
     });
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '100%',
-    marginTop: width * 2 / 5 - Metrics.doubleBaseMargin,
+    marginTop: height / 2 - width * 9 / 20,
     shadowColor: Colors.dark,
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.7,
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'row',
     padding: Metrics.baseMargin,
-    top: width / 6 - Metrics.baseMargin * 3,
+    top: height / 12,
     right:0,
   },
   fillout: {

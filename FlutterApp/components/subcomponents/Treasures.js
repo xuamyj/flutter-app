@@ -78,7 +78,7 @@ class Treasures extends React.Component {
       if (item.state === "POSTED" || (this.state.isProfile === true && item.giver.id === UserStore.userId)) {
         if (this.props.isHome) {
           treasureList.push(this.createTreasureObj(item))
-        } else if (this.props.isGroup && groupObj.groupName === this.props.navigation.state.params.name) {
+        } else if (this.props.isGroup && groupObj.groupId === this.props.navigation.state.params.group.groupId) {
           treasureList.push(this.createTreasureObj(item))
         } else if (this.props.isProfile && item.giver.id === UserStore.userId) {
           treasureList.push(this.createTreasureObj(item))

@@ -76,7 +76,6 @@ class StoryCard extends React.Component {
       transform: [{scale: this.animatedValue}]
     }
     var itemName = this.props.story.itemName;
-    console.log(itemName);
     var groupName = this.props.story.groupName;
     var activeUserName = (this.state.isGiver === true) ? this.props.story.giveUserName : this.props.story.recvUserName;
     var inactiveUserName = (this.state.isGiver === true) ? this.props.story.recvUserName : this.props.story.giveUserName;
