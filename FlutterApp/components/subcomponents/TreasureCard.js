@@ -196,9 +196,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: Colors.lightText,
     textAlign: 'center',
-    backgroundColor: Colors.background,
+    backgroundColor: Colors.buttonTint,
     letterSpacing: 1.25,
     fontFamily: 'NunitoSemiBold',
-    paddingVertical: Metrics.baseMargin,
+    paddingVertical: Metrics.smallMargin,
   }
 })
