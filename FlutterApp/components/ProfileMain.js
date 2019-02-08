@@ -54,7 +54,8 @@ class ProfileMain extends React.Component {
     routes: [
       { key: 'posted', title: 'Posted' },
       { key: 'given', title: 'Given' },
-      { key: 'received', title: 'Received' },
+      { key: 'received', title: "❗️ Received" },
+      //{ key: 'received', title: 'Received' },
     ],
   };
 

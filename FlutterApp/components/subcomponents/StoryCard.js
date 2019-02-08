@@ -75,13 +75,18 @@ class StoryCard extends React.Component {
     const animatedStyle = {
       transform: [{scale: this.animatedValue}]
     }
-    var itemName = this.props.story.itemName;
+
+    var receiverIsComplete = this.props.story.recvItemPicUrl !== "";
+    if (!receiverIsComplete && this.props.story.recvUserName === this.props.myName && !this.state.isGiver) {
+     var itemName = "❗️ " + this.props.story.itemName;
+    } else {
+      var itemName = this.props.story.itemName;
+    }
     var groupName = this.props.story.groupName;
     var activeUserName = (this.state.isGiver === true) ? this.props.story.giveUserName : this.props.story.recvUserName;
     var inactiveUserName = (this.state.isGiver === true) ? this.props.story.recvUserName : this.props.story.giveUserName;
     var itemDescription;
     var subjectName;
-    var receiverIsComplete = this.props.story.recvItemPicUrl !== "";
     if (!receiverIsComplete && this.props.story.giverUserName === this.props.myName && !this.state.isGiver) {
       activeUserName = this.props.story.recvUserName;
       subjectName = activeUserName;
