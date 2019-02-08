@@ -16,31 +16,18 @@ class Treasures extends React.Component {
    constructor(props) {
     super(props);
     this.state = {
-      searchTerm: ''
+      searchTerm: '',
+      isProfile: this.props.isProfile || false,
     }
   }
   searchUpdated(term) {
     this.setState({ searchTerm: term })
-  }
-  state = {
-<<<<<<< HEAD
-    isProfile: this.props.isProfile || false,
-    update: true,
   }
 
   onChangeSearchText = () => null; // search; do last
   onClearSearchText = () => null; // search; do last
 
   renderItem = ({item}) => {
-=======
-    isModalVisible: false,
-  };
-
-  _toggleModal = () =>
-    this.setState({ isModalVisible: !this.state.isModalVisible });
-
-  renderItem({item}) {
->>>>>>> 48c3fd45bd4a89c6d9161173cffb24545b45aed0
     return (
       <TreasureCard
         treasure={item}
@@ -107,7 +94,7 @@ class Treasures extends React.Component {
           lightTheme
           containerStyle={styles.searchBarContainer}
           inputStyle={styles.searchBar}
-          onChangeText={(term) => { this.searchUpdated(term) }} 
+          onChangeText={(term) => { this.searchUpdated(term) }}
           placeholder='Search...'
         />
         <FlatList
@@ -127,6 +114,15 @@ const styles = StyleSheet.create({
   cardsContainer: {
     paddingHorizontal: Metrics.baseMargin * 1.5,
     marginBottom: Metrics.smallMargin,
+  },
+  searchBarContainer: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+  },
+  searchBar: {
+    backgroundColor: Colors.background,
+    fontSize: 15,
   },
 });
 
