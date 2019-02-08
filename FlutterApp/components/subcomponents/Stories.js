@@ -1,16 +1,19 @@
 import React, {Component} from 'react';
-import { Text, View, StyleSheet, Button, ScrollView, Dimensions, Image, Animated, Alert } from 'react-native';
+import { Text, View, StyleSheet, Button, ScrollView, Dimensions, Image, Animated, Alert, TouchableOpacity } from 'react-native';
 import { Card, Avatar, SearchBar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 import StoryCard from './StoryCard';
 
 import SearchInput, { createFilter } from 'react-native-search-filter';
 import { withNavigation } from 'react-navigation';
+import Modal from 'react-native-modal';
+import ModalFilterPicker from 'react-native-modal-filter-picker'
 
 import { view } from 'react-easy-state'
 import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../../GlobalStore'
 
-const KEYS_TO_FILTERS = ['itemName', 'itemDescription', 'groupName', 'userName'];
+const KEYS_TO_FILTERS = ['itemName', 'itemDescription', 'userName', 'recvItemDescription'];
+const GROUP_KEYS_TO_FILTERS = ['groupName']
 
 const {height, width} = Dimensions.get('window');
 
@@ -19,9 +22,12 @@ class Stories extends React.Component {
  constructor(props) {
     super(props);
     this.state = {
-      searchTerm: ''
+      isModalVisible: false,
+      searchTerm: '',
+      picked: '',
     }
   }
+
   searchUpdated(term) {
     this.setState({ searchTerm: term })
   }
@@ -47,7 +53,23 @@ class Stories extends React.Component {
         {text: 'OK'},
       ],
     );
+  }
 
+  onShow = () => {
+    this.setState({ isModalVisible: true });
+  }
+
+  onSelect = (picked) => {
+    this.setState({
+      picked: picked,
+      isModalVisible: false
+    })
+  }
+
+  onCancel = () => {
+    this.setState({
+      isModalVisible: false
+    });
   }
 
   createStoryObj = (item) => {
@@ -88,6 +110,8 @@ class Stories extends React.Component {
   }
 
   render() {
+    const { isModalVisible, picked } = this.state;
+
     let storiesList = [];
     ItemListStore.items.forEach((item)=>{
       // if it belongs to a group that I am a part of
@@ -107,19 +131,44 @@ class Stories extends React.Component {
       }
     })
 
+    let options = [];
+    GroupListStore.groups.forEach((group)=>{
+      key = group.groupName;
+      label = group.groupName;
+      options.push({key, label});
+    });
+
     filteredStoriesList = storiesList.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS))
+    filteredStoriesList = filteredStoriesList.filter(createFilter(this.state.picked, GROUP_KEYS_TO_FILTERS))
 
     return (
       <View style={styles.container}>
-          <SearchBar
-          round
-          lightTheme
-          containerStyle={styles.searchBarContainer}
-          inputStyle={styles.searchBar}
-          onChangeText={(term) => { this.searchUpdated(term) }} 
-          placeholder='Search...'
+        <ModalFilterPicker
+          visible={isModalVisible}
+          onSelect={this.onSelect}
+          onCancel={this.onCancel}
+          options={options}
+          placeholderText="Filter by group..."
         />
-
+        <View style={styles.searchView}>
+          <View style={styles.searchBarView}>
+            <SearchBar
+              round
+              lightTheme
+              containerStyle={styles.searchBarContainer}
+              inputStyle={styles.searchBar}
+              onChangeText={(term) => { this.searchUpdated(term) }} 
+              placeholder='Search...'
+            />
+          </View>
+          <TouchableOpacity onPress={this.onShow}>
+              <Image
+              style={styles.button}
+              source={require("../../assets/filter.png")}
+              /> 
+          </TouchableOpacity>
+        </View>
+          
         <ScrollView>
           {
             filteredStoriesList.map((l, i) => (
@@ -186,7 +235,7 @@ const styles = StyleSheet.create({
   },
   titleheader: {
     fontSize: 24,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   groupheader: {
     fontSize: 24,
@@ -199,6 +248,19 @@ const styles = StyleSheet.create({
   searchBar: {
     backgroundColor: Colors.background,
     fontSize: 15,
+    width: Metrics.screenWidth * 0.88,
+  },
+  searchBarView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: Metrics.screenWidth * 0.88,
+  },
+  searchView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: Metrics.screenWidth,
   },
   smallImageWrapper: {
     alignItems: 'center',
@@ -208,6 +270,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     margin: 5,
+  },
+  button: {
+    width: 20,
+    height: 20,
+    marginRight: 12,
   },
 })
 
