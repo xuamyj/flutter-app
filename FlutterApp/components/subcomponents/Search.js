@@ -15,7 +15,7 @@ class Search extends React.Component {
           lightTheme
           containerStyle={styles.searchBarContainer}
           inputStyle={styles.searchBar}
-          onChangeText={this.onChangeSearchText}
+          onChangeText={(term) => { this.searchUpdated(term) }} 
           onClearText={this.onClearSearchText}
           placeholder='Search...'
         />
