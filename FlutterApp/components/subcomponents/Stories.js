@@ -36,18 +36,8 @@ class Stories extends React.Component {
     ItemListStore.items = ItemListStore.items;
   }
 
-  onPressShareStory = (text, newImage, index) => {
-    this.changeRecvDescription({description: text, index: index})
-    this.changeRecvImage({url:newImage, index: index})
-
-    Alert.alert(
-      'Story shared!',
-      ('You have shared ' + text + '!'),
-      [
-        {text: 'OK'},
-      ],
-    );
-
+  onPressShareStory = (name, index) => {
+    this.props.navigation.navigate('ShareStory', {name: name, index: index});
   }
 
   createStoryObj = (item) => {
@@ -116,7 +106,7 @@ class Stories extends React.Component {
           lightTheme
           containerStyle={styles.searchBarContainer}
           inputStyle={styles.searchBar}
-          onChangeText={(term) => { this.searchUpdated(term) }} 
+          onChangeText={(term) => { this.searchUpdated(term) }}
           placeholder='Search...'
         />
 

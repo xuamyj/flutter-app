@@ -5,6 +5,7 @@ import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from '../Themes';
 import RoundButtonSmall from '../subcomponents/RoundButtonSmall';
 
+
 // import { view } from 'react-easy-state'
 // import { UserStore } from '../../GlobalStore'
 
@@ -42,9 +43,6 @@ class StoryCard extends React.Component {
     this.handlePressOut = this.handlePressOut.bind(this);
   }
 
-  onChangeText = (inputText) => {this.setState({ inputText: inputText })}
-
-
   componentWillMount() {
     this.animatedValue = new Animated.Value(1);
   }
@@ -63,26 +61,14 @@ class StoryCard extends React.Component {
     }).start();
   }
 
-  onPressShareStory = () => {
-    this.props.onPressShareStory(this.state.inputText, this.state.inputGroupPicUrl, this.props.index);
-  }
-
   switch = () => {
     this.setState({
       isGiver: !this.state.isGiver,
     });
   }
 
-  selectPhoto = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    if (status === 'granted') {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [3,2],
-      });
-      this.setState({ inputGroupPicUrl: result.uri })
-    }
+  onPressShareStory = (name, index) => {
+    this.props.onPressShareStory(name, index);
   }
 
   render() {
@@ -90,11 +76,11 @@ class StoryCard extends React.Component {
       transform: [{scale: this.animatedValue}]
     }
     var itemName = this.props.story.itemName;
+    console.log(itemName);
     var groupName = this.props.story.groupName;
     var activeUserName = (this.state.isGiver === true) ? this.props.story.giveUserName : this.props.story.recvUserName;
     var inactiveUserName = (this.state.isGiver === true) ? this.props.story.recvUserName : this.props.story.giveUserName;
     var itemDescription;
-    var itemName;
     var subjectName;
     var receiverIsComplete = this.props.story.recvItemPicUrl !== "";
     if (!receiverIsComplete && this.props.story.giverUserName === this.props.myName && !this.state.isGiver) {
@@ -139,23 +125,11 @@ class StoryCard extends React.Component {
               <Avatar avatarStyle={styles.propicBorder} containerStyle={[styles.propic, giveUserPicStyle]} medium rounded source={{uri: giveUserPicUrl}} />
               <Avatar avatarStyle={styles.propicBorder} containerStyle={[styles.propic, recvUserPicStyle]} medium rounded source={{uri: recvUserPicUrl}} />
             </View>
-            {receiverIsComplete === false && activeUserName === this.props.myName && !this.state.isGiver &&
-              <View style={styles.iconContainer}>
-                <Icon name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
-              </View>
-            }
           </View>
           <View style={styles.cardInfo}>
             <Text style={styles.description}><Text style={styles.username}>{subjectName}</Text> {itemDescription}</Text>
             {itemDescription.substring(0, 10) === "is waiting"  &&
               <View>
-                <TextInput
-                  placeholder="Share your new adventures!"
-                  autoCapitalize="none"
-                  multiline={true}
-                  style={styles.textInput}
-                  onChangeText={this.onChangeText}
-                />
                 <RoundButtonSmall
                   containerStyle={styles.button}
                   label="SHARE STORY"
@@ -163,7 +137,7 @@ class StoryCard extends React.Component {
                   color={'white'}
                   size={14}
                   isActive={true}
-                  onPress={this.onPressShareStory}/>
+                  onPress={() => {this.onPressShareStory(itemName, this.props.index)}}/>
               </View>
             }
           </View>
@@ -256,8 +230,8 @@ const styles = StyleSheet.create({
     opacity: 0.4,
   },
   button: {
-    marginTop: Metrics.baseMargin,
-    marginBottom: Metrics.doubleBaseMargin,
+    marginTop: Metrics.baseMargin * 1.5,
+    marginBottom: Metrics.baseMargin,
     width: '65%',
     alignSelf: 'center',
   },
@@ -268,20 +242,6 @@ const styles = StyleSheet.create({
     margin: Metrics.baseMargin,
     fontSize: 15,
   },
-  icon: {
-    padding: Metrics.baseMargin,
-    borderRadius: 100,
-    backgroundColor: 'white',
-    margin: Metrics.smallMargin,
-  },
-  iconContainer: {
-    flex: 1,
-    position: 'absolute',
-    alignSelf: 'flex-end',
-    bottom:Metrics.baseMargin,
-    right:Metrics.baseMargin,
-    zIndex: 1,
-  }
 })
 
 export default StoryCard

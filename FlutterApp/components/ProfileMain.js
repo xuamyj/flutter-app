@@ -45,7 +45,7 @@ class ProfileMain extends React.Component {
   };
 
   componentDidMount() {
-    this.props.navigation.setParams({userName: UserStore.userName})
+    this.props.navigation.setParams({userName: UserStore.userName});
     this.props.navigation.setParams({ onPressSettings: this.onPressSettings });
   }
 

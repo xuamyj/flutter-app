@@ -4,8 +4,6 @@ import { Icon } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
 import RoundButton from './subcomponents/RoundButton';
-import Carousel from 'react-native-snap-carousel';
-import GroupItemSmall from './subcomponents/GroupItemSmall';
 
 
 import { view } from 'react-easy-state'
@@ -13,52 +11,31 @@ import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../Glob
 
 const {height, width} = Dimensions.get('window');
 
-class PostMain extends React.Component {
+class ShareStory extends React.Component {
   state = {
-    inputItemName: '',
+    name: (this.props.navigation.state.params || {}).name,
+    index: (this.props.navigation.state.params || {}).index,
     inputItemDescription: '',
     inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
-    inputGroupKey: GroupListStore.groups[0].groupId,
     errorMsgName: 'Error message placeholder: name',
     errorMsgDescription: 'Error message placeholder: description',
   }
 
-  onChangeInputItemName = (inputItemName) => {this.setState({ inputItemName: inputItemName })}
   onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })}
-  onChangeGroup = (inputGroupKey) => {
-    console.log('onchangegroup', this.groups[inputGroupKey].key);
-    this.setState({inputGroupKey: this.groups[inputGroupKey].key})
-  }
 
   onPressPost = () => {
-    ItemListStore.items.push({
-      itemId: this.state.inputItemName,
-      itemName: this.state.inputItemName,
-      groupId: this.state.inputGroupKey,
-      state: "POSTED",
-      giver: {
-        id: UserStore.userId,
-        itemDescription: this.state.inputItemDescription,
-        itemPicUrl: this.state.inputItemPicUrl,
-      }
-    })
+    let i = this.state.index
+    ItemListStore.items[i].state = "COMPLETE";
+    ItemListStore.items[i].receiver.itemDescription = this.state.inputItemDescription;
+    ItemListStore.items[i].receiver.itemPicUrl = this.state.inputItemPicUrl;
+
     Alert.alert(
-      'Item posted!',
-      ('You have posted ' + this.state.inputItemName + '!'),
+      'Story shared!',
+      ('You have shared your story with ' + this.state.name + '!'),
       [
-        {text: 'OK'},
+        {text: 'OK', onPress: () => this.props.navigation.navigate('Profile')},
       ],
     );
-
-    this.setState({
-      inputItemName: '',
-      inputItemDescription: '',
-      inputItemPicUrl: '',
-      inputGroupKey: '',
-      errorMsgName: 'Error message placeholder: name',
-      errorMsgDescription: 'Error message placeholder: description',
-    })
-    this.props.navigation.navigate('HOME'); //
   }
 
   selectPhoto = async () => {
@@ -75,34 +52,16 @@ class PostMain extends React.Component {
     }
   }
 
-  renderItem = ({item}) => {
-    return (
-      <GroupItemSmall group={item}/>
-    )
-  }
-
-  static navigationOptions = {
-    title: 'Give',
+  static navigationOptions = ({ navigation }) => ({
+    title: (navigation.state.params || {}).name,
     headerStyle: {backgroundColor: Colors.background },
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
     }
-  };
+  });
 
   render() {
-    let groupResultList = [];
-    GroupListStore.groups.forEach((group) => {
-      if (group['memberList'].indexOf(UserStore.userId) != -1) {
-        tempGroupResult = {
-          name: group['groupName'],
-          key: group['groupId'],
-          picUrl: group['groupPicUrl'],
-        }
-        groupResultList.push(tempGroupResult);
-      }
-    });
-    this.groups = groupResultList;
 
     return (
       <View style={{ flex:1, backgroundColor: 'transparent' }}>
@@ -114,34 +73,16 @@ class PostMain extends React.Component {
             <Icon name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
           </View>
           <View style={styles.formContainer}>
-            <Text style={styles.label}>Name</Text>
-            <TextInput
-              placeholder="What are you giving away?"
-              autoCapitalize="none"
-              style={styles.textInput}
-              onChangeText={this.onChangeInputItemName}
-            />
             <Text style={styles.label}>Description</Text>
             <TextInput
               style = {[styles.textInput]}
               multiline={true}
-              placeholder = "Why is it meaningful to you?"
+              placeholder = "What experiences have you had with this object?"
               onChangeText={this.onChangeInputItemDescription}
             />
-            <Text style={styles.label}>Group</Text>
-            <Carousel
-                ref={(c) => { this._carousel = c; }}
-                data={groupResultList}
-                renderItem={this.renderItem}
-                sliderWidth={width}
-                itemWidth={width * 0.65}
-                enableMomentum={true}
-                onSnapToItem={this.onChangeGroup}
-                containerCustomStyle={styles.groups}
-              />
             <RoundButton
               containerStyle={styles.button}
-              label="GIVE ITEM"
+              label="SHARE STORY"
               backgroundColor={Colors.teal}
               color={'white'}
               size={15}
@@ -225,6 +166,6 @@ const styles = StyleSheet.create({
     top: height * 1 / 4,
     right:0,
   }
-})
+});
 
-export default view(PostMain);
+export default view(ShareStory);

@@ -58,13 +58,14 @@ class Treasures extends React.Component {
   }
 
   addObjectRecv = (key) => {
-    ItemListStore.getItem(key).receiver = {id: '1', itemDescription: "", itemPicUrl: ""};
+    ItemListStore.getItem(key).receiver = {id: UserStore.userId, itemDescription: "", itemPicUrl: ""};
     ItemListStore.items = ItemListStore.items;
   }
 
   giveTreasure = (treasure) => {
     this.changeObjectState(treasure.key);
     this.addObjectRecv(treasure.key);
+    console.log(ItemListStore.getItem(treasure.key));
   }
 
 
@@ -74,7 +75,7 @@ class Treasures extends React.Component {
       let groupObj = GroupListStore.getGroup(item.groupId)
 
       // if it is a treasure
-      if (item.state === "POSTED" || (this.state.isProfile === true && item.giver.id === '1')) {
+      if (item.state === "POSTED" || (this.state.isProfile === true && item.giver.id === UserStore.userId)) {
         if (this.props.isHome) {
           treasureList.push(this.createTreasureObj(item))
         } else if (this.props.isGroup && groupObj.groupName === this.props.navigation.state.params.name) {
