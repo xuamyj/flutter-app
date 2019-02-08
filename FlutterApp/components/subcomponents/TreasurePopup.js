@@ -25,6 +25,10 @@ class TreasurePopup extends React.Component {
     this._toggleModal();
   }
 
+  onPressGive = () => {
+    this.props.give();
+  }
+
   render() {
     var itemName = this.props.treasure.itemName;
     var groupName = this.props.treasure.groupName;
@@ -64,7 +68,7 @@ class TreasurePopup extends React.Component {
                     backgroundColor={Colors.teal}
                     color={'white'}
                     size={14}
-                    onPress={this._toggleModal}
+                    onPress={this.onPressGive}
                     isActive={this.props.isActive} />
                 }
                 {this.props.isActive === false &&

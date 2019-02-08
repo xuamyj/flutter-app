@@ -10,11 +10,23 @@ export default class TreasureCard extends React.Component {
   state = {
     isModalVisible: false,
     isProfile: this.props.isProfile,
-    isActive: true,
+    isActive: this.props.isActive,
   };
 
   _toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
+  }
+
+  giftObj() {
+    this.props.onPressGive(this.props.treasure);
+  }
+
+  onPressGive = () => {
+    this.giftObj();
+    this.setState({
+      isActive: !this.state.isActive,
+      isModalVisible: !this.state.isModalVisible
+    });
   }
 
   constructor(props) {
@@ -71,8 +83,20 @@ export default class TreasureCard extends React.Component {
               <Text style={styles.username}>{userName}</Text>
             </View>
           }
+          {this.state.isActive === false &&
+            <View style={styles.givenOverlay}>
+              <View style={styles.givenOverlayShadow} />
+              <Text style={styles.givenOverlayText}>GIVEN</Text>
+            </View>
+          }
 
-          <TreasurePopup isVisible={this.state.isModalVisible} toggle={this._toggleModal} treasure={this.props.treasure} isProfile={this.state.isProfile} isActive={this.state.isActive}/>
+          <TreasurePopup
+            isVisible={this.state.isModalVisible}
+            toggle={this._toggleModal}
+            give={this.onPressGive}
+            treasure={this.props.treasure}
+            isProfile={this.state.isProfile}
+            isActive={this.state.isActive}/>
         </Animated.View>
       </TouchableWithoutFeedback>
     );
@@ -148,5 +172,33 @@ const styles = StyleSheet.create({
   profileImages: {
     borderBottomLeftRadius: Metrics.baseMargin,
     borderBottomRightRadius: Metrics.baseMargin,
+  },
+  givenOverlay: {
+    position: 'absolute',
+    flex: 1,
+    left: 0,
+    top: 0,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+  },
+  givenOverlayShadow: {
+    position: 'absolute',
+    flex: 1,
+    left: 0,
+    top: 0,
+    opacity: 0.4,
+    backgroundColor: Colors.background,
+    width: '100%',
+    height: '100%',
+  },
+  givenOverlayText: {
+    fontSize: 18,
+    color: Colors.lightText,
+    textAlign: 'center',
+    backgroundColor: Colors.background,
+    letterSpacing: 1.25,
+    fontFamily: 'NunitoSemiBold',
+    paddingVertical: Metrics.baseMargin,
   }
 })
