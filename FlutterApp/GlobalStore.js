@@ -20,7 +20,7 @@ itemInfo = [
 },
 {
     itemId: '11',
-    itemName: 'Cactus cup',
+    itemName: 'Bird paperweights',
     groupId: 'CS147',
     state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
     giver: {
