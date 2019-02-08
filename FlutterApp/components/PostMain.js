@@ -138,6 +138,8 @@ class PostMain extends React.Component {
                 enableMomentum={true}
                 onSnapToItem={this.onChangeGroup}
                 containerCustomStyle={styles.groups}
+                inactiveSlideScale={0.8}
+                inactiveSlideOpacity={0.6}
               />
             <RoundButton
               containerStyle={styles.button}
