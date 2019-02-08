@@ -5,13 +5,13 @@ import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import { Metrics, Colors } from './Themes';
 
 import Stories from './subcomponents/Stories'
-import ProfileTreasures from './subcomponents/ProfileTreasures'
+import Treasures from './subcomponents/Treasures'
 
 import { view } from 'react-easy-state'
 import { UserStore } from '../GlobalStore'
 
 const PostedRoute = () => (
-  <ProfileTreasures isProfile/>
+  <Treasures isProfile/>
 );
 const GivenRoute = () => (
   <Stories isProfile isMineGiven/>
@@ -45,7 +45,7 @@ class ProfileMain extends React.Component {
   };
 
   componentDidMount() {
-    this.props.navigation.setParams({userName: UserStore.userName})
+    this.props.navigation.setParams({userName: UserStore.userName});
     this.props.navigation.setParams({ onPressSettings: this.onPressSettings });
   }
 
@@ -77,7 +77,7 @@ class ProfileMain extends React.Component {
         <TabView
           navigationState={this.state}
           renderScene={SceneMap({
-            posted: PostedRoute,
+            posted: () => <PostedRoute isProfile={true} />,
             given: GivenRoute,
             received: ReceivedRoute
           })}

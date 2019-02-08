@@ -20,7 +20,7 @@ itemInfo = [
 },
 {
     itemId: '11',
-    itemName: 'Cactus cup',
+    itemName: 'Bird paperweights',
     groupId: 'CS147',
     state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
     giver: {
@@ -51,7 +51,7 @@ itemInfo = [
     },
 },
 {
-    itemId: '11',
+    itemId: '14',
     itemName: 'Cactus cup',
     groupId: 'Disney',
     state: 'POSTED', // POSTED, GIVEN, COMPLETE

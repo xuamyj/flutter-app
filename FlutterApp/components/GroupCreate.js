@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Alert, Image, Dimensions, ScrollView } from 'react-native';
+import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Alert, Image, Dimensions, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Icon } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
@@ -88,7 +88,7 @@ class GroupCreate extends React.Component {
 
   render() {
     return (
-      <View style={{ flex:1, backgroundColor: 'transparent' }}>
+      <KeyboardAvoidingView style={{ flex:1, backgroundColor: 'transparent' }} behavior="padding" keyboardVerticalOffset={width * 1 / 3 - 2 * Metrics.doubleBaseMargin}>
         <View style={{ backgroundColor: Colors.teal }}>
             <Image style={styles.imagePreview} source={{uri: this.state.inputGroupPicUrl}} />
         </View>
@@ -122,7 +122,7 @@ class GroupCreate extends React.Component {
               onPress={this.onPressCreate} />
           </View>
         </ScrollView>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 
@@ -131,8 +131,8 @@ class GroupCreate extends React.Component {
     UserListStore.users.forEach((user) => {
       let userObj = {};
       let userId = user.userId;
-      let userEmail = user.email;
-      userObj['name'] = userEmail;
+      let userDisplayName = user.displayName;
+      userObj['name'] = userDisplayName;
       userObj['userId'] = userId;
       resultList.push(userObj);
     });
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '100%',
-    marginTop: width * 2 / 5 - Metrics.doubleBaseMargin,
+    marginTop: height / 2 - width * 9 / 20,
     shadowColor: Colors.dark,
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.7,
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'row',
     padding: Metrics.baseMargin,
-    top: width / 6 - Metrics.baseMargin * 3,
+    top: height / 12,
     right:0,
   },
   fillout: {

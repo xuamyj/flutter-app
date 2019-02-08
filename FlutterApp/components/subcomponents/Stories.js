@@ -42,19 +42,6 @@ class Stories extends React.Component {
     ItemListStore.items = ItemListStore.items;
   }
 
-  onPressShareStory = (text, newImage, index) => {
-    this.changeRecvDescription({description: text, index: index})
-    this.changeRecvImage({url:newImage, index: index})
-
-    Alert.alert(
-      'Story shared!',
-      ('You have shared ' + text + '!'),
-      [
-        {text: 'OK'},
-      ],
-    );
-  }
-
   onShow = () => {
     this.setState({ isModalVisible: true });
   }
@@ -70,6 +57,10 @@ class Stories extends React.Component {
     this.setState({
       isModalVisible: false
     });
+  }
+
+  onPressShareStory = (name, index) => {
+    this.props.navigation.navigate('ShareStory', {name: name, index: index});
   }
 
   createStoryObj = (item) => {
@@ -122,7 +113,7 @@ class Stories extends React.Component {
           storiesList.push(this.createStoryObj(item));
         } else if (this.props.isGroup
           && item.state === "COMPLETE"
-          && groupObj.groupName === this.props.navigation.state.params.name) {
+          && groupObj.groupId === this.props.navigation.state.params.group.groupId) {
           storiesList.push(this.createStoryObj(item));
         } else if ((this.props.isMineGiven && this.isMineGiven(item))
           || (this.props.isMineReceived && this.isMineReceived(item))) {

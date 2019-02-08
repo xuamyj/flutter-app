@@ -11,6 +11,7 @@ import ChatMain from './components/ChatMain';
 import Chat from './components/Chat';
 import ProfileMain from './components/ProfileMain';
 import Settings from './components/Settings';
+import ShareStory from './components/ShareStory';
 
 // Import the authentication screens
 import AuthLoading from './components/authentication/AuthLoading';
@@ -57,6 +58,7 @@ const ChatStack = createStackNavigator({
 const ProfileStack = createStackNavigator({
   Profile: { screen: ProfileMain },
   Settings: { screen: Settings },
+  ShareStory: { screen: ShareStory },
 });
 
 const AuthStack = createStackNavigator({

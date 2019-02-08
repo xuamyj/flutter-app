@@ -47,8 +47,8 @@ class GroupsMain extends React.Component {
     this.props.navigation.navigate('GroupCreate', {});
   }
 
-  onPressGroup = (name) => {
-    this.props.navigation.navigate('Group', { name: name });
+  onPressGroup = (id) => {
+    this.props.navigation.navigate('Group', { group: GroupListStore.getGroup(id) });
   }
 
   renderItem = ({item}) => {

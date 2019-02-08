@@ -21,17 +21,16 @@ class Treasures extends React.Component {
       groupFilterModal: false,
       searchTerm: '',
       picked: '',
+      isProfile: this.props.isProfile || false,
     }
   }
+
   searchUpdated(term) {
     this.setState({ searchTerm: term })
   }
-  state = {
-    groupFilterModal: false,
-  };
 
   onShow = () => {
-    this.setState({ isModalVisible: true });
+    this.setState({ groupFilterModal: true });
   }
 
   onSelect = (picked) => {
@@ -50,9 +49,16 @@ class Treasures extends React.Component {
   _toggleModal = () =>
     this.setState({ isModalVisible: !this.state.isModalVisible });
 
-  renderItem({item}) {
+  onChangeSearchText = () => null; // search; do last
+  onClearSearchText = () => null; // search; do last
+
+  renderItem = ({item}) => {
     return (
-      <TreasureCard treasure={item} isProfile={false} />
+      <TreasureCard
+        treasure={item}
+        isProfile={this.state.isProfile}
+        isActive={item.isActive}
+        onPressGive={this.giveTreasure}/>
     )
   }
 
@@ -67,7 +73,24 @@ class Treasures extends React.Component {
       userName: giverObj.displayName,
       userPicUrl: giverObj.userPicUrl,
       key: item.itemId,
+      isActive: item.state === 'POSTED',
     }
+  }
+
+  changeObjectState = (key) => {
+    ItemListStore.getItem(key).state = "GIVEN";
+    ItemListStore.items = ItemListStore.items;
+  }
+
+  addObjectRecv = (key) => {
+    ItemListStore.getItem(key).receiver = {id: UserStore.userId, itemDescription: "", itemPicUrl: ""};
+    ItemListStore.items = ItemListStore.items;
+  }
+
+  giveTreasure = (treasure) => {
+    this.changeObjectState(treasure.key);
+    this.addObjectRecv(treasure.key);
+    console.log(ItemListStore.getItem(treasure.key));
   }
 
 
@@ -79,10 +102,10 @@ class Treasures extends React.Component {
       let groupObj = GroupListStore.getGroup(item.groupId)
 
       // if it is a treasure
-      if (item.state === "POSTED") {
+      if (item.state === "POSTED" || (this.state.isProfile === true && item.giver.id === UserStore.userId)) {
         if (this.props.isHome) {
           treasureList.push(this.createTreasureObj(item))
-        } else if (this.props.isGroup && groupObj.groupName === this.props.navigation.state.params.name) {
+        } else if (this.props.isGroup && groupObj.groupId === this.props.navigation.state.params.group.groupId) {
           treasureList.push(this.createTreasureObj(item))
         } else if (this.props.isProfile && item.giver.id === UserStore.userId) {
           treasureList.push(this.createTreasureObj(item))
@@ -98,7 +121,7 @@ class Treasures extends React.Component {
     });
 
     filteredTreasureList = treasureList.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
-    filteredStoriesList = filteredStoriesList.filter(createFilter(this.state.picked, GROUP_KEYS_TO_FILTERS))
+    filteredTreasureList = filteredTreasureList.filter(createFilter(this.state.picked, GROUP_KEYS_TO_FILTERS))
 
     return (
       <View style={styles.container}>
@@ -145,7 +168,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Metrics.baseMargin * 1.5,
     marginBottom: Metrics.smallMargin,
   },
- searchBarContainer: {
+  searchBarContainer: {
     backgroundColor: 'transparent',
     borderTopWidth: 0,
     borderBottomWidth: 0,

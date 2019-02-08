@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {KeyboardAvoidingView} from 'react-native';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { Metrics, Colors } from './Themes';
 
@@ -30,11 +31,13 @@ class Chat extends Component {
 
   render() {
     return (
+      <KeyboardAvoidingView style={{ flex:1, backgroundColor: 'transparent' }} behavior="padding" keyboardVerticalOffset={4*Metrics.doubleBaseMargin}>
       <GiftedChat
         messages={this.state.messages}
         onSend={Fire.shared.send}
         user={this.user}
       />
+      </KeyboardAvoidingView>
     );
   }
 

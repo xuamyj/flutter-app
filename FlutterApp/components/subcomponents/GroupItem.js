@@ -3,12 +3,22 @@ import { Text, View, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFe
 import { Avatar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 
+import { view } from 'react-easy-state'
+import { UserStore, UserListStore, GroupListStore } from '../../GlobalStore'
+
 const {height, width} = Dimensions.get('window');
 
 export default class GroupItem extends React.Component {
 
   constructor(props) {
     super(props);
+    let group = GroupListStore.getGroup(props.group.key);
+    this.state = {
+      name: group.groupName,
+      id: group.groupId,
+      picUrl: group.groupPicUrl,
+      members: group.memberList,
+    }
     this.handlePressIn = this.handlePressIn.bind(this);
     this.handlePressOut = this.handlePressOut.bind(this);
   }
@@ -31,28 +41,32 @@ export default class GroupItem extends React.Component {
     }).start();
   }
 
+  getUserPicUrl(id) {
+    let user = UserListStore.getUserObject(id);
+    return user.userPicUrl;
+  }
+
+  getRemainingUsers() {
+    let remaining = this.props.group.size - 3;
+    return "+" + remaining;
+  }
+
   render() {
     const animatedStyle = {
       transform: [{scale: this.animatedValue}]
     }
 
-    var membersLabel = this.props.group.size - 3;
-    var extraMembers = null;
-    if (membersLabel > 0) {
-      extraMembers = <Avatar containerStyle={styles.propic} medium rounded title={"+"+membersLabel} />
-    }
-
     return (
-      <TouchableWithoutFeedback onPress={() => {this.props.openGroup(this.props.group.name)}} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
+      <TouchableWithoutFeedback onPress={() => {this.props.openGroup(this.state.id)}} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
         <Animated.View style={[styles.container, animatedStyle]}>
-          <Image style={styles.image} source={{uri:this.props.group.picUrl}} />
-          <Text style={styles.groupName}>{this.props.group.name}</Text>
+          <Image style={styles.image} source={{uri:this.state.picUrl}} />
+          <Text style={styles.groupName}>{this.state.name}</Text>
           <View style={styles.memberContainer}>
             <View style={styles.groupMembersContainer}>
-              <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.props.group.user1}} />
-              <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.props.group.user2}} />
-              <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.props.group.user3}} />
-              {extraMembers}
+              {this.props.group.size > 0 && <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.getUserPicUrl(this.state.members[0])}} /> }
+              {this.props.group.size > 1 && <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.getUserPicUrl(this.state.members[1])}} /> }
+              {this.props.group.size > 2 && <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.getUserPicUrl(this.state.members[2])}} /> }
+              {this.props.group.size > 3 && <Avatar containerStyle={styles.propic} medium rounded title={this.getRemainingUsers()} /> }
             </View>
           </View>
         </Animated.View>
