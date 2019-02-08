@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View, StyleSheet, Dimensions, TouchableOpacity, Image, Alert, ScrollView } from 'react-native';
+import { Text, TextInput, View, StyleSheet, Dimensions, TouchableOpacity, Image, Alert, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Icon } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
@@ -105,7 +105,7 @@ class PostMain extends React.Component {
     this.groups = groupResultList;
 
     return (
-      <View style={{ flex:1, backgroundColor: 'transparent' }}>
+      <KeyboardAvoidingView style={{ flex:1, backgroundColor: 'transparent' }} behavior="padding" keyboardVerticalOffset={width * 1 / 3 - 2 * Metrics.doubleBaseMargin}>
         <View>
             <Image style={styles.imagePreview} source={{uri: this.state.inputItemPicUrl}} />
         </View>
@@ -148,7 +148,7 @@ class PostMain extends React.Component {
               onPress={this.onPressPost} />
           </View>
         </ScrollView>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

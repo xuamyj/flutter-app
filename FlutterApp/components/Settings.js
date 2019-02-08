@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, Button, Image, Dimensions } from 'react-native';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Button, Image, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { Icon, Avatar } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
@@ -87,7 +87,7 @@ class Settings extends React.Component {
 
 
     return (
-        <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
           <View style={styles.heading}>
             <View>
               <Avatar
@@ -124,7 +124,7 @@ class Settings extends React.Component {
             color={Colors.dark}
             size={14}
             onPress={this.onSignout} />
-        </View>
+        </KeyboardAvoidingView>
     );
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Alert, Image, Dimensions, ScrollView } from 'react-native';
+import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Alert, Image, Dimensions, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Icon } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
@@ -88,7 +88,7 @@ class GroupCreate extends React.Component {
 
   render() {
     return (
-      <View style={{ flex:1, backgroundColor: 'transparent' }}>
+      <KeyboardAvoidingView style={{ flex:1, backgroundColor: 'transparent' }} behavior="padding" keyboardVerticalOffset={width * 1 / 3 - 2 * Metrics.doubleBaseMargin}>
         <View style={{ backgroundColor: Colors.teal }}>
             <Image style={styles.imagePreview} source={{uri: this.state.inputGroupPicUrl}} />
         </View>
@@ -122,7 +122,7 @@ class GroupCreate extends React.Component {
               onPress={this.onPressCreate} />
           </View>
         </ScrollView>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 
