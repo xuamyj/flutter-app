@@ -31,34 +31,67 @@ class PostMain extends React.Component {
   }
 
   onPressPost = () => {
-    ItemListStore.items.push({
-      itemId: this.state.inputItemName,
-      itemName: this.state.inputItemName,
-      groupId: this.state.inputGroupKey,
-      state: "POSTED",
-      giver: {
-        id: UserStore.userId,
-        itemDescription: this.state.inputItemDescription,
-        itemPicUrl: this.state.inputItemPicUrl,
-      }
-    })
-    Alert.alert(
-      'Item posted!',
-      ('You have posted ' + this.state.inputItemName + '!'),
-      [
-        {text: 'OK'},
-      ],
-    );
+    postIsIncomplete = (this.state.inputItemName == "") || 
+    (this.state.inputItemDescription == "") || 
+    (typeof this.state.inputItemPicUrl === "undefined");
 
-    this.setState({
-      inputItemName: '',
-      inputItemDescription: '',
-      inputItemPicUrl: '',
-      inputGroupKey: '',
-      errorMsgName: 'Error message placeholder: name',
-      errorMsgDescription: 'Error message placeholder: description',
-    })
-    this.props.navigation.navigate('HOME'); //
+    if (postIsIncomplete){
+      missingItems = "";
+      if (this.state.inputItemName == "") {
+        missingItems += "a name for the item";
+      }
+      if (this.state.inputItemDescription == "") {
+        if (missingItems != "") {
+          missingItems += " and "
+        }
+        missingItems += "a description of the item";
+      }
+      if (typeof this.state.inputItemPicUrl === "undefined") {
+        if (missingItems != "") {
+          missingItems += " and "
+        }
+        missingItems += "a photo of the item";
+      }
+      missingItems += ".";
+
+      Alert.alert(
+        'Unable to Post Item',
+        ('Please include ' + missingItems),
+        [
+          {text: 'OK'},
+        ],
+      );
+
+    } else {
+      ItemListStore.items.push({
+        itemId: this.state.inputItemName,
+        itemName: this.state.inputItemName,
+        groupId: this.state.inputGroupKey,
+        state: "POSTED",
+        giver: {
+          id: UserStore.userId,
+          itemDescription: this.state.inputItemDescription,
+          itemPicUrl: this.state.inputItemPicUrl,
+        }
+      })
+      Alert.alert(
+        'Item posted!',
+        ('You have posted ' + this.state.inputItemName + '!'),
+        [
+          {text: 'OK'},
+        ],
+      );
+
+      this.setState({
+        inputItemName: '',
+        inputItemDescription: '',
+        inputItemPicUrl: '',
+        inputGroupKey: '',
+        errorMsgName: 'Error message placeholder: name',
+        errorMsgDescription: 'Error message placeholder: description',
+      })
+      this.props.navigation.navigate('HOME'); 
+    }
   }
 
   selectPhoto = async () => {
