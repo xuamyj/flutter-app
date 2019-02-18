@@ -17,15 +17,14 @@ export default class TreasureCard extends React.Component {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   }
 
-  giftObj() {
-    this.props.onPressGive(this.props.treasure);
+  giftObj(receiver) {
+    this.props.onPressGive(this.props.treasure, receiver);
   }
 
-  onPressGive = () => {
-    this.giftObj();
+  onPressGive = (receiver) => {
+    this.giftObj(receiver);
     this.setState({
       isActive: !this.state.isActive,
-      isModalVisible: !this.state.isModalVisible
     });
   }
 
@@ -194,7 +193,7 @@ const styles = StyleSheet.create({
   },
   givenOverlayText: {
     fontSize: 18,
-    color: Colors.lightText,
+    color: Colors.medium,
     textAlign: 'center',
     backgroundColor: Colors.buttonTint,
     letterSpacing: 1.25,

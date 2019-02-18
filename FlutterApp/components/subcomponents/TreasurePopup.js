@@ -5,6 +5,11 @@ import { Metrics, Colors } from '../Themes';
 import Icons from '../Themes/Icons';
 import Modal from 'react-native-modal';
 import RoundButtonSmall from '../subcomponents/RoundButtonSmall';
+import GivePopupImage from '../subcomponents/GivePopupImage';
+import GivePopupHeader from '../subcomponents/GivePopupHeader';
+import GivePopupDescription from '../subcomponents/GivePopupDescription';
+import GivePopupButtons from '../subcomponents/GivePopupButtons';
+import GiveSelectFriendPopup from '../subcomponents/GiveSelectFriendPopup';
 import { withNavigation } from 'react-navigation';
 
 
@@ -14,10 +19,17 @@ class TreasurePopup extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      selectFriendToggle: false,
+      completionScreenViewed: false,
+    }
   }
 
   _toggleModal = () => {
     this.props.toggle();
+    if (this.state.selectFriendToggle === true) {
+      this.onToggleSelectFriend();
+    }
   }
 
   onPressMessage = () => {
@@ -25,8 +37,21 @@ class TreasurePopup extends React.Component {
     this._toggleModal();
   }
 
-  onPressGive = () => {
-    this.props.give();
+  onPressGive = (receiver) => {
+    this.props.give(receiver);
+  }
+
+  onToggleSelectFriend = () => {
+    this.setState({
+      selectFriendToggle: !this.state.selectFriendToggle,
+    });
+  }
+
+  onCompleteGive = (receiver) => {
+    this._toggleModal();
+    this.setState({
+      completionScreenViewed: true,
+    })
   }
 
   render() {
@@ -41,78 +66,37 @@ class TreasurePopup extends React.Component {
       <Modal isVisible={this.props.isVisible}
              onBackdropPress={this._toggleModal}>
         <View style={styles.card}>
-          <View style={styles.cardTitle}>
-            <Text style={styles.itemName} ellipsizeMode={'tail'} numberOfLines={1}>{itemName}</Text>
-            <View style={styles.cardTitleRight}>
-              <Badge textStyle={styles.groupName} value={groupName} containerStyle={styles.badgeStyle}/>
-              <TouchableOpacity onPress={this._toggleModal}>
-                <Icons iconName={"cross"} size={18}/>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View>
-            <Image style={styles.image} source={{uri:itemPicURL}} />
-          </View>
-          {this.props.isProfile === true &&
+        <GivePopupHeader
+          itemName={itemName}
+          groupName={groupName}
+          toggle={this._toggleModal}/>
+          {this.state.selectFriendToggle === false &&
             <View>
-              <View style={styles.cardInfo}>
-                <View style={styles.cardInfoText} >
-                  <Text style={styles.text}>{itemDescription}</Text>
-                </View>
-              </View>
-              <View style={styles.buttonContainer}>
-                {this.props.isActive === true &&
-                  <RoundButtonSmall
-                    containerStyle={styles.button}
-                    label="GIVE!"
-                    backgroundColor={Colors.teal}
-                    color={'white'}
-                    size={14}
-                    onPress={this.onPressGive}
-                    isActive={this.props.isActive} />
-                }
-                {this.props.isActive === false &&
-                  <RoundButtonSmall
-                    containerStyle={styles.button}
-                    label="ALREADY GIVEN"
-                    backgroundColor={Colors.background}
-                    color={Colors.lightText}
-                    size={14}
-                    isActive={this.props.isActive} />
-                }
-              </View>
+            <GivePopupImage
+              itemPicURL={itemPicURL} />
+            <GivePopupDescription
+              isProfile={this.props.isProfile}
+              itemDescription={itemDescription}
+              userName={userName}
+              userPicUrl={userPicUrl}/>
+            <GivePopupButtons
+              isProfile={this.props.isProfile}
+              isActive={this.props.isActive}
+              onPressMessage={this.onPressMessage}
+              onToggleSelectFriend={this.onToggleSelectFriend}
+              userName={userName}
+              />
             </View>
           }
-          {this.props.isProfile === false &&
-            <View>
-              <View style={styles.cardInfo}>
-                <Avatar containerStyle={styles.propic} medium rounded source={{uri: userPicUrl}} />
-                <View style={styles.cardInfoText}>
-                  <Text style={styles.text}><Text style={styles.username}>{userName} </Text>{itemDescription}</Text>
-                </View>
-              </View>
-              <View style={styles.buttonContainer}>
-                {this.props.isActive === true &&
-                  <RoundButtonSmall
-                    containerStyle={styles.button}
-                    label={"MESSAGE " + userName.toUpperCase()}
-                    backgroundColor={Colors.teal}
-                    color={'white'}
-                    size={14}
-                    onPress={this.onPressMessage}
-                    isActive={this.props.isActive} />
-                }
-                {this.props.isActive === false &&
-                  <RoundButtonSmall
-                    containerStyle={styles.button}
-                    label="ALREADY GIVEN"
-                    backgroundColor={Colors.background}
-                    color={Colors.lightText}
-                    size={14}
-                    isActive={this.props.isActive} />
-                }
-              </View>
-            </View>
+          {this.state.selectFriendToggle === true && this.state.completionScreenViewed === false &&
+            <GiveSelectFriendPopup
+              isActive={true}
+              onToggleSelectFriend={this.onToggleSelectFriend}
+              onCompleteGive={this.onCompleteGive}
+              onPressGive={this.onPressGive}
+              toggle={this._toggleModal}
+              itemPicURL={itemPicURL}
+              />
           }
         </View>
       </Modal>

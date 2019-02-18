@@ -82,14 +82,14 @@ class Treasures extends React.Component {
     ItemListStore.items = ItemListStore.items;
   }
 
-  addObjectRecv = (key) => {
-    ItemListStore.getItem(key).receiver = {id: UserStore.userId, itemDescription: "", itemPicUrl: ""};
+  addObjectRecv = (key, receiver) => {
+    ItemListStore.getItem(key).receiver = {id: receiver, itemDescription: "", itemPicUrl: ""};
     ItemListStore.items = ItemListStore.items;
   }
 
-  giveTreasure = (treasure) => {
+  giveTreasure = (treasure,receiver) => {
     this.changeObjectState(treasure.key);
-    this.addObjectRecv(treasure.key);
+    this.addObjectRecv(treasure.key, receiver);
     console.log(ItemListStore.getItem(treasure.key));
   }
 
@@ -139,7 +139,7 @@ class Treasures extends React.Component {
               lightTheme
               containerStyle={styles.searchBarContainer}
               inputStyle={styles.searchBar}
-              onChangeText={(term) => { this.searchUpdated(term) }} 
+              onChangeText={(term) => { this.searchUpdated(term) }}
               placeholder='Search...'
             />
           </View>
@@ -147,7 +147,7 @@ class Treasures extends React.Component {
               <Image
               style={styles.button}
               source={require("../../assets/filter.png")}
-              /> 
+              />
           </TouchableOpacity>
         </View>
         <FlatList

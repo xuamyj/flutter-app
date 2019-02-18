@@ -56,7 +56,15 @@ class ChatMain extends React.Component {
     return (
       <View style={styles.container}>
 
-      <Search />
+      <SearchBar
+        round
+        lightTheme
+        containerStyle={styles.searchBarContainer}
+        inputStyle={styles.searchBar}
+        // onChangeText={(term) => { this.searchUpdated(term) }}
+        onClearText={this.onClearSearchText}
+        placeholder='Search...'
+      />
 
       <ScrollView>
         {
@@ -75,6 +83,28 @@ const offset = 24;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  searchBarContainer: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+  },
+  searchBar: {
+    backgroundColor: Colors.background,
+    fontSize: 15,
+    width: Metrics.screenWidth * 0.88,
+  },
+  searchBarView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: Metrics.screenWidth * 0.88,
+  },
+  searchView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: Metrics.screenWidth,
   },
 });
 

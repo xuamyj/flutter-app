@@ -87,7 +87,7 @@ class StoryCard extends React.Component {
     var inactiveUserName = (this.state.isGiver === true) ? this.props.story.recvUserName : this.props.story.giveUserName;
     var itemDescription;
     var subjectName;
-    if (!receiverIsComplete && this.props.story.giverUserName === this.props.myName && !this.state.isGiver) {
+    if (!receiverIsComplete && this.props.story.giverUserName != this.props.myName && !this.state.isGiver) {
       activeUserName = this.props.story.recvUserName;
       subjectName = activeUserName;
       itemDescription = "is busy making memories with your object and hasn't shared their stories yet. Check back later!"
