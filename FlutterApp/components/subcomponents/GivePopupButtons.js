@@ -44,7 +44,7 @@ class GivePopupButtons extends React.Component {
           {this.props.isActive === false &&
             <RoundButtonSmall
               containerStyle={styles.button}
-              label="ALREADY GIVEN"
+              label={"GIVEN TO " + userName.toUpperCase()}
               backgroundColor={Colors.background}
               color={Colors.lightText}
               size={14}
@@ -67,7 +67,7 @@ class GivePopupButtons extends React.Component {
             {this.props.isActive === false &&
               <RoundButtonSmall
                 containerStyle={styles.button}
-                label={"GIVEN TO " + userName.toUpperCase()}
+                label="ALREADY GIVEN"
                 backgroundColor={Colors.background}
                 color={Colors.lightText}
                 size={14}

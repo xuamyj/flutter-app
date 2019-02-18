@@ -25,6 +25,7 @@ class Stories extends React.Component {
       isModalVisible: false,
       searchTerm: '',
       picked: '',
+      isProfile: this.props.isProfile,
     }
   }
 
@@ -81,11 +82,13 @@ class Stories extends React.Component {
       giveItemPicUrl: item.giver.itemPicUrl,
       giveUserName: giverObj.displayName,
       giveUserPicUrl: giverObj.userPicUrl,
+      giveUserId: giverObj.userId,
 
       recvItemDescription: item.receiver.itemDescription,
       recvItemPicUrl: item.receiver.itemPicUrl,
       recvUserName: receiverObj.displayName,
       recvUserPicUrl: receiverObj.userPicUrl,
+      recvUserId: receiverObj.userId,
     };
   }
 
@@ -148,7 +151,7 @@ class Stories extends React.Component {
               lightTheme
               containerStyle={styles.searchBarContainer}
               inputStyle={styles.searchBar}
-              onChangeText={(term) => { this.searchUpdated(term) }} 
+              onChangeText={(term) => { this.searchUpdated(term) }}
               placeholder='Search...'
             />
           </View>
@@ -156,20 +159,21 @@ class Stories extends React.Component {
               <Image
               style={styles.button}
               source={require("../../assets/filter.png")}
-              /> 
+              />
           </TouchableOpacity>
         </View>
-          
+
         <ScrollView>
           {
             filteredStoriesList.map((l, i) => (
               <StoryCard story={l}
                 key={l.key}
-                myName={UserStore.userName}
+                myId={UserStore.userId}
                 index={i}
                 changeRecvDescription={this.changeRecvDescription}
                 changeRecvImage={this.changeRecvImage}
-                onPressShareStory={this.onPressShareStory}/>
+                onPressShareStory={this.onPressShareStory}
+                isProfile={this.state.isProfile}/>
             ))
           }
         </ScrollView>
