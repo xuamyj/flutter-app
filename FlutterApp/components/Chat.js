@@ -5,9 +5,12 @@ import { Metrics, Colors } from './Themes';
 
 import Fire from '../Fire';
 
+import { view } from 'react-easy-state';
+import { ChatListStore, UserListStore, UserStore } from '../GlobalStore';
+
 class Chat extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: (navigation.state.params || {}).name || 'Chat!',
+    title: (navigation.state.params || {}).otherName || 'Chat!',
     headerStyle: {backgroundColor: Colors.background},
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
@@ -24,9 +27,38 @@ class Chat extends Component {
   get user() {
     // Return our name and our UID for GiftedChat to parse
     return {
-      name: this.props.navigation.state.params.name,
-      _id: Fire.shared.uid,
+      name: UserListStore.getUserObject(UserStore.userId).displayName,
+      _id: UserStore.userId,
     };
+  }
+
+  onSend = (messages = []) => {
+    var chat = ChatListStore.getChat(this.props.navigation.state.params.chat.key);
+    var timestamp = new Date();
+    chat.messages.push({
+      text: messages[0].text,
+      timestamp: timestamp.getTime(),
+      userId: this.user._id,
+    });
+    this.setState(previousState => ({
+      messages: GiftedChat.append(previousState.messages, messages),
+    }));
+    this.props.navigation.state.params.updateChatList();
+    console.log(chat.messages);
+  }
+
+  createMessageObj = (message) => {
+    //  CHANGE ID DEFINITION
+    return({
+      _id: message.text.length,
+      text: message.text,
+      createdAt: message.timestamp,
+      user: {
+        _id: message.userId,
+        name: UserListStore.getUserObject(message.userId).displayName,
+        avatar: UserListStore.getUserObject(message.userId).userPicUrl,
+      }
+    })
   }
 
   render() {
@@ -34,7 +66,7 @@ class Chat extends Component {
       <KeyboardAvoidingView style={{ flex:1, backgroundColor: 'transparent' }} behavior="padding" keyboardVerticalOffset={4*Metrics.doubleBaseMargin}>
       <GiftedChat
         messages={this.state.messages}
-        onSend={Fire.shared.send}
+        onSend={messages => this.onSend(messages)}
         user={this.user}
       />
       </KeyboardAvoidingView>
@@ -42,11 +74,18 @@ class Chat extends Component {
   }
 
   componentDidMount() {
-    Fire.shared.on(message =>
-      this.setState(previousState => ({
-        messages: GiftedChat.append(previousState.messages, message),
-      }))
-    );
+    // Fire.shared.on(message =>
+    //   this.setState(previousState => ({
+    //     messages: GiftedChat.append(previousState.messages, message),
+    //   }))
+    // );
+    var messageList = this.state.messages;
+    this.props.navigation.state.params.chat.messages.forEach((message) => {
+      messageList.unshift(this.createMessageObj(message));
+    });
+    this.setState({
+      messages: messageList,
+    })
   }
 
   componentWillUnmount() {

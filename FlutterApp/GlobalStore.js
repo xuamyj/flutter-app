@@ -170,6 +170,72 @@ userInfo = [
         }
     ];
 
+chatInfo = [
+  {
+    key: "1234",
+    userIds: ["1", "2"],
+    messages: [
+      {
+        text: "Hello, this is a@m.com",
+        timestamp: 1542581460576,
+        userId: "1",
+      },
+      {
+        text: "Testing :)",
+        timestamp: 1542581466651,
+        userId: "1",
+      },
+      {
+        text: "This is Chloe",
+        timestamp: 1542581522699,
+        userId: "2",
+      },
+    ],
+  },
+  {
+    key: "2345",
+    userIds: ["1", "3"],
+    messages: [
+      {
+        text: "Hello, this is a@m.com",
+        timestamp: 1542581460576,
+        userId: "1",
+      },
+      {
+        text: "Testing :)",
+        timestamp: 1542581466651,
+        userId: "1",
+      },
+      {
+        text: "This is Cynthia",
+        timestamp: 1542581522699,
+        userId: "3",
+      },
+    ],
+  },
+  {
+    key: "3456",
+    userIds: ["1", "4"],
+    messages: [
+      {
+        text: "Hello, this is a@m.com",
+        timestamp: 1542581460576,
+        userId: "1",
+      },
+      {
+        text: "Testing :)",
+        timestamp: 1542581466651,
+        userId: "1",
+      },
+      {
+        text: "This is Jenny",
+        timestamp: 1542581522699,
+        userId: "4",
+      },
+    ],
+  },
+];
+
 groupInfo = [
 {
     groupName: 'CS147',
@@ -228,6 +294,18 @@ const UserListStore = store({
     }
 })
 
+const ChatListStore = store({
+  chats: chatInfo,
+  getChat(key) {
+    for (var i = 0; i < ChatListStore.chats.length; ++i) {
+      if (ChatListStore.chats[i].key == key) {
+        return ChatListStore.chats[i];
+      }
+    }
+    return undefined;
+  }
+})
+
 const GroupListStore = store({
     groups: groupInfo,
     getGroup(groupId){
@@ -258,4 +336,5 @@ export {
     UserListStore,
     GroupListStore,
     ItemListStore,
+    ChatListStore,
 }

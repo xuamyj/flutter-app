@@ -5,18 +5,29 @@ import { Metrics, Colors } from '../Themes';
 
 const {height, width} = Dimensions.get('window');
 
+import { view } from 'react-easy-state';
+import { ChatListStore, UserListStore } from '../../GlobalStore';
+
 export default class ChatItem extends React.Component {
   render() {
+    var otherUser = UserListStore.getUserObject(this.props.chat.otherUserId);
+    var otherUserPicUrl = otherUser.userPicUrl;
+    var otherUserName = otherUser.displayName;
+    var lastMessage = this.props.chat.messages[this.props.chat.messages.length - 1];
+
+    var moment = require('moment');
+    var formattedDate = moment(new Date(lastMessage.timestamp)).format("MMM D");
+
     return (
       <View style={styles.container}>
       <View style={styles.itemContainer}>
-        <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.props.chat.picUrl}} />
+        <Avatar containerStyle={styles.propic} medium rounded source={{uri: otherUserPicUrl}} />
         <View style={styles.text}>
           <View style={styles.heading}>
-            <Text style={styles.name} ellipsizeMode={'tail'} numberOfLines={1}>{this.props.chat.name}</Text>
-            <Text style={styles.date}>Dec 4</Text>
+            <Text style={styles.name} ellipsizeMode={'tail'} numberOfLines={1}>{otherUserName}</Text>
+            <Text style={styles.date}>{formattedDate}</Text>
           </View>
-          <Text style={styles.preview} ellipsizeMode={'tail'} numberOfLines={1}>{this.props.chat.subtitle}</Text>
+          <Text style={styles.preview} ellipsizeMode={'tail'} numberOfLines={1}>{lastMessage.text}</Text>
         </View>
       </View>
       <View style={styles.border} />
