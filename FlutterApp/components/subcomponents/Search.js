@@ -5,9 +5,6 @@ import { Metrics, Colors } from '../Themes';
 
 class Search extends React.Component {
 
-  onChangeSearchText = () => null; // search; do last
-  onClearSearchText = () => null; // search; do last
-
   render() {
     return (
         <SearchBar

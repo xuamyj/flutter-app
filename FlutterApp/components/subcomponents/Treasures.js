@@ -50,9 +50,6 @@ class Treasures extends React.Component {
   _toggleModal = () =>
     this.setState({ isModalVisible: !this.state.isModalVisible });
 
-  onChangeSearchText = () => null; // search; do last
-  onClearSearchText = () => null; // search; do last
-
   renderItem = ({item}) => {
     return (
       <TreasureCard

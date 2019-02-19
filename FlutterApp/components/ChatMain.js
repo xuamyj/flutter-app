@@ -18,8 +18,6 @@ class ChatMain extends React.Component {
       searchTerm: '',
     }
   }
-  onChangeSearchText = () => null; // search; do last
-  onClearSearchText = () => null; // search; do last
 
   componentDidMount() {
     this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {

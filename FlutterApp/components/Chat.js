@@ -49,9 +49,8 @@ class Chat extends Component {
   }
 
   createMessageObj = (message) => {
-    //  CHANGE ID DEFINITION
     return({
-      _id: message.text.length,
+      _id: this.user._id + "0" + message.userId + message.text.length,
       text: message.text,
       createdAt: message.timestamp,
       user: {

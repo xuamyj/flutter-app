@@ -49,9 +49,6 @@ class GroupsMain extends React.Component {
     this.props.navigation.setParams({ onPressCreateGroup: this.onPressCreateGroup });
   }
 
-  onChangeSearchText = () => null; // search; do last
-  onClearSearchText = () => null; // search; do last
-
   onPressCreateGroup = () => {
     this.props.navigation.navigate('GroupCreate', {});
   }

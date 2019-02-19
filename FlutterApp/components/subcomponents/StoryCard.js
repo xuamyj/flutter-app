@@ -5,31 +5,9 @@ import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from '../Themes';
 import RoundButtonSmall from '../subcomponents/RoundButtonSmall';
 
-
-// import { view } from 'react-easy-state'
-// import { UserStore } from '../../GlobalStore'
-
 const {height, width} = Dimensions.get('window');
 
 class StoryCard extends React.Component {
-
-
-  // {
-  //   itemName: 'Handmade pillow',
-  //   groupName: 'Disney',
-
-  //   giveItemDescription: 'My aunt made this pillow by hand :) but I\'m about to move to the Netherlands and can\'t take it with me :(',
-  //   giveItemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/79440_XXX_v1.tif&wid=650&cvt=jpeg',
-  //   giveUserName: 'Amy',
-  //   giveUserPicUrl: 'http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg',
-
-  //   recvItemDescription: 'Thanks Amy--With a bit of magic I made my bed to match!',
-  //   recvItemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/79440_XXX_v3.tif&wid=650&cvt=jpeg',
-  //   recvUserName: 'Belle',
-  //   recvUserPicUrl: 'https://vignette.wikia.nocookie.net/disneyheroines/images/7/7c/Belle.jpg',
-
-  //   key: '7008',
-  // },
 
   constructor(props) {
     super(props);
