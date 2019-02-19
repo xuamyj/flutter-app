@@ -162,7 +162,7 @@ class Treasures extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 40,
+    marginBottom: Metrics.doubleBaseMargin * 2.5,
   },
   cardsContainer: {
     paddingHorizontal: Metrics.baseMargin * 1.5,

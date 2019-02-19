@@ -105,7 +105,8 @@ const styles = StyleSheet.create({
   },
   topSection:{
     flexDirection: 'column',
-    padding: Metrics.baseMargin,
+    paddingBottom: Metrics.smallMargin,
+    paddingTop: -Metrics.smallMargin,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.background,
