@@ -35,7 +35,7 @@ class GroupCreate extends React.Component {
       memberList.push(UserStore.userId);
     }
 
-    GroupListStore.groups.push({
+    GroupListStore.groups.unshift({
       groupName: this.state.inputGroupName,
       groupId: this.state.inputGroupName,
       memberList,

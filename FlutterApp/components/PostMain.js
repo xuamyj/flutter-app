@@ -79,7 +79,7 @@ class PostMain extends React.Component {
       );
 
     } else {
-      ItemListStore.items.push({
+      ItemListStore.items.unshift({
         itemId: this.state.inputItemName,
         itemName: this.state.inputItemName,
         groupId: this.state.inputGroupKey,

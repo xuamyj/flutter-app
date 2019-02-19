@@ -42,9 +42,12 @@ class ShareStory extends React.Component {
     ItemListStore.items[i].receiver.itemDescription = this.state.inputItemDescription;
     ItemListStore.items[i].receiver.itemPicUrl = this.state.inputItemPicUrl;
 
+    itemObj = ItemListStore.items.pop();
+    ItemListStore.items.unshift(itemObj);
+
     Alert.alert(
       'Story shared!',
-      ('You have shared your story with ' + this.state.name + '!'),
+      ('You have shared your story with ' + this.state.name.substring(3) + '!'),
       [
         {text: 'OK', onPress: () => this.props.navigation.navigate('Profile')},
       ],
