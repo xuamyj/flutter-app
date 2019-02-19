@@ -39,6 +39,7 @@ class TreasurePopup extends React.Component {
     var chatObj = {
       myUserId: UserStore.userId,
       otherUserId: this.props.treasure.userId,
+      otherUserName: UserListStore.getUserObject(this.props.treasure.userId).displayName,
       messages: [],
       key: UserStore.userId + "0" + this.props.treasure.userId,
     }

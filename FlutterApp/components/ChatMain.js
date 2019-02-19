@@ -4,17 +4,22 @@ import { ListItem, SearchBar, Icon } from 'react-native-elements';
 import { Metrics, Colors } from './Themes';
 import ChatItem from './subcomponents/ChatItem';
 import Search from './subcomponents/Search';
+import SearchInput, { createFilter } from 'react-native-search-filter';
 
 import { view } from 'react-easy-state';
 import { UserStore, UserListStore, ChatListStore } from '../GlobalStore';
 
 class ChatMain extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      chatList: [],
+      searchTerm: '',
+    }
+  }
   onChangeSearchText = () => null; // search; do last
   onClearSearchText = () => null; // search; do last
-
-  state = {
-    chatList: [],
-  }
 
   componentDidMount() {
     this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
@@ -22,9 +27,12 @@ class ChatMain extends React.Component {
     });
   }
 
+  searchUpdated = (term) => {
+    this.setState({ searchTerm: term });
+  }
+
   onPressChat = (chat) => {
-    var otherName = UserListStore.getUserObject(chat.otherUserId).displayName;
-    this.props.navigation.navigate('Chat', { chat: chat, otherName: otherName, updateChatList: this.updateChatList });
+    this.props.navigation.navigate('Chat', { chat: chat, otherName: chat.otherUserName, updateChatList: this.updateChatList });
   }
 
   updateChatList = () => {
@@ -71,27 +79,22 @@ class ChatMain extends React.Component {
     return {
       myUserId: myId,
       otherUserId: otherId,
+      otherUserName: UserListStore.getUserObject(otherId).displayName,
       messages: chat.messages,
       key: key,
     }
   }
 
   render() {
+
+    var filteredChatList = this.state.chatList.filter(createFilter(this.state.searchTerm, ['otherUserName']));
+
     return (
       <View style={styles.container}>
-        <SearchBar
-          round
-          lightTheme
-          containerStyle={styles.searchBarContainer}
-          inputStyle={styles.searchBar}
-          // onChangeText={(term) => { this.searchUpdated(term) }}
-          onClearText={this.onClearSearchText}
-          placeholder='Search...'
-        />
-
+        <Search searchUpdated={this.searchUpdated}/>
         <ScrollView>
             <FlatList
-              data={this.state.chatList}
+              data={filteredChatList}
               renderItem={this.renderChat}
             />
         </ScrollView>

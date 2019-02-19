@@ -15,9 +15,10 @@ class Search extends React.Component {
           lightTheme
           containerStyle={styles.searchBarContainer}
           inputStyle={styles.searchBar}
-          onChangeText={(term) => { this.searchUpdated(term) }} 
+          onChangeText={(term) => this.props.searchUpdated(term)}
           onClearText={this.onClearSearchText}
           placeholder='Search...'
+          clearIcon
         />
     );
   }

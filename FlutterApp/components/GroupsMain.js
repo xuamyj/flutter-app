@@ -4,12 +4,21 @@ import { ListItem, SearchBar, Icon } from 'react-native-elements';
 import { Metrics, Colors } from './Themes';
 import Search from './subcomponents/Search';
 import GroupItem from './subcomponents/GroupItem';
+import SearchInput, { createFilter } from 'react-native-search-filter';
 
 import { view } from 'react-easy-state'
 import { UserStore, UserListStore, GroupListStore } from '../GlobalStore'
 
 
 class GroupsMain extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchTerm: '',
+    }
+  }
+
   static navigationOptions = ({navigation}) => {
     return {
       title: 'Groups',
@@ -57,6 +66,10 @@ class GroupsMain extends React.Component {
     )
   }
 
+  searchUpdated = (term) => {
+    this.setState({ searchTerm: term });
+  }
+
   render() {
     let userPicUrlMap = {};
     UserListStore.users.forEach((user) => {
@@ -83,12 +96,14 @@ class GroupsMain extends React.Component {
       }
     });
 
+    var filteredGroupList = groupResultList.filter(createFilter(this.state.searchTerm, ['name']));
+
     return (
       <View style={styles.container}>
-        <Search />
+        <Search searchUpdated={this.searchUpdated}/>
         <FlatList
           style={styles.cardsContainer}
-          data={groupResultList}
+          data={filteredGroupList}
           renderItem={this.renderItem} />
       </View>
     );

@@ -87,6 +87,7 @@ class GiveSelectFriendPopup extends React.Component {
                 inputStyle={styles.searchBar}
                 onChangeText={(term) => { this.searchUpdated(term) }}
                 placeholder='Search...'
+                clearIcon
               />
             </View>
             <View style={styles.listContainer}>
@@ -173,14 +174,13 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginHorizontal: Metrics.baseMargin,
   },
   doubleButton: {
     marginTop: Metrics.baseMargin,
     marginBottom: Metrics.doubleBaseMargin,
     minWidth: '35%',
     maxWidth: '50%',
-    marginHorizontal: Metrics.smallMargin,
+    marginHorizontal: Metrics.baseMargin,
   },
   button: {
     marginTop: Metrics.baseMargin,
