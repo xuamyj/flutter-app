@@ -10,7 +10,7 @@ import { ChatListStore, UserListStore, UserStore } from '../GlobalStore';
 
 class Chat extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: (navigation.state.params || {}).otherName || 'Chat!',
+    title: (navigation.state.params || {}).chat.otherUserName || 'Chat!',
     headerStyle: {backgroundColor: Colors.background},
     headerTitleStyle: {
       fontFamily: 'NunitoBold',

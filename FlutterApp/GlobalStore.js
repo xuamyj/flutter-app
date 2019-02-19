@@ -5,7 +5,7 @@ itemInfo = [
 {
     itemId: '13',
     itemName: 'Silk scarf',
-    groupId: 'CS147',
+    groupId: 'Stanf trees',
     state: 'GIVEN', // POSTED, GIVEN, COMPLETE
     giver: {
         id: '4',
@@ -21,7 +21,7 @@ itemInfo = [
 {
     itemId: '11',
     itemName: 'Bird paperweights',
-    groupId: 'CS147',
+    groupId: 'Bay Area Art Fiends',
     state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
     giver: {
         id: '3',
@@ -37,7 +37,7 @@ itemInfo = [
 {
     itemId: '12',
     itemName: 'Handmade pillow',
-    groupId: 'Disney',
+    groupId: 'Bay Area Art Fiends',
     state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
     giver: {
         id: '1',
@@ -45,15 +45,15 @@ itemInfo = [
         itemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/79440_XXX_v1.tif&wid=650&cvt=jpeg'
     },
     receiver: {
-        id: '5',
-        itemDescription: 'Thanks Amy--With a bit of magic I made my bed to match!',
+        id: '7',
+        itemDescription: 'Thanks Amy -- With a bit of magic I made my bed to match!',
         itemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/79440_XXX_v3.tif&wid=650&cvt=jpeg'
     },
 },
 {
     itemId: '14',
     itemName: 'Cactus cup',
-    groupId: 'Disney',
+    groupId: 'Stanf trees',
     state: 'POSTED', // POSTED, GIVEN, COMPLETE
     giver: {
         id: '1',
@@ -65,11 +65,11 @@ itemInfo = [
 {
     itemId: '24',
     itemName: 'Pusheen pillow',
-    groupId: 'CS147',
+    groupId: 'Stanf trees',
     state: 'POSTED',
     giver:{
         id: '3',
-        itemDescription: 'Looking to give away this pillow, which is very important to me--would be great to chat in person about why!',
+        itemDescription: 'Looking to give away this pillow, which is very important to me -- would be great to chat in person about why!',
         itemPicUrl: 'https://cdn.shopify.com/s/files/1/0057/8182/products/large-plush-front_700x700.png',
     },
     receiver: null,
@@ -104,7 +104,7 @@ itemInfo = [
     state: 'POSTED',
     groupId: 'Bay Area Art Fiends',
     giver: {
-        itemDescription: 'Hey guys, trying this app out. Does anyone want this painting I made?',
+        itemDescription: 'Hey guys, trying this app out. Does anyone want this painting I made? Could be good decoration!',
         itemPicUrl: 'https://render.fineartamerica.com/images/rendered/search/print/images/artworkimages/medium/1/colorful-rooster-hailey-e-herrera.jpg',
         id: '4',
     },
@@ -164,7 +164,7 @@ itemInfo = [
     state: 'POSTED',
     groupId: 'Bay Area Art Fiends',
     giver: {
-        itemDescription: 'Acrylic painting I made freshman year. Inspired by the movie “Red Wagons.” Have been holding on to this because it was via this dorm activity that I made a lot of the friends I have today. Have to part with it because moving to a one room double and don’t have enough space. Also worried I will not be able to maintain it in good condition.',
+        itemDescription: 'Acrylic painting I made freshman year. Inspired by the movie “Red Wagons.” Have been holding on to this because it was via this dorm activity that I made a lot of the friends I have today. Have to part with it because moving to a one room double and don’t have enough space. Also worried I will not be able to maintain it in good condition. It\'s great for deocrating!',
         itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/shoes.png',
         id: '5',
     },
@@ -178,7 +178,7 @@ itemInfo = [
     giver: {
         itemDescription: 'This broken spear has seen me through many battles. Does anyone want it for hanging/framing in their house?',
         itemPicUrl: 'https://store.ubi.com/on/demandware.static/-/Sites-masterCatalog/default/dwe92f8ae1/images/large/5afda8ad6b54a4271407a8e3-collectible-5_Assassins_Creed_odyssey_spear.jpg',
-        id: '7',
+        id: '5',
     },
     receiver: null,
 },
@@ -190,7 +190,7 @@ itemInfo = [
     giver: {
         itemDescription: 'My father gave me this bar of soap, and I don\'t want to throw it away, but I\'m about to go on a journey across the Mediterranean, so hoping someone will take it.',
         itemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/65377_XXX_v1.tif&wid=650&cvt=jpeg',
-        id: '7',
+        id: '5',
     },
     receiver: null,
 },

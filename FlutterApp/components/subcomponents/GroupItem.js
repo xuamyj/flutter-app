@@ -54,7 +54,7 @@ export default class GroupItem extends React.Component {
   render() {
     const animatedStyle = {
       transform: [{scale: this.animatedValue}]
-    }
+    };
 
     return (
       <TouchableWithoutFeedback onPress={() => {this.props.openGroup(this.state.id)}} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>

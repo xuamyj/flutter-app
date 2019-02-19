@@ -59,7 +59,7 @@ class TreasurePopup extends React.Component {
       });
     }
 
-    this.props.navigation.navigate('Chat', { chat: chatObj, otherName: this.props.treasure.userName, needUpdate: false });
+    this.props.navigation.navigate('Chat', { chat: chatObj, needUpdate: false });
     this._toggleModal();
   }
 

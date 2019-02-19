@@ -43,7 +43,6 @@ class PostMain extends React.Component {
   onChangeInputItemName = (inputItemName) => {this.setState({ inputItemName: inputItemName })};
   onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })};
   onChangeGroup = (inputGroupKey) => {
-    console.log('onchangegroup', this.groups[inputGroupKey].key);
     this.setState({inputGroupKey: this.groups[inputGroupKey].key})
   }
 

@@ -89,7 +89,6 @@ class Treasures extends React.Component {
   giveTreasure = (treasure,receiver) => {
     this.changeObjectState(treasure.key);
     this.addObjectRecv(treasure.key, receiver);
-    console.log(ItemListStore.getItem(treasure.key));
   }
 
 

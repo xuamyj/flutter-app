@@ -30,7 +30,7 @@ class ChatMain extends React.Component {
   }
 
   onPressChat = (chat) => {
-    this.props.navigation.navigate('Chat', { chat: chat, otherName: chat.otherUserName, updateChatList: this.updateChatList });
+    this.props.navigation.navigate('Chat', { chat: chat, updateChatList: this.updateChatList });
   }
 
   updateChatList = () => {
@@ -39,11 +39,13 @@ class ChatMain extends React.Component {
     ChatListStore.chats.forEach((chat)=>{
       let chatObj = ChatListStore.getChat(chat.key)
 
-      // if it is user's chats
-      if (chatObj.userIds[0] == userId) {
-        chatList.push(this.createChatObject(chat.key, userId, chatObj.userIds[1]))
-      } else if (chat.userIds[1] == userId) {
-        chatList.push(this.createChatObject(chat.key, userId, chatObj.userIds[0]));
+      if (chatObj.messages.length > 0) {
+        // if it is user's chats
+        if (chatObj.userIds[0] == userId) {
+          chatList.push(this.createChatObject(chat.key, userId, chatObj.userIds[1]))
+        } else if (chat.userIds[1] == userId) {
+          chatList.push(this.createChatObject(chat.key, userId, chatObj.userIds[0]));
+        }
       }
     });
     this.setState({
