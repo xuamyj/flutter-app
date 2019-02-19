@@ -75,27 +75,98 @@ itemInfo = [
     receiver: null,
 },
 {
+    itemId: '94',
+    itemName: 'Wooden longboard',
+    state: 'POSTED',
+    groupId: 'Stanf trees',
+    giver: {
+        itemDescription: 'My friend convinced me to get a boosted board, and it’s been very fun zooming around campus without pedalling :) But now I’m graduating, it’s looking for a new home!',
+        itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/longboard.png',
+        id: '9',
+    },
+    receiver: null,
+},
+{
     itemId: '32',
     itemName: 'Magic books',
     state: 'POSTED',
-    groupId: 'Disney',
+    groupId: 'Stanf trees',
     giver: {
         itemDescription: 'I have too many magic books in my house, but can\'t bear to throw any away. Does anyone want to adopt these? They come in a set.',
         itemPicUrl: 'https://thenypost.files.wordpress.com/2018/10/old-books.jpg',
         id: '5',
     },
-    userPicUrl: 'https://vignette.wikia.nocookie.net/disneyheroines/images/7/7c/Belle.jpg',
     receiver: null,
 },
 {
     itemId: '87',
     itemName: 'Watercolor painting',
     state: 'POSTED',
-    groupId: 'Disney',
+    groupId: 'Bay Area Art Fiends',
     giver: {
         itemDescription: 'Hey guys, trying this app out. Does anyone want this painting I made?',
         itemPicUrl: 'https://render.fineartamerica.com/images/rendered/search/print/images/artworkimages/medium/1/colorful-rooster-hailey-e-herrera.jpg',
-        id: '6',
+        id: '4',
+    },
+    receiver: null,
+},
+{
+    itemId: '543',
+    itemName: 'Enamel rainbow pin',
+    state: 'POSTED',
+    groupId: 'Bay Area Art Fiends',
+    giver: {
+        itemDescription: 'Got this lil charm from a good friend! Unfortunately, I can’t pin it on any of my clothes or backpacks :( anyone want this?',
+        itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/rainbow.png',
+        id: '10',
+    },
+    receiver: null,
+},
+{
+    itemId: '45',
+    itemName: 'Solar system dorm poster',
+    state: 'POSTED',
+    groupId: 'Stanf trees',
+    giver: {
+        itemDescription: 'Got this at the exploratorium in SF last year. Looking to open up space on my walls for new merchandise! Big fan of space, a physics major and Nat Geo lover. So this is dear to my heart! Hope it can find a new home.',
+        itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/solar.png',
+        id: '8',
+    },
+    receiver: null,
+},
+{
+    itemId: '564',
+    itemName: 'Chalk pastel anatomy drawing',
+    state: 'POSTED',
+    groupId: 'Bay Area Art Fiends',
+    giver: {
+        itemDescription: 'HUGE chalk pastel drawing; I have no space to put it in my tiny apartment!! Anyone care to showcase it in their home? Give an art hobbyist some ~exposure~!!',
+        itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/drawing.png',
+        id: '7',
+    },
+    receiver: null,
+},
+{
+    itemId: '87',
+    itemName: 'Nightstand',
+    state: 'POSTED',
+    groupId: 'Stanf trees',
+    giver: {
+        itemDescription: 'I bought this nightstand my freshman year of college and have had it all four years. Now that I’m graduating, I don’t have room in my new apartment. I’d love to pass it on to another student to be with them through their college adventures!',
+        itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/nightstand.jpg',
+        id: '3',
+    },
+    receiver: null,
+},
+{
+    itemId: '415',
+    itemName: 'Red Shoes Painting',
+    state: 'POSTED',
+    groupId: 'Bay Area Art Fiends',
+    giver: {
+        itemDescription: 'Acrylic painting I made freshman year. Inspired by the movie “Red Wagons.” Have been holding on to this because it was via this dorm activity that I made a lot of the friends I have today. Have to part with it because moving to a one room double and don’t have enough space. Also worried I will not be able to maintain it in good condition.',
+        itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/shoes.png',
+        id: '5',
     },
     receiver: null,
 },
@@ -151,43 +222,73 @@ userInfo = [
             userPicUrl: "http://web.stanford.edu/class/cs147/projects/TransformingLivingSpace/Flutter/images/jenny.png",
         },
         {
-            displayName: "Belle",
+            displayName: "Anthony",
             userId: "5",
-            email: "b@m.com",
-            userPicUrl: "https://vignette.wikia.nocookie.net/disneyheroines/images/7/7c/Belle.jpg",
+            email: "anthony@m.com",
+            userPicUrl: "http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/people/anthony.png",
         },
         {
-            displayName: "Mulan",
+            displayName: "Greg",
             userId: "6",
-            email: "m@m.com",
-            userPicUrl: "https://www.gannett-cdn.com/-mm-/09a7c94119fde38af582f9f815d623e4ee8d3ba2/c=0-64-2758-1622/local/-/media/2017/11/29/USATODAY/USATODAY/636475571371921197-XXX-IMG-XXX-IA01G1REAR09-8P-1-1-ELILBTVF-91704861.JPG",
+            email: "greg@m.com",
+            userPicUrl: "http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/people/greg.png",
         },
         {
-            displayName: "Herodotus",
+            displayName: "Jenna",
             userId: "7",
-            email: "h@m.com",
-            userPicUrl: "https://i.ytimg.com/vi/ClvjENmquG4/maxresdefault.jpg",
-        }
+            email: "jenna@m.com",
+            userPicUrl: "http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/people/jenna.png",
+        },
+        {
+            displayName: "Jon",
+            userId: "8",
+            email: "jon@m.com",
+            userPicUrl: "http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/people/jon.png",
+        },
+        {
+            displayName: "Laura",
+            userId: "9",
+            email: "laura@m.com",
+            userPicUrl: "http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/people/laura.png",
+        },
+        {
+            displayName: "Maria",
+            userId: "10",
+            email: "maira@m.com",
+            userPicUrl: "http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/people/maria.png",
+        },
+        {
+            displayName: "Noah",
+            userId: "11",
+            email: "noah@m.com",
+            userPicUrl: "http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/people/noah.png",
+        },
+        {
+            displayName: "Will",
+            userId: "12",
+            email: "will@m.com",
+            userPicUrl: "http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/people/will.png",
+        },
     ];
 
 chatInfo = [];
 
 groupInfo = [
 {
-    groupName: 'CS147',
-    groupId: 'CS147',
+    groupName: 'Stanf trees',
+    groupId: 'Stanf trees',
     memberList: [
-        '1', '2', '3', '4'
+        '1', '2', '3', '4', '10', '12'
     ],
-    groupPicUrl: 'http://web.stanford.edu/class/cs147/projects/TransformingLivingSpace/Flutter/images/need.jpg',
+    groupPicUrl: 'https://germanmotorspecialist.com/wp-content/uploads/2018/08/Stanford.jpg',
 },
 {
-    groupName: 'Disney',
-    groupId: 'Disney',
+    groupName: 'Bay Area Art Fiends',
+    groupId: 'Bay Area Art Fiends',
     memberList: [
-        '1', '5', '6'
+        '1', '3', '5', '6', '9', '11', '2', '4', '7', '8', '10', '12'
     ],
-    groupPicUrl: 'https://nerdist.com/wp-content/uploads/2015/03/maxresdefault-970x545.jpg',
+    groupPicUrl: 'https://d2jv9003bew7ag.cloudfront.net/uploads/Victor-Reyes-Untitled.-Image-via-artofreyes.tumblr.com_-865x577.jpg',
 },
 {
     groupName: 'Camping',
