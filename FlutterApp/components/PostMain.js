@@ -14,25 +14,42 @@ import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../Glob
 const {height, width} = Dimensions.get('window');
 
 class PostMain extends React.Component {
-  state = {
-    inputItemName: '',
-    inputItemDescription: '',
-    inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
-    inputGroupKey: GroupListStore.groups[0].groupId,
-    errorMsgName: 'Error message placeholder: name',
-    errorMsgDescription: 'Error message placeholder: description',
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputItemName: '',
+      inputItemDescription: '',
+      inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
+      inputGroupKey: GroupListStore.groups[0].groupId,
+      errorMsgName: 'Error message placeholder: name',
+      errorMsgDescription: 'Error message placeholder: description',
+    };
   }
 
-  onChangeInputItemName = (inputItemName) => {this.setState({ inputItemName: inputItemName })}
-  onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })}
+  componentDidMount() {
+    this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
+      this.setState({
+        inputItemName: '',
+        inputItemDescription: '',
+        inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
+        inputGroupKey: GroupListStore.groups[0].groupId,
+        errorMsgName: 'Error message placeholder: name',
+        errorMsgDescription: 'Error message placeholder: description',
+      });
+    });
+  }
+
+  onChangeInputItemName = (inputItemName) => {this.setState({ inputItemName: inputItemName })};
+  onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })};
   onChangeGroup = (inputGroupKey) => {
     console.log('onchangegroup', this.groups[inputGroupKey].key);
     this.setState({inputGroupKey: this.groups[inputGroupKey].key})
   }
 
   onPressPost = () => {
-    postIsIncomplete = (this.state.inputItemName == "") || 
-    (this.state.inputItemDescription == "") || 
+    postIsIncomplete = (this.state.inputItemName == "") ||
+    (this.state.inputItemDescription == "") ||
     (typeof this.state.inputItemPicUrl === "undefined");
 
     if (postIsIncomplete){
@@ -78,19 +95,9 @@ class PostMain extends React.Component {
         'Item posted!',
         ('You have posted ' + this.state.inputItemName + '!'),
         [
-          {text: 'OK'},
+          {text: 'OK', onPress: () => this.props.navigation.navigate('HOME')},
         ],
       );
-
-      this.setState({
-        inputItemName: '',
-        inputItemDescription: '',
-        inputItemPicUrl: '',
-        inputGroupKey: '',
-        errorMsgName: 'Error message placeholder: name',
-        errorMsgDescription: 'Error message placeholder: description',
-      })
-      this.props.navigation.navigate('HOME'); 
     }
   }
 
@@ -153,6 +160,7 @@ class PostMain extends React.Component {
               autoCapitalize="none"
               style={styles.textInput}
               onChangeText={this.onChangeInputItemName}
+              defaultValue={this.state.inputItemName}
             />
             <Text style={styles.label}>Description</Text>
             <TextInput
@@ -160,6 +168,7 @@ class PostMain extends React.Component {
               multiline={true}
               placeholder = "Why is it meaningful to you?"
               onChangeText={this.onChangeInputItemDescription}
+              defaultValue={this.state.inputItemDescription}
             />
             <Text style={styles.label}>Group</Text>
             <Carousel

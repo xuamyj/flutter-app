@@ -21,6 +21,19 @@ class ShareStory extends React.Component {
     errorMsgDescription: 'Error message placeholder: description',
   }
 
+  componentDidMount() {
+    this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
+      this.setState({
+        name: (this.props.navigation.state.params || {}).name,
+        index: (this.props.navigation.state.params || {}).index,
+        inputItemDescription: '',
+        inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
+        errorMsgName: 'Error message placeholder: name',
+        errorMsgDescription: 'Error message placeholder: description',
+      });
+    });
+  }
+
   onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })}
 
   onPressPost = () => {
@@ -79,6 +92,7 @@ class ShareStory extends React.Component {
               multiline={true}
               placeholder = "What experiences have you had with this object?"
               onChangeText={this.onChangeInputItemDescription}
+              defaultValue={""}
             />
             <RoundButton
               containerStyle={styles.button}
