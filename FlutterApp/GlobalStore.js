@@ -2,36 +2,96 @@ import { store } from 'react-easy-state'
 import moment from 'moment'
 
 itemInfo = [
+  {
+      itemId: '8',
+      itemName: 'Chocolate rabbit!',
+      groupId: 'Stanf trees',
+      state: 'Given', // POSTED, GIVEN, COMPLETE
+      giver: {
+          id: '9',
+          itemDescription: 'My boyfriend and I saw these chocolate rabbits on sale (post-Valentine\'s haha) but got wayyy too many. Looking for somebody to take some off of our hands -- but also to share it with your loved ones. It\'s BIG!',
+          itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/rabbit.jpg'
+      },
+      receiver: {
+          id: '1',
+          itemDescription: '',
+          itemPicUrl: ''
+      },
+  },
+  {
+      itemId: '11',
+      itemName: 'Bird paperweights',
+      groupId: 'Bay Area Art Fiends',
+      state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
+      giver: {
+          id: '3',
+          itemDescription: 'I went to buy a set of glass dolphin paperweights, but accidentally came home with birds instead! They\'re q nice and I would only really give them to a friend. Anyone want to be their new nest?',
+          itemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0289/st-jude-glass-bird-paperweight-c.jpg'
+      },
+      receiver: {
+          id: '1',
+          itemDescription: 'These are even more lovely in person :) Look how pretty they are on my desk!',
+          itemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0313/st-jude-glass-bird-paperweight-c.jpg'
+      },
+  },
+  {
+    itemId: '94',
+    itemName: 'Wooden longboard',
+    state: 'COMPLETE',
+    groupId: 'Stanf trees',
+    giver: {
+        itemDescription: 'My friend convinced me to get a boosted board, and it’s been very fun zooming around campus without pedalling :) But now I’m graduating, it’s looking for a new home!',
+        itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/longboard.png',
+        id: '12',
+    },
+    receiver: {
+        itemDescription: 'I LOVE ZIPPING DOWN SANTA TERESA ON THIS. Photo I took of Lag as I zoomed by!',
+        itemPicUrl: 'https://rde-stanford-edu.s3.amazonaws.com/Housing/Images/Lagunita_New_474x325.jpg',
+        id: '4',
+    },
+},
 {
     itemId: '13',
     itemName: 'Silk scarf',
     groupId: 'Stanf trees',
-    state: 'GIVEN', // POSTED, GIVEN, COMPLETE
+    state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
     giver: {
-        id: '4',
+        id: '9',
         itemDescription: 'I\'m cleaning out my closet, and this silk scarf (passed down from my family) needs a home!',
         itemPicUrl: 'https://66.media.tumblr.com/efeffdfb2e3100550e1f91aa423e2d62/tumblr_pck2dplZRQ1roj277o1_500.jpg'
     },
     receiver: {
         id: '1',
-        itemDescription: "",
-        itemPicUrl: ""
+        itemDescription: "This is so, so, so soft. I wear it all the time now, and I always get compliments!",
+        itemPicUrl: "http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/scarf.jpg"
     },
 },
 {
-    itemId: '11',
-    itemName: 'Bird paperweights',
-    groupId: 'Bay Area Art Fiends',
-    state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
+    itemId: '14',
+    itemName: 'Cactus cup',
+    groupId: 'Stanf trees',
+    state: 'POSTED', // POSTED, GIVEN, COMPLETE
     giver: {
-        id: '3',
-        itemDescription: 'I went to buy a set of glass dolphin paperweights, but accidentally came home with birds instead! They\'re q nice and I would only really give them to a friend. Anyone want to be their new nest?',
-        itemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0289/st-jude-glass-bird-paperweight-c.jpg'
+        id: '1',
+        itemDescription: 'My ex gave me this cup. Too many memories :( Someone take it please?',
+        itemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/80878_XXX_v1.tif&wid=650&cvt=jpeg'
+    },
+    receiver: null,
+},
+{
+    itemId: '32',
+    itemName: 'Magic books',
+    state: 'GIVEN',
+    groupId: 'Stanf trees',
+    giver: {
+        itemDescription: 'I have too many magic books in my house, but can\'t bear to throw any away. Does anyone want to adopt these? They come in a set.',
+        itemPicUrl: 'https://thenypost.files.wordpress.com/2018/10/old-books.jpg',
+        id: '1',
     },
     receiver: {
-        id: '1',
-        itemDescription: 'These are even more lovely in person :) Look how pretty they are on my desk!',
-        itemPicUrl: 'https://www.westelm.com/weimgs/rk/images/wcm/products/201824/0313/st-jude-glass-bird-paperweight-c.jpg'
+        itemDescription: '',
+        itemPicUrl: '',
+        id: '2',
     },
 },
 {
@@ -51,18 +111,6 @@ itemInfo = [
     },
 },
 {
-    itemId: '14',
-    itemName: 'Cactus cup',
-    groupId: 'Stanf trees',
-    state: 'POSTED', // POSTED, GIVEN, COMPLETE
-    giver: {
-        id: '1',
-        itemDescription: 'My ex gave me this cup. Too many memories :( Someone take it please?',
-        itemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/80878_XXX_v1.tif&wid=650&cvt=jpeg'
-    },
-    receiver: null,
-},
-{
     itemId: '24',
     itemName: 'Pusheen pillow',
     groupId: 'Stanf trees',
@@ -71,42 +119,6 @@ itemInfo = [
         id: '3',
         itemDescription: 'Looking to give away this pillow, which is very important to me -- would be great to chat in person about why!',
         itemPicUrl: 'https://cdn.shopify.com/s/files/1/0057/8182/products/large-plush-front_700x700.png',
-    },
-    receiver: null,
-},
-{
-    itemId: '94',
-    itemName: 'Wooden longboard',
-    state: 'POSTED',
-    groupId: 'Stanf trees',
-    giver: {
-        itemDescription: 'My friend convinced me to get a boosted board, and it’s been very fun zooming around campus without pedalling :) But now I’m graduating, it’s looking for a new home!',
-        itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/longboard.png',
-        id: '9',
-    },
-    receiver: null,
-},
-{
-    itemId: '32',
-    itemName: 'Magic books',
-    state: 'POSTED',
-    groupId: 'Stanf trees',
-    giver: {
-        itemDescription: 'I have too many magic books in my house, but can\'t bear to throw any away. Does anyone want to adopt these? They come in a set.',
-        itemPicUrl: 'https://thenypost.files.wordpress.com/2018/10/old-books.jpg',
-        id: '5',
-    },
-    receiver: null,
-},
-{
-    itemId: '87',
-    itemName: 'Watercolor painting',
-    state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
-    giver: {
-        itemDescription: 'Hey guys, trying this app out. Does anyone want this painting I made? Could be good decoration!',
-        itemPicUrl: 'https://render.fineartamerica.com/images/rendered/search/print/images/artworkimages/medium/1/colorful-rooster-hailey-e-herrera.jpg',
-        id: '4',
     },
     receiver: null,
 },
@@ -126,7 +138,7 @@ itemInfo = [
     itemId: '45',
     itemName: 'Solar system dorm poster',
     state: 'POSTED',
-    groupId: 'Stanf trees',
+    groupId: 'Bay Area Art Fiends',
     giver: {
         itemDescription: 'Got this at the exploratorium in SF last year. Looking to open up space on my walls for new merchandise! Big fan of space, a physics major and Nat Geo lover. So this is dear to my heart! Hope it can find a new home.',
         itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/solar.png',
@@ -148,13 +160,25 @@ itemInfo = [
 },
 {
     itemId: '87',
+    itemName: 'Watercolor painting',
+    state: 'POSTED',
+    groupId: 'Bay Area Art Fiends',
+    giver: {
+        itemDescription: 'Hey guys, trying this app out. Does anyone want this painting I made? Could be good decoration!',
+        itemPicUrl: 'https://render.fineartamerica.com/images/rendered/search/print/images/artworkimages/medium/1/colorful-rooster-hailey-e-herrera.jpg',
+        id: '4',
+    },
+    receiver: null,
+},
+{
+    itemId: '87',
     itemName: 'Nightstand',
     state: 'POSTED',
     groupId: 'Stanf trees',
     giver: {
         itemDescription: 'I bought this nightstand my freshman year of college and have had it all four years. Now that I’m graduating, I don’t have room in my new apartment. I’d love to pass it on to another student to be with them through their college adventures!',
         itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/nightstand.jpg',
-        id: '3',
+        id: '10',
     },
     receiver: null,
 },
@@ -173,14 +197,18 @@ itemInfo = [
 {
     itemId: '92',
     itemName: 'Spear',
-    state: 'POSTED',
+    state: 'COMPLETE',
     groupId: 'Camping',
     giver: {
         itemDescription: 'This broken spear has seen me through many battles. Does anyone want it for hanging/framing in their house?',
         itemPicUrl: 'https://store.ubi.com/on/demandware.static/-/Sites-masterCatalog/default/dwe92f8ae1/images/large/5afda8ad6b54a4271407a8e3-collectible-5_Assassins_Creed_odyssey_spear.jpg',
         id: '5',
     },
-    receiver: null,
+    receiver: {
+        id: '11',
+        itemDescription: 'Used it when I went camping, and caught some fish. Had a good supper that night :)',
+        itemPicUrl: 'https://www.sunnysports.com/blog/wp-content/uploads/2016/12/campfire-fish.jpg'
+    },
 },
 {
     itemId: '113',
@@ -190,7 +218,7 @@ itemInfo = [
     giver: {
         itemDescription: 'My father gave me this bar of soap, and I don\'t want to throw it away, but I\'m about to go on a journey across the Mediterranean, so hoping someone will take it.',
         itemPicUrl: 'https://ii.worldmarket.com/fcgi-bin/iipsrv.fcgi?FIF=/images/worldmarket/source/65377_XXX_v1.tif&wid=650&cvt=jpeg',
-        id: '5',
+        id: '2',
     },
     receiver: null,
 },
