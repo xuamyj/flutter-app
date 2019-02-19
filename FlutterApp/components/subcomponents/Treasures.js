@@ -42,6 +42,7 @@ class Treasures extends React.Component {
 
   onCancel = () => {
     this.setState({
+      picked: '',
       groupFilterModal: false
     });
   }
@@ -141,6 +142,7 @@ class Treasures extends React.Component {
               inputStyle={styles.searchBar}
               onChangeText={(term) => { this.searchUpdated(term) }}
               placeholder='Search...'
+              clearIcon
             />
           </View>
           <TouchableOpacity onPress={this.onShow}>
