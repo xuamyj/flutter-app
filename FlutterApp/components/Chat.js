@@ -43,8 +43,9 @@ class Chat extends Component {
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
-    this.props.navigation.state.params.updateChatList();
-    console.log(chat.messages);
+    if (this.props.navigation.state.params.needUpdate != false) {
+      this.props.navigation.state.params.updateChatList();
+    }
   }
 
   createMessageObj = (message) => {

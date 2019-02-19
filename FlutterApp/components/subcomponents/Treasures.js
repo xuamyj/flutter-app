@@ -72,6 +72,7 @@ class Treasures extends React.Component {
       itemPicUrl: item.giver.itemPicUrl,
       groupName: item.groupId,
       userName: giverObj.displayName,
+      userId: giverObj.userId,
       userPicUrl: giverObj.userPicUrl,
       key: item.itemId,
       isActive: item.state === 'POSTED',

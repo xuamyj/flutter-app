@@ -12,6 +12,9 @@ import GivePopupButtons from '../subcomponents/GivePopupButtons';
 import GiveSelectFriendPopup from '../subcomponents/GiveSelectFriendPopup';
 import { withNavigation } from 'react-navigation';
 
+import { view } from 'react-easy-state';
+import { UserStore, UserListStore, ChatListStore } from '../../GlobalStore';
+
 
 const {height, width} = Dimensions.get('window');
 
@@ -33,7 +36,29 @@ class TreasurePopup extends React.Component {
   }
 
   onPressMessage = () => {
-    this.props.navigation.navigate('Chat', { name: this.props.treasure.userName });
+    var chatObj = {
+      myUserId: UserStore.userId,
+      otherUserId: this.props.treasure.userId,
+      messages: [],
+      key: UserStore.userId + "0" + this.props.treasure.userId,
+    }
+
+    var chatExists = false;
+    ChatListStore.chats.forEach((chat) => {
+      if (chatExists === false && chat.key === chatObj.key) {
+        chatObj.messages = chat.messages;
+        chatExists = true;
+      }
+    });
+    if (chatExists === false) {
+      ChatListStore.chats.push({
+        key: chatObj.key,
+        userIds: [chatObj.myUserId, chatObj.otherUserId],
+        messages: chatObj.messages,
+      });
+    }
+
+    this.props.navigation.navigate('Chat', { chat: chatObj, otherName: this.props.treasure.userName, needUpdate: false });
     this._toggleModal();
   }
 
@@ -61,6 +86,7 @@ class TreasurePopup extends React.Component {
     var userName = this.props.treasure.userName;
     var itemPicURL = this.props.treasure.itemPicUrl;
     var userPicUrl = this.props.treasure.userPicUrl;
+    var userId = this.props.treasure.userId;
 
     return  (
       <Modal isVisible={this.props.isVisible}
@@ -85,6 +111,8 @@ class TreasurePopup extends React.Component {
               onPressMessage={this.onPressMessage}
               onToggleSelectFriend={this.onToggleSelectFriend}
               userName={userName}
+              userId={userId}
+              myUserId={UserStore.userId}
               />
             </View>
           }

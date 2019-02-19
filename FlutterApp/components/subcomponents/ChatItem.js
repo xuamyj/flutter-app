@@ -13,7 +13,7 @@ export default class ChatItem extends React.Component {
     var otherUser = UserListStore.getUserObject(this.props.chat.otherUserId);
     var otherUserPicUrl = otherUser.userPicUrl;
     var otherUserName = otherUser.displayName;
-    var lastMessage = this.props.chat.messages[this.props.chat.messages.length - 1];
+    var lastMessage = this.props.chat.messages.length > 0 ? this.props.chat.messages[this.props.chat.messages.length - 1] : 0;
 
     var moment = require('moment');
     var formattedDate = moment(new Date(lastMessage.timestamp)).format("MMM D");

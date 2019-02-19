@@ -17,11 +17,9 @@ class ChatMain extends React.Component {
   }
 
   componentDidMount() {
-    this.updateChatList();
-  }
-
-  onPressNewChat = () => {
-    this.props.navigation.navigate('Chat', { name: 'TODO fix chat' });
+    this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
+      this.updateChatList();
+    });
   }
 
   onPressChat = (chat) => {

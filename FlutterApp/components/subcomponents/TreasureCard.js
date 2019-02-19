@@ -63,6 +63,7 @@ export default class TreasureCard extends React.Component {
     var userName = this.props.treasure.userName;
     var itemPicURL = this.props.treasure.itemPicUrl;
     var userPicUrl = this.props.treasure.userPicUrl;
+    var userId = this.props.treasure.userId;
 
     return  (
 
