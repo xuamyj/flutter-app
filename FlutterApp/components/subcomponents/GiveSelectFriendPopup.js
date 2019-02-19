@@ -179,8 +179,9 @@ const styles = StyleSheet.create({
     marginTop: Metrics.baseMargin,
     marginBottom: Metrics.doubleBaseMargin,
     minWidth: '35%',
-    maxWidth: '50%',
-    marginHorizontal: Metrics.baseMargin,
+    width: '42%',
+    maxWidth: width / 2.5,
+    marginHorizontal: Metrics.smallMargin * 1.5,
   },
   button: {
     marginTop: Metrics.baseMargin,
