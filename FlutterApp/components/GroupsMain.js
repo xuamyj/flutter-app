@@ -21,7 +21,7 @@ class GroupsMain extends React.Component {
 
   static navigationOptions = ({navigation}) => {
     return {
-      title: 'Groups',
+      title: 'Communities',
       headerStyle: {backgroundColor: Colors.background},
       headerRight: (
         <View style={styles.headerButton}>

@@ -62,7 +62,7 @@ class GroupSettings extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Group Settings',
+    title: 'Community Settings',
     headerStyle: {backgroundColor: Colors.background },
     headerTitleStyle: {
       fontFamily: 'NunitoBold',

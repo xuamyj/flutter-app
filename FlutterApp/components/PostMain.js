@@ -179,7 +179,7 @@ class PostMain extends React.Component {
               onChangeText={this.onChangeInputItemDescription}
               defaultValue={this.state.inputItemDescription}
             />
-            <Text style={styles.label}>Group</Text>
+            <Text style={styles.label}>Community</Text>
             <Carousel
                 ref={(c) => { this._carousel = c; }}
                 data={groupResultList}

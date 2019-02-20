@@ -42,7 +42,7 @@ class GroupCreate extends React.Component {
       groupPicUrl: this.state.inputGroupPicUrl
     })
     Alert.alert(
-      'Group created!',
+      'Community created!',
       ('You have created ' + this.state.inputGroupName + '!'),
       [
         {text: 'OK'},
@@ -52,7 +52,7 @@ class GroupCreate extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Create New Group',
+    title: 'Create New Community',
     headerStyle: {backgroundColor: Colors.background },
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
@@ -115,7 +115,7 @@ class GroupCreate extends React.Component {
             </View>
             <RoundButton
               containerStyle={styles.button}
-              label="CREATE GROUP"
+              label="CREATE COMMUNITY"
               backgroundColor={Colors.teal}
               color={'white'}
               size={15}
