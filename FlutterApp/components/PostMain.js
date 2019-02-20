@@ -152,7 +152,7 @@ class PostMain extends React.Component {
     this.groups = groupResultList;
 
     return (
-      <KeyboardAvoidingView style={{ flex:1, backgroundColor: 'transparent' }} behavior="padding" keyboardVerticalOffset={width * 1 / 3 - 2 * Metrics.doubleBaseMargin}>
+      <View style={{ flex:1 }}>
         <View>
             <Image style={styles.imagePreview} source={{uri: this.state.inputItemPicUrl}} />
         </View>
@@ -199,7 +199,7 @@ class PostMain extends React.Component {
               onPress={this.onPressPost} />
           </View>
         </ScrollView>
-      </KeyboardAvoidingView>
+      </View>
     );
   }
 }
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '100%',
-    marginTop: height / 2 - width * 5 / 24,
+    marginTop: height / 2 - width / 4,
     shadowColor: Colors.dark,
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.7,
@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'row',
     padding: Metrics.baseMargin,
-    top: height * 1 / 4,
+    top: height * 1 / 4 - Metrics.baseMargin,
     right:0,
   }
 })

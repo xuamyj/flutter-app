@@ -135,6 +135,54 @@ itemInfo = [
     receiver: null,
 },
 {
+    itemId: '62',
+    itemName: 'Chicken sculpture!! My masterpiece~',
+    state: 'POSTED',
+    groupId: 'Bay Area Art Fiends',
+    giver: {
+        itemDescription: 'Is this not the cutest thing ever?? I made it in ceramics class :)',
+        itemPicUrl: 'https://i.etsystatic.com/5162299/r/il/cdeb48/1567221375/il_1140xN.1567221375_384s.jpg',
+        id: '7',
+    },
+    receiver: null,
+},
+{
+    itemId: '63',
+    itemName: 'Mom art',
+    state: 'POSTED',
+    groupId: 'Bay Area Art Fiends',
+    giver: {
+        itemDescription: 'Wanted to follow this tutorial online for book page folding but I kind of hate my mom right now...wanna take?',
+        itemPicUrl: 'https://i.etsystatic.com/11935929/r/il/96f796/1147669963/il_1140xN.1147669963_blzm.jpg',
+        id: '6',
+    },
+    receiver: null,
+},
+{
+    itemId: '64',
+    itemName: 'Bobbleheads',
+    state: 'POSTED',
+    groupId: 'Bay Area Art Fiends',
+    giver: {
+        itemDescription: 'Got these for a wedding but accidentally ordered an extra set. Admit it, these are pretty funny.',
+        itemPicUrl: 'https://i.etsystatic.com/9820484/r/il/0055c9/1235090184/il_1140xN.1235090184_j93h.jpg',
+        id: '7',
+    },
+    receiver: null,
+},
+{
+    itemId: '415',
+    itemName: 'Red Shoes Painting',
+    state: 'POSTED',
+    groupId: 'Bay Area Art Fiends',
+    giver: {
+        itemDescription: 'Acrylic painting I made freshman year. Inspired by the movie “Red Wagons.” Have been holding on to this because it was via this dorm activity that I made a lot of the friends I have today. Have to part with it because moving to a one room double and don’t have enough space. Also worried I will not be able to maintain it in good condition. It\'s great for deocrating!',
+        itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/shoes.png',
+        id: '5',
+    },
+    receiver: null,
+},
+{
     itemId: '45',
     itemName: 'Solar system dorm poster',
     state: 'POSTED',
@@ -162,7 +210,7 @@ itemInfo = [
     itemId: '87',
     itemName: 'Watercolor painting',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Stanf trees',
     giver: {
         itemDescription: 'Hey guys, trying this app out. Does anyone want this painting I made? Could be good decoration!',
         itemPicUrl: 'https://render.fineartamerica.com/images/rendered/search/print/images/artworkimages/medium/1/colorful-rooster-hailey-e-herrera.jpg',
@@ -171,7 +219,7 @@ itemInfo = [
     receiver: null,
 },
 {
-    itemId: '87',
+    itemId: '60',
     itemName: 'Nightstand',
     state: 'POSTED',
     groupId: 'Stanf trees',
@@ -183,14 +231,14 @@ itemInfo = [
     receiver: null,
 },
 {
-    itemId: '415',
-    itemName: 'Red Shoes Painting',
+    itemId: '61',
+    itemName: 'Bluebird Felt Mask',
     state: 'POSTED',
     groupId: 'Bay Area Art Fiends',
     giver: {
-        itemDescription: 'Acrylic painting I made freshman year. Inspired by the movie “Red Wagons.” Have been holding on to this because it was via this dorm activity that I made a lot of the friends I have today. Have to part with it because moving to a one room double and don’t have enough space. Also worried I will not be able to maintain it in good condition. It\'s great for deocrating!',
-        itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/shoes.png',
-        id: '5',
+        itemDescription: 'Crafted up this mask for a masquerade. Anyone want to use this for a play?',
+        itemPicUrl: 'https://i.etsystatic.com/5383725/r/il/446443/1672806615/il_1140xN.1672806615_ht38.jpg',
+        id: '7',
     },
     receiver: null,
 },
@@ -226,7 +274,7 @@ itemInfo = [
 
 userInfo = [
         {
-            displayName: "Amy",
+            displayName: "JENNY", //CHANGE NAME BEFORE EACH TEST
             userId: "1",
             email: "a@m.com",
             userPicUrl: "http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg",
@@ -330,7 +378,7 @@ groupInfo = [
 
 const UserStore = store({
     userId: '1',
-    userName: "Amy",
+    userName: "JENNY", //CHANGE NAME BEFORE EACH TEST
     setUserName(newUserName){
         UserStore.userName = newUserName;
         let userObj = UserListStore.getUserObject(UserStore.userId);

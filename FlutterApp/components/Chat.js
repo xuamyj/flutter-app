@@ -79,13 +79,13 @@ class Chat extends Component {
 
   render() {
     return (
-      <KeyboardAvoidingView style={{ flex:1, backgroundColor: 'transparent' }} behavior="padding" keyboardVerticalOffset={4*Metrics.doubleBaseMargin}>
+      <View style={{ flex:1 }}>
       <GiftedChat
         messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
         user={this.user}
       />
-      </KeyboardAvoidingView>
+      </View>
     );
   }
 
