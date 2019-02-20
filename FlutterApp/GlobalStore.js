@@ -21,7 +21,7 @@ itemInfo = [
   {
       itemId: '11',
       itemName: 'Bird paperweights',
-      groupId: 'Bay Area Art Fiends',
+      groupId: 'Bay Art',
       state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
       giver: {
           id: '3',
@@ -97,7 +97,7 @@ itemInfo = [
 {
     itemId: '12',
     itemName: 'Handmade pillow',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     state: 'COMPLETE', // POSTED, GIVEN, COMPLETE
     giver: {
         id: '1',
@@ -126,7 +126,7 @@ itemInfo = [
     itemId: '543',
     itemName: 'Enamel rainbow pin',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     giver: {
         itemDescription: 'Got this lil charm from a good friend! Unfortunately, I can’t pin it on any of my clothes or backpacks :( anyone want this?',
         itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/rainbow.png',
@@ -138,7 +138,7 @@ itemInfo = [
     itemId: '62',
     itemName: 'Chicken sculpture!! My masterpiece~',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     giver: {
         itemDescription: 'Is this not the cutest thing ever?? I made it in ceramics class :)',
         itemPicUrl: 'https://i.etsystatic.com/5162299/r/il/cdeb48/1567221375/il_1140xN.1567221375_384s.jpg',
@@ -150,7 +150,7 @@ itemInfo = [
     itemId: '63',
     itemName: 'Mom art',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     giver: {
         itemDescription: 'Wanted to follow this tutorial online for book page folding but I kind of hate my mom right now...wanna take?',
         itemPicUrl: 'https://i.etsystatic.com/11935929/r/il/96f796/1147669963/il_1140xN.1147669963_blzm.jpg',
@@ -162,7 +162,7 @@ itemInfo = [
     itemId: '64',
     itemName: 'Bobbleheads',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     giver: {
         itemDescription: 'Got these for a wedding but accidentally ordered an extra set. Admit it, these are pretty funny.',
         itemPicUrl: 'https://i.etsystatic.com/9820484/r/il/0055c9/1235090184/il_1140xN.1235090184_j93h.jpg',
@@ -186,7 +186,7 @@ itemInfo = [
     itemId: '66',
     itemName: 'Duck carving',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     giver: {
         itemDescription: 'My grandpa made this for me. He passed away a few years back and my heart breaks a little bit whenever I see this... If you do take it, please take care of it.',
         itemPicUrl: 'https://i.etsystatic.com/5423629/r/il/da6804/460149722/il_1140xN.460149722_31i9.jpg',
@@ -198,7 +198,7 @@ itemInfo = [
     itemId: '67',
     itemName: 'Duck carving',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     giver: {
         itemDescription: 'My grandpa made this for me. He passed away a few years back and my heart breaks a little bit whenever I see this... If you do take it, please take care of it.',
         itemPicUrl: 'https://i.etsystatic.com/5423629/r/il/da6804/460149722/il_1140xN.460149722_31i9.jpg',
@@ -210,7 +210,7 @@ itemInfo = [
     itemId: '68',
     itemName: 'Handpainted wave bag',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     giver: {
         itemDescription: 'Upcycled a bunch of bags from the thrift store. Donating some back, but would anyone want this?',
         itemPicUrl: 'https://i.etsystatic.com/6209815/r/il/1b11fa/1190181899/il_1140xN.1190181899_qz28.jpg',
@@ -222,7 +222,7 @@ itemInfo = [
     itemId: '415',
     itemName: 'Red Shoes Painting',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     giver: {
         itemDescription: 'Acrylic painting I made freshman year. Inspired by the movie “Red Wagons.” Have been holding on to this because it was via this dorm activity that I made a lot of the friends I have today. Have to part with it because moving to a one room double and don’t have enough space. Also worried I will not be able to maintain it in good condition. It\'s great for deocrating!',
         itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/shoes.png',
@@ -234,7 +234,7 @@ itemInfo = [
     itemId: '45',
     itemName: 'Solar system dorm poster',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     giver: {
         itemDescription: 'Got this at the exploratorium in SF last year. Looking to open up space on my walls for new merchandise! Big fan of space, a physics major and Nat Geo lover. So this is dear to my heart! Hope it can find a new home.',
         itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/solar.png',
@@ -246,7 +246,7 @@ itemInfo = [
     itemId: '564',
     itemName: 'Chalk pastel anatomy drawing',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     giver: {
         itemDescription: 'HUGE chalk pastel drawing; I have no space to put it in my tiny apartment!! Anyone care to showcase it in their home? Give an art hobbyist some ~exposure~!!',
         itemPicUrl: 'http://web.stanford.edu/class/cs194h/projects/Flutter/app-images/objects/drawing.png',
@@ -282,7 +282,7 @@ itemInfo = [
     itemId: '61',
     itemName: 'Bluebird Felt Mask',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     giver: {
         itemDescription: 'Crafted up this mask for a masquerade. Anyone want to use this for a play?',
         itemPicUrl: 'https://i.etsystatic.com/5383725/r/il/446443/1672806615/il_1140xN.1672806615_ht38.jpg',
@@ -407,8 +407,8 @@ groupInfo = [
     groupPicUrl: 'https://germanmotorspecialist.com/wp-content/uploads/2018/08/Stanford.jpg',
 },
 {
-    groupName: 'Bay Area Art Fiends',
-    groupId: 'Bay Area Art Fiends',
+    groupName: 'Bay Art',
+    groupId: 'Bay Art',
     memberList: [
         '1', '3', '5', '6', '9', '11', '2', '4', '7', '8', '10', '12'
     ],
