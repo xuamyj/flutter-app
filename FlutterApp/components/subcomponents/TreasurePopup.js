@@ -88,6 +88,7 @@ class TreasurePopup extends React.Component {
     var itemPicURL = this.props.treasure.itemPicUrl;
     var userPicUrl = this.props.treasure.userPicUrl;
     var userId = this.props.treasure.userId;
+    var recvUserName = this.props.treasure.recvUserName;
 
     return  (
       <Modal isVisible={this.props.isVisible}
@@ -114,6 +115,7 @@ class TreasurePopup extends React.Component {
               userName={userName}
               userId={userId}
               myUserId={UserStore.userId}
+              recvUserName={recvUserName}
               />
             </View>
           }

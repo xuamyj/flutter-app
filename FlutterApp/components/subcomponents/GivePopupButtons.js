@@ -26,6 +26,7 @@ class GivePopupButtons extends React.Component {
     var userName = this.props.userName;
     var itemPicURL = this.props.itemPicUrl;
     var userPicUrl = this.props.userPicUrl;
+    var recvUserName = this.props.recvUserName;
 
     return  (
       <View>
@@ -44,7 +45,7 @@ class GivePopupButtons extends React.Component {
           {this.props.isActive === false &&
             <RoundButtonSmall
               containerStyle={styles.button}
-              label={"GIVEN TO " + userName.toUpperCase()}
+              label={"GIVEN TO " + recvUserName.toUpperCase()}
               backgroundColor={Colors.background}
               color={Colors.lightText}
               size={14}

@@ -62,6 +62,10 @@ class Treasures extends React.Component {
 
   createTreasureObj(item) {
     let giverObj = UserListStore.getUserObject(item.giver.id);
+    var recvObj = '';
+    if (item.receiver != null && item.receiver.id != '') {
+      recvObj = UserListStore.getUserObject(item.receiver.id);
+    }
 
     return {
       itemName: item.itemName,
@@ -73,6 +77,7 @@ class Treasures extends React.Component {
       userPicUrl: giverObj.userPicUrl,
       key: item.itemId,
       isActive: item.state === 'POSTED',
+      recvUserName: (recvObj != '') ? recvObj.displayName : "",
     }
   }
 
