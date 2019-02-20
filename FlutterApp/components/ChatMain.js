@@ -30,21 +30,23 @@ class ChatMain extends React.Component {
   }
 
   onPressChat = (chat) => {
-    this.props.navigation.navigate('Chat', { chat: chat, updateChatList: this.updateChatList });
+    this.props.navigation.navigate('Chat', { chat: chat, updateChatList: this.updateChatList, toProfile: this.onPressGive });
+  }
+
+  onPressGive = () => {
+    this.props.navigation.navigate('Profile', {});
   }
 
   updateChatList = () => {
     let userId = UserStore.userId;
     let chatList = [];
     ChatListStore.chats.forEach((chat)=>{
-      let chatObj = ChatListStore.getChat(chat.key)
-
-      if (chatObj.messages.length > 0) {
+      if (chat.messages.length > 0) {
         // if it is user's chats
-        if (chatObj.userIds[0] == userId) {
-          chatList.push(this.createChatObject(chat.key, userId, chatObj.userIds[1]))
+        if (chat.userIds[0] == userId) {
+          chatList.push(this.createChatObject(chat.key, userId, chat.userIds[1]))
         } else if (chat.userIds[1] == userId) {
-          chatList.push(this.createChatObject(chat.key, userId, chatObj.userIds[0]));
+          chatList.push(this.createChatObject(chat.key, userId, chat.userIds[0]));
         }
       }
     });

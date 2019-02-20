@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {KeyboardAvoidingView} from 'react-native';
+import {KeyboardAvoidingView, View, StyleSheet, TouchableOpacity} from 'react-native';
+import Icons from './Themes/Icons';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { Metrics, Colors } from './Themes';
 
@@ -17,6 +18,18 @@ class Chat extends Component {
       fontWeight: '200',
       color: Colors.dark,
     },
+    headerRight: (
+      <View style={styles.headerButton}>
+        <TouchableOpacity onPress={() => this.props.navigation.state.params.toProfile()}>
+          <Icons
+            iconName={'gift'}
+            size={22}
+            tintColor={'#49B6BB'}
+            />
+        </TouchableOpacity>
+      </View>
+    ),
+    headerBackTitle: null,
     headerTintColor: Colors.teal,
   });
 
@@ -92,5 +105,14 @@ class Chat extends Component {
     Fire.shared.off();
   }
 }
+
+const styles = StyleSheet.create({
+  headerButton:{
+    paddingHorizontal: Metrics.baseMargin * 1.5,
+  },
+  icon: {
+    resizeMode: 'contain',
+  },
+});
 
 export default Chat;

@@ -9,7 +9,7 @@ import GroupItemSmall from './subcomponents/GroupItemSmall';
 
 
 import { view } from 'react-easy-state'
-import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../GlobalStore'
+import { ItemListStore, UserStore, UserListStore, GroupListStore, ChatListStore } from '../GlobalStore'
 
 const {height, width} = Dimensions.get('window');
 
@@ -97,6 +97,16 @@ class PostMain extends React.Component {
           {text: 'OK', onPress: () => this.props.navigation.navigate('HOME')},
         ],
       );
+      ChatListStore.chats.unshift({
+        key: '845',
+        userIds: [UserStore.userId, '9'],
+        messages: [{
+          text: 'Hello!! I love this! Can I claim?',
+          timestamp: new Date().getTime(),
+          userId: '9'
+        },
+        ]
+      });
     }
   }
 
