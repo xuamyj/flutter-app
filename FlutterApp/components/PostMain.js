@@ -7,7 +7,6 @@ import RoundButton from './subcomponents/RoundButton';
 import Carousel from 'react-native-snap-carousel';
 import GroupItemSmall from './subcomponents/GroupItemSmall';
 
-
 import { view } from 'react-easy-state'
 import { ItemListStore, UserStore, UserListStore, GroupListStore, ChatListStore } from '../GlobalStore'
 
@@ -49,30 +48,29 @@ class PostMain extends React.Component {
   onPressPost = () => {
     postIsIncomplete = (this.state.inputItemName == "") ||
     (this.state.inputItemDescription == "") ||
-    (typeof this.state.inputItemPicUrl === "undefined");
+    (this.state.inputItemPicUrl === "https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640");
 
     if (postIsIncomplete){
       missingItems = "";
       if (this.state.inputItemName == "") {
-        missingItems += "a name for the item";
+        missingItems += "a name";
       }
       if (this.state.inputItemDescription == "") {
         if (missingItems != "") {
           missingItems += " and "
         }
-        missingItems += "a description of the item";
+        missingItems += "a description";
       }
-      if (typeof this.state.inputItemPicUrl === "undefined") {
+      if (this.state.inputItemPicUrl === "https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640") {
         if (missingItems != "") {
           missingItems += " and "
         }
-        missingItems += "a photo of the item";
+        missingItems += "a photo";
       }
-      missingItems += ".";
 
       Alert.alert(
         'Unable to Post Item',
-        ('Please include ' + missingItems),
+        ('Please include ' + missingItems + ' of the item.'),
         [
           {text: 'OK'},
         ],

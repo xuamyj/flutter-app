@@ -37,21 +37,49 @@ class ShareStory extends React.Component {
   onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })}
 
   onPressPost = () => {
-    let i = this.state.index
-    ItemListStore.items[i].state = "COMPLETE";
-    ItemListStore.items[i].receiver.itemDescription = this.state.inputItemDescription;
-    ItemListStore.items[i].receiver.itemPicUrl = this.state.inputItemPicUrl;
+    postIsIncomplete = (this.state.inputItemDescription == "") ||
+    (this.state.inputItemPicUrl === "https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640");
 
-    itemObj = ItemListStore.items.pop();
-    ItemListStore.items.unshift(itemObj);
+    if (postIsIncomplete){
+      missingItems = "";
+      if (this.state.inputItemDescription == "") {
+        if (missingItems != "") {
+          missingItems += " and "
+        }
+        missingItems += "a description";
+      }
+      if (this.state.inputItemPicUrl === "https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640") {
+        if (missingItems != "") {
+          missingItems += " and "
+        }
+        missingItems += "a photo";
+      }
 
-    Alert.alert(
-      'Story shared!',
-      ('You have shared your story with ' + this.state.name.substring(3) + '!'),
-      [
-        {text: 'OK', onPress: () => this.props.navigation.navigate('Profile')},
-      ],
-    );
+      Alert.alert(
+        'Unable to Post Item',
+        ('Please include ' + missingItems + ' of the item.'),
+        [
+          {text: 'OK'},
+        ],
+      );
+
+    } else {
+      let i = this.state.index
+      ItemListStore.items[i].state = "COMPLETE";
+      ItemListStore.items[i].receiver.itemDescription = this.state.inputItemDescription;
+      ItemListStore.items[i].receiver.itemPicUrl = this.state.inputItemPicUrl;
+
+      itemObj = ItemListStore.items.pop();
+      ItemListStore.items.unshift(itemObj);
+
+      Alert.alert(
+        'Story shared!',
+        ('You have shared your story with ' + this.state.name.substring(3) + '!'),
+        [
+          {text: 'OK', onPress: () => this.props.navigation.navigate('Profile')},
+        ],
+      );
+    }
   }
 
   selectPhoto = async () => {
