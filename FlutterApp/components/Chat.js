@@ -18,7 +18,8 @@ class Chat extends Component {
       fontWeight: '200',
       color: Colors.dark,
     },
-    headerRight: (
+    headerRight: (navigation.state.params.chat.messages.length != 0
+      && navigation.state.params.chat.messages[0].userId != UserStore.userId) ? (
       <View style={styles.headerButton}>
         <TouchableOpacity onPress={() => this.props.navigation.state.params.toProfile()}>
           <Icons
@@ -28,7 +29,7 @@ class Chat extends Component {
             />
         </TouchableOpacity>
       </View>
-    ),
+    ) : null,
     headerBackTitle: null,
     headerTintColor: Colors.teal,
   });
