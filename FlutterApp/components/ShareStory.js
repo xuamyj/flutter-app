@@ -43,21 +43,18 @@ class ShareStory extends React.Component {
     if (postIsIncomplete){
       missingItems = "";
       if (this.state.inputItemDescription == "") {
-        if (missingItems != "") {
-          missingItems += " and "
-        }
-        missingItems += "a description";
+        missingItems += "description";
       }
       if (this.state.inputItemPicUrl === "https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640") {
         if (missingItems != "") {
           missingItems += " and "
         }
-        missingItems += "a photo";
+        missingItems += "photo";
       }
 
       Alert.alert(
         'Unable to Post Item',
-        ('Please include ' + missingItems + ' of the item.'),
+        ('Please include a ' + missingItems + ' of the item.'),
         [
           {text: 'OK'},
         ],
