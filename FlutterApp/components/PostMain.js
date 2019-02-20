@@ -94,7 +94,7 @@ class PostMain extends React.Component {
         'Item posted!',
         ('You have posted ' + this.state.inputItemName + '!'),
         [
-          {text: 'OK', onPress: () => this.props.navigation.navigate('HOME')},
+          {text: 'OK', onPress: () => this.props.navigation.navigate('PROFILE')},
         ],
       );
       ChatListStore.chats.unshift({

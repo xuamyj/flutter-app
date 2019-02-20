@@ -34,7 +34,7 @@ class ChatMain extends React.Component {
   }
 
   onPressGive = () => {
-    this.props.navigation.navigate('Profile', {});
+    this.props.navigation.navigate('PROFILE');
   }
 
   updateChatList = () => {
