@@ -3,6 +3,7 @@ import {KeyboardAvoidingView, View, StyleSheet, TouchableOpacity} from 'react-na
 import Icons from './Themes/Icons';
 import { GiftedChat } from 'react-native-gifted-chat';
 import { Metrics, Colors } from './Themes';
+import { withNavigation } from 'react-navigation';
 
 import Fire from '../Fire';
 
@@ -10,6 +11,7 @@ import { view } from 'react-easy-state';
 import { ChatListStore, UserListStore, UserStore } from '../GlobalStore';
 
 class Chat extends Component {
+
   static navigationOptions = ({ navigation }) => ({
     title: (navigation.state.params || {}).chat.otherUserName || 'Chat!',
     headerStyle: {backgroundColor: Colors.background},
@@ -21,7 +23,7 @@ class Chat extends Component {
     headerRight: (navigation.state.params.chat.messages.length != 0
       && navigation.state.params.chat.messages[0].userId != UserStore.userId) ? (
       <View style={styles.headerButton}>
-        <TouchableOpacity onPress={() => this.props.navigation.state.params.toProfile()}>
+        <TouchableOpacity onPress={() => navigation.navigate('PROFILE')}>
           <Icons
             iconName={'gift'}
             size={22}
@@ -116,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Chat;
+export default withNavigation(Chat);
