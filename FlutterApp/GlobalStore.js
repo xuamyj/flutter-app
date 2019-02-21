@@ -174,7 +174,7 @@ itemInfo = [
     itemId: '65',
     itemName: 'Glass flowers',
     state: 'POSTED',
-    groupId: 'Bay Area Art Fiends',
+    groupId: 'Bay Art',
     giver: {
         itemDescription: 'I have a literal ROOM full of these from my glassblowing class. PLEASE take some. They are all my precious babies.',
         itemPicUrl: 'https://i.etsystatic.com/5787638/r/il/71f041/773022592/il_1140xN.773022592_fkut.jpg',
@@ -322,7 +322,7 @@ itemInfo = [
 
 userInfo = [
         {
-            displayName: "JENNY", //CHANGE NAME BEFORE EACH TEST
+            displayName: "John", //CHANGE NAME BEFORE EACH TEST
             userId: "1",
             email: "a@m.com",
             userPicUrl: "http://www.interestingfunfacts.com/files/2012/01/facts-about-hedgehog.jpg",
@@ -426,7 +426,7 @@ groupInfo = [
 
 const UserStore = store({
     userId: '1',
-    userName: "JENNY", //CHANGE NAME BEFORE EACH TEST
+    userName: "John", //CHANGE NAME BEFORE EACH TEST
     setUserName(newUserName){
         UserStore.userName = newUserName;
         let userObj = UserListStore.getUserObject(UserStore.userId);
