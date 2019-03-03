@@ -6,6 +6,7 @@ import { Metrics, Colors } from './Themes';
 import RoundButton from './subcomponents/RoundButton';
 import Carousel from 'react-native-snap-carousel';
 import GroupItemSmall from './subcomponents/GroupItemSmall';
+import { FontAwesome } from '@expo/vector-icons';
 
 import { view } from 'react-easy-state'
 import { ItemListStore, UserStore, UserListStore, GroupListStore, ChatListStore } from '../GlobalStore'
@@ -108,8 +109,11 @@ class PostMain extends React.Component {
     }
   }
 
+  // tom woz 'ere 2k19 yolo swaGGGG xDxDxD
+
   selectPhoto = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
     if (status === 'granted') {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -121,6 +125,21 @@ class PostMain extends React.Component {
       }
     }
   }
+  takePicture = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
+
+    if (status === 'granted') {
+      let result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [3,2],
+      });
+      if (!result.cancelled) {
+        this.setState({ inputItemPicUrl: result.uri });
+      }
+    }
+  }
+
 
   renderItem = ({item}) => {
     return (
@@ -158,7 +177,12 @@ class PostMain extends React.Component {
         </View>
         <ScrollView style={{ flex:1 }}>
           <View style={styles.iconContainer}>
-            <Icon name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
+            <View style={styles.icon}> 
+              <FontAwesome name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
+            </View> 
+            <View style={styles.icon}>
+              <FontAwesome name={'camera'} color={Colors.dark} onPress={this.takePicture} containerStyle={styles.icon} size={30} />
+            </View>
           </View>
           <View style={styles.formContainer}>
             <Text style={styles.label}>Name</Text>
@@ -275,7 +299,7 @@ const styles = StyleSheet.create({
     padding: Metrics.baseMargin,
     top: height * 1 / 4 - Metrics.baseMargin,
     right:0,
-  }
+  },
 })
 
 export default view(PostMain);
