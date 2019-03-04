@@ -6,11 +6,7 @@ import { Metrics, Colors } from './Themes';
 import RoundButton from './subcomponents/RoundButton';
 
 import firebase from 'firebase';
-
 import Fire from '../Fire';
-
-import { view } from 'react-easy-state'
-import { UserStore } from '../GlobalStore'
 
 const {height, width} = Dimensions.get('window');
 
@@ -23,18 +19,28 @@ class Settings extends React.Component {
 
   onPressUpdateDisplayName = () => {
     if (this.state.inputName != '') {
-      UserStore.setUserName(this.state.inputName);
-      this.setState({
-        inputName: '',
+      Fire.shared.updateUserName(Fire.shared.uid, this.state.inputName, () => {
+          this.setState({
+            userName: this.state.inputName,
+            inputName: '',
+           });
+        // TODO toast
+      }, () => {
+        // TODO toast
       });
     }
   }
 
-  onPressUpdateProfilePicture = () => {
-    if (this.state.inputPicUrl == undefined) {
-      return;
-    }
-    UserStore.setUserPicUrl(this.state.inputPicUrl);
+  onPressUpdateProfilePicture = async () => {
+    uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputPicUrl);
+    Fire.shared.updateUserPicUrl(Fire.shared.uid, uploadUrl, () => {
+      this.setState({
+        userPicUrl: this.state.inputPicUrl,
+      });
+      // TODO toast
+    }, () => {
+      // TODO toast
+    });
   }
 
   onSignout = () => {
@@ -57,7 +63,17 @@ class Settings extends React.Component {
 
 
   componentDidMount() {
-    this.setState({inputPicUrl: UserStore.userPicUrl});
+    Fire.shared.getUserName(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userName: result,
+      }))
+    })
+    Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userPicUrl: result,
+        inputPicUrl: result,
+      }))
+    })
   }
 
   onPressCamera = async () => {
@@ -100,7 +116,7 @@ class Settings extends React.Component {
                 <Icon name={'edit'} color={Colors.dark} onPress={this.onPressCamera} containerStyle={styles.icon} />
               </View>
             </View>
-            <Text style={styles.text}>{UserStore.userName}</Text>
+            <Text style={styles.text}>{this.props.navigation.state.params.username}</Text>
           </View>
           <Text style={styles.label}>Change display name</Text>
           <TextInput
@@ -187,4 +203,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default view(Settings);
+export default Settings;

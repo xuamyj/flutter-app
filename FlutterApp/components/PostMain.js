@@ -8,8 +8,7 @@ import Carousel from 'react-native-snap-carousel';
 import GroupItemSmall from './subcomponents/GroupItemSmall';
 import { FontAwesome } from '@expo/vector-icons';
 
-import { view } from 'react-easy-state'
-import { ItemListStore, UserStore, UserListStore, GroupListStore, ChatListStore } from '../GlobalStore'
+import Fire from '../Fire';
 
 const {height, width} = Dimensions.get('window');
 
@@ -21,9 +20,10 @@ class PostMain extends React.Component {
       inputItemName: '',
       inputItemDescription: '',
       inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
-      inputGroupKey: GroupListStore.groups[0].groupId,
+      inputGroupKey: "",
       errorMsgName: 'Error message placeholder: name',
       errorMsgDescription: 'Error message placeholder: description',
+      groups: [],
     };
   }
 
@@ -33,17 +33,37 @@ class PostMain extends React.Component {
         inputItemName: '',
         inputItemDescription: '',
         inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
-        inputGroupKey: GroupListStore.groups[0].groupId,
         errorMsgName: 'Error message placeholder: name',
         errorMsgDescription: 'Error message placeholder: description',
       });
     });
+
+    Fire.shared.getAllGroups(groupResult => {
+      let groupResultList = [];
+      groupResult.forEach((childResult) => {
+        let childResultObj = childResult.val();
+
+        if (childResultObj['memberList'].indexOf(Fire.shared.uid) != -1) {
+          tempGroupResult = {
+            name: childResultObj['groupName'],
+            key: childResult.key,
+            size: childResultObj['memberList'].length,
+            picUrl: childResultObj['groupPicUrl'],
+          }
+          groupResultList.push(tempGroupResult);
+        }
+      });
+      this.setState(previousState => ({
+        groups: groupResultList,
+        inputGroupKey: groupResultList[0].key,
+      }));
+    })
   }
 
   onChangeInputItemName = (inputItemName) => {this.setState({ inputItemName: inputItemName })};
   onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })};
   onChangeGroup = (inputGroupKey) => {
-    this.setState({inputGroupKey: this.groups[inputGroupKey].key})
+    this.setState({inputGroupKey: this.state.groups[inputGroupKey].key})
   }
 
   onPressPost = () => {
@@ -78,17 +98,17 @@ class PostMain extends React.Component {
       );
 
     } else {
-      ItemListStore.items.unshift({
-        itemId: this.state.inputItemName,
-        itemName: this.state.inputItemName,
-        groupId: this.state.inputGroupKey,
-        state: "POSTED",
-        giver: {
-          id: UserStore.userId,
-          itemDescription: this.state.inputItemDescription,
-          itemPicUrl: this.state.inputItemPicUrl,
-        }
-      })
+      Fire.shared.writeItem(this.state.inputItemName, this.state.inputGroupKey, this.state.inputItemDescription, this.state.inputItemPicUrl, () => {
+        this.setState({
+          inputItemName: '',
+          inputItemDescription: '',
+          inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
+          inputGroupKey: "",
+          errorMsgName: 'Error message placeholder: name',
+          errorMsgDescription: 'Error message placeholder: description',
+        });
+      }, () => {
+      });
       Alert.alert(
         'Item posted!',
         ('You have posted ' + this.state.inputItemName + '!'),
@@ -96,16 +116,16 @@ class PostMain extends React.Component {
           {text: 'OK', onPress: () => this.props.navigation.navigate('PROFILE')},
         ],
       );
-      ChatListStore.chats.unshift({
-        key: '845',
-        userIds: [UserStore.userId, '9'],
-        messages: [{
-          text: 'Hello!! I love this! Can I claim?',
-          timestamp: new Date().getTime(),
-          userId: '9'
-        },
-        ]
-      });
+      // ChatListStore.chats.unshift({
+      //   key: '845',
+      //   userIds: [UserStore.userId, '9'],
+      //   messages: [{
+      //     text: 'Hello!! I love this! Can I claim?',
+      //     timestamp: new Date().getTime(),
+      //     userId: '9'
+      //   },
+      //   ]
+      // });
     }
   }
 
@@ -157,19 +177,6 @@ class PostMain extends React.Component {
   };
 
   render() {
-    let groupResultList = [];
-    GroupListStore.groups.forEach((group) => {
-      if (group['memberList'].indexOf(UserStore.userId) != -1) {
-        tempGroupResult = {
-          name: group['groupName'],
-          key: group['groupId'],
-          picUrl: group['groupPicUrl'],
-        }
-        groupResultList.push(tempGroupResult);
-      }
-    });
-    this.groups = groupResultList;
-
     return (
       <View style={{ flex:1 }}>
         <View>
@@ -177,9 +184,9 @@ class PostMain extends React.Component {
         </View>
         <ScrollView style={{ flex:1 }}>
           <View style={styles.iconContainer}>
-            <View style={styles.icon}> 
+            <View style={styles.icon}>
               <FontAwesome name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
-            </View> 
+            </View>
             <View style={styles.icon}>
               <FontAwesome name={'camera'} color={Colors.dark} onPress={this.takePicture} containerStyle={styles.icon} size={30} />
             </View>
@@ -204,7 +211,7 @@ class PostMain extends React.Component {
             <Text style={styles.label}>Community</Text>
             <Carousel
                 ref={(c) => { this._carousel = c; }}
-                data={groupResultList}
+                data={this.state.groups}
                 renderItem={this.renderItem}
                 sliderWidth={width}
                 itemWidth={width * 0.65}
@@ -302,4 +309,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default view(PostMain);
+export default PostMain;

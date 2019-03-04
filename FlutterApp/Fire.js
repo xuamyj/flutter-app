@@ -222,6 +222,45 @@ class Fire {
     });
   }
 
+  getItem(itemKey, successCallback) {
+    return firebase.database().ref('posts/' + itemKey).on('value', function(snapshot) {
+      successCallback(snapshot.val());
+    });
+  }
+
+  updateItem(itemKey, description, picUrl) {
+    firebase.database().ref('posts/' + itemKey).update({
+      state : "COMPLETE",
+      receiver : {
+        itemDescription: description,
+        itemPicUrl: picUrl,
+      }
+    }).then(function() {
+      successCallback();
+    }).catch(function(error) {
+      errorCallback();
+    });
+  }
+
+  writeItem(name, groupId, description, picUrl) {
+    var newItemKey = firebase.database().ref('posts/').push().key;
+    firebase.database().ref('posts/' + newItemKey).set({
+      itemName: name,
+      groupId: groupId,
+      state: "POSTED",
+      giver: {
+        id: this.uid,
+        itemDescription: description,
+        itemPicUrl: picUrl,
+      },
+      receiver: {
+        id: "",
+        itemDescription: "",
+        itemPicUrl: "",
+      }
+    });
+  }
+
   // ----------------
   // DATABASE: GROUPS
   // ----------------

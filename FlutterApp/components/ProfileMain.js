@@ -7,8 +7,7 @@ import { Metrics, Colors } from './Themes';
 import Stories from './subcomponents/Stories'
 import Treasures from './subcomponents/Treasures'
 
-import { view } from 'react-easy-state'
-import { UserStore } from '../GlobalStore'
+import Fire from '../Fire';
 
 const PostedRoute = () => (
   <Treasures isProfile/>
@@ -45,8 +44,24 @@ class ProfileMain extends React.Component {
   };
 
   componentDidMount() {
-    this.props.navigation.setParams({userName: UserStore.userName});
-    this.props.navigation.setParams({ onPressSettings: this.onPressSettings });
+    this.props.navigation.setParams({ onPressSettings: this.onPressSettings});
+
+    this.callbackGetUserName = Fire.shared.getUserName(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userName: result,
+      }))
+      this.props.navigation.setParams({userName: result})
+    })
+    this.callbackgetUserPicUrl = Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userPicUrl: result
+      }))
+    })
+  }
+
+  componentWillUnmount() {
+    Fire.shared.offUsers(Fire.shared.uid, this.callbackGetUserName);
+    Fire.shared.offUsers(Fire.shared.uid, this.callbackgetUserPicUrl);
   }
 
   state = {
@@ -60,17 +75,21 @@ class ProfileMain extends React.Component {
   };
 
   onPressSettings = () => {
-    this.props.navigation.navigate('Settings', {});
+    this.props.navigation.navigate('Settings', {username: this.props.navigation.state.params.userName});
   }
 
   render() {
+    var userPicUrl;
+    Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
+      userPicUrl = result;
+    });
     return (
       <View style={styles.container}>
           <View style={styles.topSection}>
             <Avatar
             large
             rounded
-            source={{uri: UserStore.userPicUrl}}
+            source={{uri: userPicUrl}}
             style={styles.icon}
             />
           </View>
@@ -122,4 +141,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default view(ProfileMain);
+export default ProfileMain;

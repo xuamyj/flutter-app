@@ -52,8 +52,8 @@ class Stories extends React.Component {
     });
   }
 
-  onPressShareStory = (name, index) => {
-    this.props.navigation.navigate('ShareStory', {name: name, index: index});
+  onPressShareStory = (name, key) => {
+    this.props.navigation.navigate('ShareStory', {name: name, key: key});
   }
 
   createStoryObj = (item, giverObj, receiverObj, groupObj) => {
@@ -97,43 +97,45 @@ class Stories extends React.Component {
       itemResult.forEach((item)=>{
         itemObj = item.val();
         // if it belongs to a group that I am a part of
-        Fire.shared.getGroup(itemObj.groupId, groupObj => {
-          Fire.shared.getUser(itemObj.giver.id, giverObj => {
-            Fire.shared.getUser(itemObj.receiver.id, receiverObj => {
-              let storiesList = [];
-              let filteredStoriesList = [];
-              if (!this.isTreasure(itemObj)){
-                if (this.props.isHome && itemObj.state === "COMPLETE") {
-                  storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
-                } else if (this.props.isGroup
-                  && itemObj.state === "COMPLETE"
-                  && groupObj.groupId === this.props.navigation.state.params.groupId) {
+        if (itemObj.state !== "POSTED") {
+          Fire.shared.getGroup(itemObj.groupId, groupObj => {
+            Fire.shared.getUser(itemObj.giver.id, giverObj => {
+              Fire.shared.getUser(itemObj.receiver.id, receiverObj => {
+                let storiesList = [];
+                let filteredStoriesList = [];
+                if (!this.isTreasure(itemObj)){
+                  if (this.props.isHome && itemObj.state === "COMPLETE") {
                     storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
-                } else if ((this.props.isMineGiven && this.isMineGiven(itemObj))
-                  || (this.props.isMineReceived && this.isMineReceived(itemObj))) {
-                    storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                  } else if (this.props.isGroup
+                    && itemObj.state === "COMPLETE"
+                    && groupObj.groupId === this.props.navigation.state.params.groupId) {
+                      storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                  } else if ((this.props.isMineGiven && this.isMineGiven(itemObj))
+                    || (this.props.isMineReceived && this.isMineReceived(itemObj))) {
+                      storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                  }
                 }
-              }
 
-              let options = [];
-              Fire.shared.getAllGroups(groupResult => {
-                groupResult.forEach((group)=>{
-                  key = group.val().groupName;
-                  label = group.val().groupName;
-                  options.push({key, label});
+                let options = [];
+                Fire.shared.getAllGroups(groupResult => {
+                  groupResult.forEach((group)=>{
+                    key = group.val().groupName;
+                    label = group.val().groupName;
+                    options.push({key, label});
+                  });
                 });
-              });
 
-              filteredStoriesList = storiesList.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
-              filteredStoriesList = filteredStoriesList.filter(createFilter(this.state.picked, GROUP_KEYS_TO_FILTERS));
-              
-              this.setState( previousState => ({
-                stories: filteredStoriesList,
-                options: options
-              }));
+                filteredStoriesList = storiesList.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
+                filteredStoriesList = filteredStoriesList.filter(createFilter(this.state.picked, GROUP_KEYS_TO_FILTERS));
+
+                this.setState( previousState => ({
+                  stories: filteredStoriesList,
+                  options: options
+                }));
+              })
             })
-          })
-        });
+          });
+        }
       })
     })
   }
