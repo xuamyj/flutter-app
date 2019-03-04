@@ -171,6 +171,12 @@ class Fire {
     });
   }
 
+  getUser(userId, successCallback) {
+    return firebase.database().ref('users/' + userId).on('value', function(snapshot) {
+      successCallback(snapshot.val())
+    });
+  }
+
   offUsers(userId, returnedCallback) {
     firebase.database().ref('users/' + userId).off('value', returnedCallback);
   }
@@ -199,6 +205,21 @@ class Fire {
 
   offAllUsers(returnedCallback) {
     firebase.database().ref('users/').off('value', returnedCallback);
+  }
+
+  // ----------------
+  // DATABASE: ITEMS
+  // ----------------
+
+  updateItemDescription(description, userId) {
+    firebase.database().ref('posts/')
+  }
+
+  // get all items
+  getAllItems(successCallback) {
+    return firebase.database().ref('posts/').on('value', function(snapshot) {
+      successCallback(snapshot);
+    });
   }
 
   // ----------------
@@ -232,7 +253,7 @@ class Fire {
 
   getGroup(groupId, successCallback) {
     return firebase.database().ref('groups/' + groupId).on('value', function(snapshot) {
-      successCallback(snapshot);
+      successCallback(snapshot.val());
     });
   }
 
