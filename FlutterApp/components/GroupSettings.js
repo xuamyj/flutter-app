@@ -8,15 +8,14 @@ import RoundButton from './subcomponents/RoundButton';
 
 import Fire from '../Fire';
 
-import { view } from 'react-easy-state'
-import { UserStore, UserListStore, GroupListStore } from '../GlobalStore'
-
 const {height, width} = Dimensions.get('window');
 
 class GroupSettings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      group: {},
+
       inputGroupName: "",
       inputGroupPicUrl: "",
       errorMsgName: 'Error message placeholder: name',
@@ -27,11 +26,13 @@ class GroupSettings extends React.Component {
     }
   }
 
-  onChangeInputGroupName = (inputGroupName) => {this.setState({ inputGroupName: inputGroupName })}
+  onChangeInputGroupName = (inputGroupName) => {
+    this.setState({ inputGroupName: inputGroupName })
+  }
 
   onPressSave = async () => {
     this.setState({
-      tagsSelected: this.props.navigation.state.params.group.memberList,
+      tagsSelected: this.state.group.memberList
     })
     memberList = [];
     this.state.tagsSelected.forEach((tag) => {
@@ -44,8 +45,6 @@ class GroupSettings extends React.Component {
     uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputGroupPicUrl);
     Fire.shared.writeGroupData(this.state.inputGroupName, uploadUrl, memberList, () => {
       this.props.navigation.navigate('GroupsMain');
-    }, () => {
-      // TODO toast
     });
   }
 
@@ -97,11 +96,10 @@ class GroupSettings extends React.Component {
   }
 
   render() {
-    let group = this.props.navigation.state.params.group;
     return (
       <KeyboardAvoidingView style={{ flex:1, backgroundColor: 'transparent' }} behavior="padding" keyboardVerticalOffset={width * 1 / 3 - 2 * Metrics.doubleBaseMargin}>
         <View style={{ backgroundColor: Colors.teal }}>
-            <Image style={styles.imagePreview} source={{uri: group.groupPicUrl}} />
+            <Image style={styles.imagePreview} source={{uri: this.state.inputGroupPicUrl}} />
         </View>
         <ScrollView style={{ flex:1 }}>
           <View style={styles.iconContainer}>
@@ -154,7 +152,14 @@ class GroupSettings extends React.Component {
       this.setState(previousState => ({
         suggestions: resultList,
       }))
-    })
+    });
+    Fire.shared.getGroup(this.props.navigation.state.params.groupId, groupResult => {
+      this.setState({
+        group: groupResult,
+        inputGroupPicUrl: groupResult.groupPicUrl,
+      });
+      console.log(this.state.inputGroupPicUrl   );
+    });
   }
 }
 

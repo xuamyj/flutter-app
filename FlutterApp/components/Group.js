@@ -22,10 +22,11 @@ class Group extends React.Component {
         { key: 'stories', title: 'Stories' },
         { key: 'treasures', title: 'Treasures' },
       ],
+      groupName:"",
     };
 
   static navigationOptions = ({ navigation }) => ({
-    title: (navigation.state.params || {}).group.groupName || 'Group!',
+    title: (navigation.state.params || {}).groupName || 'Group!',
     headerStyle: {backgroundColor: Colors.background, borderBottomWidth: 0, elevation: 0},
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
@@ -47,11 +48,12 @@ class Group extends React.Component {
   });
 
   onPressGroupSettings = () => {
-    this.props.navigation.navigate('GroupSettings', {group: this.props.navigation.state.params.group});
+    this.props.navigation.navigate('GroupSettings', {groupId: this.props.navigation.state.params.groupId});
   }
 
   componentDidMount() {
     this.props.navigation.setParams({ onPressGroupSettings: this.onPressGroupSettings });
+
   }
 
   render() {

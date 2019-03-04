@@ -223,6 +223,19 @@ class Fire {
     });
   }
 
+  getGroupName(groupId, successCallback) {
+    return firebase.database().ref('groups/' + groupId).on('value', function(snapshot) {
+      var groupName = (snapshot.val() && snapshot.val().groupName) || '';
+      successCallback(groupName);
+    });
+  }
+
+  getGroup(groupId, successCallback) {
+    return firebase.database().ref('groups/' + groupId).on('value', function(snapshot) {
+      successCallback(snapshot);
+    });
+  }
+
   offGroups(userId, returnedCallback) {
     firebase.database().ref('groups/').off('value', returnedCallback);
   }

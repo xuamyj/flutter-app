@@ -3,8 +3,7 @@ import { Text, View, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFe
 import { Avatar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 
-import { view } from 'react-easy-state'
-import { UserStore, UserListStore, GroupListStore } from '../../GlobalStore'
+import Fire from '../../Fire';
 
 const {height, width} = Dimensions.get('window');
 
@@ -12,12 +11,11 @@ export default class GroupItem extends React.Component {
 
   constructor(props) {
     super(props);
-    let group = GroupListStore.getGroup(props.group.key);
+    let group = props.group;
     this.state = {
-      name: group.groupName,
-      id: group.groupId,
-      picUrl: group.groupPicUrl,
-      members: group.memberList,
+      name: group.name,
+      id: group.key,
+      picUrl: group.picUrl,
     }
     this.handlePressIn = this.handlePressIn.bind(this);
     this.handlePressOut = this.handlePressOut.bind(this);
@@ -42,8 +40,16 @@ export default class GroupItem extends React.Component {
   }
 
   getUserPicUrl(id) {
-    let user = UserListStore.getUserObject(id);
-    return user.userPicUrl;
+    switch (id) {
+      case 1:
+        return this.props.group.user1;
+      case 2:
+        return this.props.group.user2;
+      case 3:
+        return this.props.group.user3;
+      default:
+        return "";
+    }
   }
 
   getRemainingUsers() {
@@ -63,9 +69,9 @@ export default class GroupItem extends React.Component {
           <Text style={styles.groupName}>{this.state.name}</Text>
           <View style={styles.memberContainer}>
             <View style={styles.groupMembersContainer}>
-              {this.props.group.size > 0 && <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.getUserPicUrl(this.state.members[0])}} /> }
-              {this.props.group.size > 1 && <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.getUserPicUrl(this.state.members[1])}} /> }
-              {this.props.group.size > 2 && <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.getUserPicUrl(this.state.members[2])}} /> }
+              {this.props.group.size > 0 && <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.getUserPicUrl(1)}} /> }
+              {this.props.group.size > 1 && <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.getUserPicUrl(2)}} /> }
+              {this.props.group.size > 2 && <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.getUserPicUrl(3)}} /> }
               {this.props.group.size > 3 && <Avatar containerStyle={styles.propic} medium rounded title={this.getRemainingUsers()} /> }
             </View>
           </View>
