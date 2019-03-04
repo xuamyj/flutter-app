@@ -158,7 +158,7 @@ class GroupSettings extends React.Component {
         group: groupResult,
         inputGroupPicUrl: groupResult.groupPicUrl,
       });
-      console.log(this.state.inputGroupPicUrl   );
+      console.log(this.state.inputGroupPicUrl);
     });
   }
 }
