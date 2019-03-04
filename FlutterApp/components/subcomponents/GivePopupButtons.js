@@ -56,13 +56,14 @@ class GivePopupButtons extends React.Component {
       {this.props.isProfile === false &&
           <View style={styles.buttonContainer}>
             {this.props.isActive === true && this.props.userId === this.props.myUserId &&
-              <RoundButtonSmall
-                containerStyle={styles.button}
-                label={"THIS IS YOUR ITEM"}
-                backgroundColor={Colors.background}
-                color={Colors.lightText}
-                size={14}
-                isActive={false} />
+                <RoundButtonSmall
+                  containerStyle={styles.button}
+                  label="GIVE!"
+                  backgroundColor={Colors.teal}
+                  color={'white'}
+                  size={14}
+                  onPress={this.onToggleSelectFriend}
+                  isActive={this.props.isActive} />
             }
             {this.props.isActive === true && this.props.userId != this.props.myUserId &&
               <RoundButtonSmall

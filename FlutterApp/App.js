@@ -21,6 +21,7 @@ import Login from './components/authentication/Login';
 import Icons from './components/Themes/Icons';
 
 import { Colors, Metrics, Fonts } from './components/Themes'
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
 
 // Import React Navigation
 import {
@@ -92,9 +93,17 @@ const AppNavigator = createBottomTabNavigator({
       }
 
       if (routeName == 'GROUPS') {
-        return <Icons iconName={iconName} size={26} tintColor={tintColor}/>;
-      } else {
-        return <Icons iconName={iconName} size={24} tintColor={tintColor}/>;
+          return <Icons iconName={iconName} size={26} tintColor={tintColor}/>;
+      } else if (routeName == 'POST') {
+          return(
+              <View
+              style={{justifyContent: 'center', alignItems: 'center', backgroundColor: '#D4BEF1', height: 60,  width: 60, borderRadius: 60 / 2, top: -20, position: 'absolute'}}
+              >
+              <Icons iconName={iconName} size={26} tintColor={tintColor}/>
+              </View>
+          );
+      }  else {
+          return <Icons iconName={iconName} size={24} tintColor={tintColor}/>;
       }
     },
   }),
