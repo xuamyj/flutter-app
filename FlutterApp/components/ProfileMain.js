@@ -59,11 +59,6 @@ class ProfileMain extends React.Component {
     })
   }
 
-  componentWillUnmount() {
-    Fire.shared.offUsers(Fire.shared.uid, this.callbackGetUserName);
-    Fire.shared.offUsers(Fire.shared.uid, this.callbackgetUserPicUrl);
-  }
-
   state = {
     index: 0,
     routes: [
