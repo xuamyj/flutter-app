@@ -26,12 +26,13 @@ class Stories extends React.Component {
       picked: '',
       isProfile: this.props.isProfile,
       stories: [],
+      filteredStories: [],
       options: [],
     }
   }
 
   searchUpdated(term) {
-    this.setState({ searchTerm: term })
+    this.updateFilter(term, this.state.picked);
   }
 
   onShow = () => {
@@ -39,17 +40,22 @@ class Stories extends React.Component {
   }
 
   onSelect = (picked) => {
-    this.setState({
-      picked: picked,
-      isModalVisible: false
-    })
+    this.updateFilter(this.state.searchTerm, picked);
   }
 
   onCancel = () => {
+    this.updateFilter(this.state.searchTerm, '');
+  }
+
+  updateFilter(searchTerm, picked) {
+    let filteredStories = this.state.stories.filter(createFilter(picked, GROUP_KEYS_TO_FILTERS));
+    filteredStories = filteredStories.filter(createFilter(searchTerm, KEYS_TO_FILTERS));
     this.setState({
-      picked: '',
-      isModalVisible: false
-    });
+      filteredStories: filteredStories,
+      searchTerm: searchTerm,
+      picked: picked,
+      isModalVisible: false,
+    })
   }
 
   onPressShareStory = (name, key) => {
@@ -66,6 +72,7 @@ class Stories extends React.Component {
       userPicUrl: giverObj.profile_picture,
       key: item.itemId,
       state: item.state,
+      timestamp: item.timestamp,
 
       giveItemDescription: item.giver.itemDescription,
       giveItemPicUrl: item.giver.itemPicUrl,
@@ -93,50 +100,60 @@ class Stories extends React.Component {
   }
 
   componentDidMount() {
-    this.callbackGetAllItems = Fire.shared.getAllItems(itemResult => {
-      itemResult.forEach((item)=>{
+    let itemList = [];
+    Fire.shared.getAllItems(itemResult => {
+      itemResult.forEach((item) => {
         itemObj = item.val();
-        // if it belongs to a group that I am a part of
-        if (itemObj.state !== "POSTED") {
-          Fire.shared.getGroup(itemObj.groupId, groupObj => {
-            Fire.shared.getUser(itemObj.giver.id, giverObj => {
-              Fire.shared.getUser(itemObj.receiver.id, receiverObj => {
-                let storiesList = [];
-                let filteredStoriesList = [];
-                if (!this.isTreasure(itemObj)){
+        itemList.push(itemObj);
+      });
+      Promise.all(itemList).then(() => {
+        let storiesList = [];
+        let filteredStoriesList = [];
+        itemList.forEach((itemObj) => {
+          // if it belongs to a group that I am a part of
+          if (!this.isTreasure(itemObj)) {
+            Fire.shared.getGroup(itemObj.groupId, groupObj => {
+              Fire.shared.getUser(itemObj.giver.id, giverObj => {
+                Fire.shared.getUser(itemObj.receiver.id, receiverObj => {
                   if (this.props.isHome && itemObj.state === "COMPLETE") {
                     storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
                   } else if (this.props.isGroup
                     && itemObj.state === "COMPLETE"
                     && groupObj.groupId === this.props.navigation.state.params.groupId) {
-                      storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                    storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
                   } else if ((this.props.isMineGiven && this.isMineGiven(itemObj))
                     || (this.props.isMineReceived && this.isMineReceived(itemObj))) {
-                      storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                    storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
                   }
-                }
-
-                let options = [];
-                Fire.shared.getAllGroups(groupResult => {
-                  groupResult.forEach((group)=>{
-                    key = group.val().groupName;
-                    label = group.val().groupName;
-                    options.push({key, label});
+                  storiesList = this.sortByTime(storiesList);
+                  let options = [];
+                  this.callbackGetAllGroups = Fire.shared.getAllGroups(groupResult => {
+                    groupResult.forEach((group)=>{
+                      key = group.val().groupName;
+                      label = group.val().groupName;
+                      options.push({key, label});
+                    });
                   });
+
+                  this.setState( previousState => ({
+                    stories: storiesList,
+                    filteredStories: storiesList,
+                    options: options,
+                  }));
                 });
+              });
+            });
+          }
+        })
+      });
+    });
+  }
 
-                filteredStoriesList = storiesList.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
-                filteredStoriesList = filteredStoriesList.filter(createFilter(this.state.picked, GROUP_KEYS_TO_FILTERS));
-
-                this.setState( previousState => ({
-                  stories: filteredStoriesList,
-                  options: options
-                }));
-              })
-            })
-          });
-        }
-      })
+  sortByTime(list) {
+    return list.sort(function(a, b) {
+      let x = a.timestamp;
+      let y = b.timestamp;
+      return ((x < y) ? 1 : ((x > y) ? -1 : 0));
     })
   }
 
@@ -174,7 +191,7 @@ class Stories extends React.Component {
 
         <ScrollView>
           {
-            this.state.stories.map((l, i) => (
+            this.state.filteredStories.map((l, i) => (
               <StoryCard story={l}
                 key={l.key}
                 myId={Fire.shared.uid}

@@ -56,7 +56,7 @@ class Fire {
   on = callback => {
     return firebase.database().ref('messages')
       .limitToLast(20)
-      .on('child_added', snapshot => callback(this.parse(snapshot)));
+      .once('child_added', snapshot => callback(this.parse(snapshot)));
   }
 
   parse = snapshot => {
@@ -157,7 +157,7 @@ class Fire {
 
   // get display name from uid
   getUserName(userId, successCallback) {
-    return firebase.database().ref('users/' + userId).on('value', function(snapshot) {
+    return firebase.database().ref('users/' + userId).once('value', function(snapshot) {
       var userName = (snapshot.val() && snapshot.val().display_name) || '';
       successCallback(userName);
     });
@@ -165,15 +165,16 @@ class Fire {
 
   // get profile picture from uid
   getUserPicUrl(userId, successCallback) {
-    return firebase.database().ref('users/' + userId).on('value', function(snapshot) {
+    return firebase.database().ref('users/' + userId).once('value', function(snapshot) {
       var userPicUrl = (snapshot.val() && snapshot.val().profile_picture) || '';
       successCallback(userPicUrl);
     });
   }
 
   getUser(userId, successCallback) {
-    return firebase.database().ref('users/' + userId).on('value', function(snapshot) {
-      successCallback(snapshot.val())
+    return firebase.database().ref('users/' + userId).once('value').then(function(snapshot) {
+      var user = snapshot.val() || '';
+      successCallback(user);
     });
   }
 
@@ -198,7 +199,7 @@ class Fire {
 
   // get all uid/email pairs
   getAllUsersOn(successCallback) {
-    return firebase.database().ref('users/').on('value', function(snapshot) {
+    return firebase.database().ref('users/').once('value', function(snapshot) {
       successCallback(snapshot);
     });
   }
@@ -217,13 +218,13 @@ class Fire {
 
   // get all items
   getAllItems(successCallback) {
-    return firebase.database().ref('posts/').on('value', function(snapshot) {
+    return firebase.database().ref('posts/').orderByChild('timestamp').once('value').then(function(snapshot) {
       successCallback(snapshot);
     });
   }
 
   getItem(itemKey, successCallback) {
-    return firebase.database().ref('posts/' + itemKey).on('value', function(snapshot) {
+    return firebase.database().ref('posts/' + itemKey).once('value').then(function(snapshot) {
       successCallback(snapshot.val());
     });
   }
@@ -261,6 +262,10 @@ class Fire {
     });
   }
 
+  offAllItems(returnedCallback) {
+    firebase.database().ref('posts/').off('value', returnedCallback);
+  }
+
   // ----------------
   // DATABASE: GROUPS
   // ----------------
@@ -278,26 +283,37 @@ class Fire {
 
   // get all groups for a certain uid
   getAllGroups(successCallback) {
-    return firebase.database().ref('groups/').on('value', function(snapshot) {
+    return firebase.database().ref('groups/').once('value', function(snapshot) {
       successCallback(snapshot);
     });
   }
 
   getGroupName(groupId, successCallback) {
-    return firebase.database().ref('groups/' + groupId).on('value', function(snapshot) {
+    return firebase.database().ref('groups/' + groupId).once('value', function(snapshot) {
       var groupName = (snapshot.val() && snapshot.val().groupName) || '';
       successCallback(groupName);
     });
   }
 
   getGroup(groupId, successCallback) {
-    return firebase.database().ref('groups/' + groupId).on('value', function(snapshot) {
-      successCallback(snapshot.val());
+    return firebase.database().ref('groups/' + groupId).once('value').then(function(snapshot) {
+      var group = snapshot.val() || '';
+      successCallback(group);
     });
   }
 
   offGroups(userId, returnedCallback) {
     firebase.database().ref('groups/').off('value', returnedCallback);
+  }
+
+  // ----------------
+  // DATABASE: MESSAGES
+  // ----------------
+
+  writeChatData(groupName, groupPicUrl, memberList) {
+    var newChatKey = firebase.database().ref('chats/').push().key;
+    firebase.database().ref('chats/' + newGroupKey).set({
+    });
   }
 }
 
