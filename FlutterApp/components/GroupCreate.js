@@ -6,9 +6,7 @@ import { Metrics, Colors } from './Themes';
 import AutoTags from 'react-native-tag-autocomplete';
 import RoundButton from './subcomponents/RoundButton';
 
-import { view } from 'react-easy-state'
-import { UserStore, UserListStore, GroupListStore } from '../GlobalStore'
-
+import Fire from '../Fire';
 
 const {height, width} = Dimensions.get('window');
 
@@ -26,21 +24,21 @@ class GroupCreate extends React.Component {
 
   onChangeInputGroupName = (inputGroupName) => {this.setState({ inputGroupName: inputGroupName })}
 
-  onPressCreate = () => {
+  onPressCreate = async () => {
     memberList = []
     this.state.tagsSelected.forEach((tag) => {
       memberList.push(tag['userId']);
     });
-    if (memberList.indexOf(UserStore.userId) == -1) {
-      memberList.push(UserStore.userId);
+    if (memberList.indexOf(Fire.shared.uid) == -1) {
+      memberList.push(Fire.shared.uid);
     }
 
-    GroupListStore.groups.unshift({
-      groupName: this.state.inputGroupName,
-      groupId: this.state.inputGroupName,
-      memberList,
-      groupPicUrl: this.state.inputGroupPicUrl
-    })
+    uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputGroupPicUrl);
+    let key;
+    Fire.shared.writeGroupData(this.state.inputGroupName, uploadUrl, memberList, keyResult => {
+      key = keyResult;
+    }, () => {
+    });
     Alert.alert(
       'Community created!',
       ('You have created ' + this.state.inputGroupName + '!'),
@@ -48,7 +46,7 @@ class GroupCreate extends React.Component {
         {text: 'OK'},
       ],
     );
-    this.props.navigation.navigate('GroupsMain');
+    this.props.navigation.navigate('Group', { groupId: key, groupName: this.state.inputGroupName});
   }
 
   static navigationOptions = {
@@ -106,12 +104,12 @@ class GroupCreate extends React.Component {
             />
             <Text style={styles.label}>Members</Text>
             <View style = {{marginLeft: '10%', marginVertical: Metrics.baseMargin}}>
-              <AutoTags
-                suggestions={this.state.suggestions}
-                tagsSelected={this.state.tagsSelected}
-                handleAddition={this.handleAddition}
-                handleDelete={this.handleDelete}
-                placeholder="Add a member.." />
+            <AutoTags
+              suggestions={this.state.suggestions}
+              tagsSelected={this.state.tagsSelected}
+              handleAddition={this.handleAddition}
+              handleDelete={this.handleDelete}
+              placeholder="Add a member.." />
             </View>
             <RoundButton
               containerStyle={styles.button}
@@ -127,20 +125,23 @@ class GroupCreate extends React.Component {
   }
 
   componentDidMount() {
-    let resultList = [];
-    UserListStore.users.forEach((user) => {
-      let userObj = {};
-      let userId = user.userId;
-      let userDisplayName = user.displayName;
-      userObj['name'] = userDisplayName;
-      userObj['userId'] = userId;
-      resultList.push(userObj);
-    });
+    Fire.shared.getAllUsers((result) => {
+      // create resultList
+      let resultList = [];
+      result.forEach((childResult) => {
+        let userObj = {}
+        let userId = childResult.key;
+        let userDisplayName = childResult.val()['displayName'];
+        userObj['name'] = userDisplayName;
+        userObj['userId'] = userId;
+        resultList.push(userObj);
+      });
 
-    // update suggestions (resultList)
-    this.setState(previousState => ({
-      suggestions: resultList,
-    }))
+      // update suggestions (resultList)
+      this.setState(previousState => ({
+        suggestions: resultList,
+      }))
+    });
   }
 }
 

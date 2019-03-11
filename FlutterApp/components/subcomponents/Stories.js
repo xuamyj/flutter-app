@@ -70,7 +70,6 @@ class Stories extends React.Component {
       groupName: groupObj.groupName,
       userName: giverObj.display_name,
       userPicUrl: giverObj.profile_picture,
-      key: item.itemId,
       state: item.state,
       timestamp: item.timestamp,
 
@@ -101,14 +100,13 @@ class Stories extends React.Component {
 
   componentDidMount() {
     let itemList = [];
-    Fire.shared.getAllItems(itemResult => {
+    this.callbackGetAllItems = Fire.shared.getAllItems(itemResult => {
       itemResult.forEach((item) => {
         itemObj = item.val();
         itemList.push(itemObj);
-      });
+      })
       Promise.all(itemList).then(() => {
         let storiesList = [];
-        let filteredStoriesList = [];
         itemList.forEach((itemObj) => {
           // if it belongs to a group that I am a part of
           if (!this.isTreasure(itemObj)) {
@@ -119,7 +117,7 @@ class Stories extends React.Component {
                     storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
                   } else if (this.props.isGroup
                     && itemObj.state === "COMPLETE"
-                    && groupObj.groupId === this.props.navigation.state.params.groupId) {
+                    && itemObj.groupId === this.props.navigation.state.params.groupId) {
                     storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
                   } else if ((this.props.isMineGiven && this.isMineGiven(itemObj))
                     || (this.props.isMineReceived && this.isMineReceived(itemObj))) {
@@ -127,7 +125,7 @@ class Stories extends React.Component {
                   }
                   storiesList = this.sortByTime(storiesList);
                   let options = [];
-                  this.callbackGetAllGroups = Fire.shared.getAllGroups(groupResult => {
+                  Fire.shared.getAllGroups(groupResult => {
                     groupResult.forEach((group)=>{
                       key = group.val().groupName;
                       label = group.val().groupName;
@@ -155,6 +153,10 @@ class Stories extends React.Component {
       let y = b.timestamp;
       return ((x < y) ? 1 : ((x > y) ? -1 : 0));
     })
+  }
+
+  componentWillUnmount() {
+    Fire.shared.offItems(this.callbackGetAllItems);
   }
 
   render() {

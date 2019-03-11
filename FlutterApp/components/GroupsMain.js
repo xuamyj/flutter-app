@@ -48,7 +48,7 @@ class GroupsMain extends React.Component {
     this.props.navigation.setParams({ onPressCreateGroup: this.onPressCreateGroup });
 
     this.callbackGetAllGroups = Fire.shared.getAllGroups(groupResult => {
-      Fire.shared.getAllUsersOn(userResult => {
+      Fire.shared.getAllUsers(userResult => {
         // create map {userId: userPicUrl}
         let userPicUrlMap = {};
         userResult.forEach((childResult) => {
@@ -85,7 +85,6 @@ class GroupsMain extends React.Component {
   }
 
   componentWillUnmount() {
-    Fire.shared.offAllUsers(this.callbackGetAllGroups);
     Fire.shared.offGroups(this.callbackGetAllGroups);
   }
 

@@ -8,8 +8,7 @@ import ModalFilterPicker from 'react-native-modal-filter-picker'
 
 import { withNavigation } from 'react-navigation';
 
-import { view } from 'react-easy-state';
-import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../../GlobalStore';
+import Fire from '../../Fire';
 
 const KEYS_TO_FILTERS = ['itemName', 'itemDescription', 'userName', 'recvItemDescription'];
 const GROUP_KEYS_TO_FILTERS = ['groupName']
@@ -22,11 +21,14 @@ class Treasures extends React.Component {
       searchTerm: '',
       picked: '',
       isProfile: this.props.isProfile || false,
+      treasures: [],
+      filteredTreasures: [],
+      options: [],
     }
   }
 
   searchUpdated(term) {
-    this.setState({ searchTerm: term })
+    this.updateFilter(term, this.state.picked);
   }
 
   onShow = () => {
@@ -34,17 +36,22 @@ class Treasures extends React.Component {
   }
 
   onSelect = (picked) => {
-    this.setState({
-      picked: picked,
-      groupFilterModal: false
-    })
+    this.updateFilter(this.state.searchTerm, picked);
   }
 
   onCancel = () => {
+    this.updateFilter(this.state.searchTerm, '');
+  }
+
+  updateFilter(searchTerm, picked) {
+    let filteredTreasures = this.state.treasures.filter(createFilter(picked, GROUP_KEYS_TO_FILTERS));
+    filteredTreasures = filteredTreasures.filter(createFilter(searchTerm, KEYS_TO_FILTERS));
     this.setState({
-      picked: '',
-      groupFilterModal: false
-    });
+      filteredTreasures: filteredTreasures,
+      searchTerm: searchTerm,
+      picked: picked,
+      groupFilterModal: false,
+    })
   }
 
   _toggleModal = () =>
@@ -60,35 +67,36 @@ class Treasures extends React.Component {
     )
   }
 
-  createTreasureObj(item) {
-    let giverObj = UserListStore.getUserObject(item.giver.id);
-    var recvObj = '';
-    if (item.receiver != null && item.receiver.id != '') {
-      recvObj = UserListStore.getUserObject(item.receiver.id);
-    }
-
+  createTreasureObj(item, groupObj, giverObj, recvObj) {
     return {
       itemName: item.itemName,
       itemDescription: item.giver.itemDescription,
       itemPicUrl: item.giver.itemPicUrl,
-      groupName: item.groupId,
-      userName: giverObj.displayName,
-      userId: giverObj.userId,
-      userPicUrl: giverObj.userPicUrl,
-      key: item.itemId,
+      groupName: groupObj.groupName,
+      groupId: item.groupId,
+      userName: giverObj.display_name,
+      userId: item.giver.id,
+      userPicUrl: giverObj.profile_picture,
       isActive: item.state === 'POSTED',
-      recvUserName: (recvObj != '') ? recvObj.displayName : "",
+      timestamp: item.timestamp,
+      recvUserName: recvObj.display_name,
     }
   }
 
   changeObjectState = (key) => {
-    ItemListStore.getItem(key).state = "GIVEN";
-    ItemListStore.items = ItemListStore.items;
+    firebase.database().ref('posts/' + key).update({
+      state : "GIVEN",
+    })
   }
 
   addObjectRecv = (key, receiver) => {
-    ItemListStore.getItem(key).receiver = {id: receiver, itemDescription: "", itemPicUrl: ""};
-    ItemListStore.items = ItemListStore.items;
+    firebase.database().ref('posts/' + key).update({
+      receiver : {
+        id: receiver,
+        itemDescription: "",
+        itemPicUrl: ""
+      },
+    })
   }
 
   giveTreasure = (treasure,receiver) => {
@@ -96,35 +104,64 @@ class Treasures extends React.Component {
     this.addObjectRecv(treasure.key, receiver);
   }
 
+  componentDidMount() {
+    let itemList = [];
+    this.callbackGetAllItems = Fire.shared.getAllItems(itemResult => {
+      itemResult.forEach((item) => {
+        itemObj = item.val();
+        itemList.push(itemObj);
+      });
+      Promise.all(itemList).then(() => {
+        let treasureList = [];
+        itemList.forEach((itemObj) => {
+          Fire.shared.getGroup(itemObj.groupId, groupObj => {
+            Fire.shared.getUser(itemObj.giver.id, giverObj => {
+              Fire.shared.getUser(itemObj.receiver.id, receiverObj => {
+                if (this.props.isHome && itemObj.state === "POSTED") {
+                  treasureList.push(this.createTreasureObj(itemObj, groupObj, giverObj, receiverObj))
+                } else if (this.props.isGroup
+                  && itemObj.groupId === this.props.navigation.state.params.groupId
+                  && itemObj.state === "POSTED") {
+                  treasureList.push(this.createTreasureObj(itemObj, groupObj, giverObj, receiverObj))
+                } else if (this.props.isProfile && itemObj.giver.id === Fire.shared.uid) {
+                  treasureList.push(this.createTreasureObj(itemObj, groupObj, giverObj, receiverObj))
+                }
+                treasureList = this.sortByTime(treasureList);
+                let options = [];
+                Fire.shared.getAllGroups(groupResult => {
+                  groupResult.forEach((group)=>{
+                    key = group.val().groupName;
+                    label = group.val().groupName;
+                    options.push({key, label});
+                  });
+                });
+                this.setState( previousState => ({
+                  treasures: treasureList,
+                  filteredTreasures: treasureList,
+                  options: options
+                }));
+              })
+            })
+          })
+        });
+      })
+    })
+  }
+
+  componentWillUnmount() {
+    Fire.shared.offItems(this.callbackGetAllItems);
+  }
+
+  sortByTime(list) {
+    return list.sort(function(a, b) {
+      let x = a.timestamp;
+      let y = b.timestamp;
+      return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+    })
+  }
 
   render() {
     const { groupFilterModal, picked } = this.state;
-
-    let treasureList = [];
-    ItemListStore.items.forEach((item)=>{
-      let groupObj = GroupListStore.getGroup(item.groupId)
-
-      // if it is a treasure
-      if (item.state === "POSTED" || (this.state.isProfile === true && item.giver.id === UserStore.userId)) {
-        if (this.props.isHome) {
-          treasureList.push(this.createTreasureObj(item))
-        } else if (this.props.isGroup && groupObj.groupId === this.props.navigation.state.params.groupId) {
-          treasureList.push(this.createTreasureObj(item))
-        } else if (this.props.isProfile && item.giver.id === UserStore.userId) {
-          treasureList.push(this.createTreasureObj(item))
-        }
-      }
-    });
-
-    let options = [];
-    GroupListStore.groups.forEach((group)=>{
-      key = group.groupName;
-      label = group.groupName;
-      options.push({key, label});
-    });
-
-    filteredTreasureList = treasureList.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
-    filteredTreasureList = filteredTreasureList.filter(createFilter(this.state.picked, GROUP_KEYS_TO_FILTERS))
 
     return (
       <View style={styles.container}>
@@ -132,7 +169,7 @@ class Treasures extends React.Component {
               visible={groupFilterModal}
               onSelect={this.onSelect}
               onCancel={this.onCancel}
-              options={options}
+              options={this.state.options}
               placeholderText="Filter by group..."
           />
         <View style={styles.searchView}>
@@ -156,9 +193,10 @@ class Treasures extends React.Component {
         </View>
         <FlatList
           style={styles.cardsContainer}
-          data={filteredTreasureList}
+          data={this.state.filteredTreasures}
           renderItem={this.renderItem}
-          numColumns={2} />
+          numColumns={2}
+          extraData={this.state} />
       </View>
     );
   }
@@ -201,4 +239,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withNavigation(view(Treasures));
+export default withNavigation(Treasures);

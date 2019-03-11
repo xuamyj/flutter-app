@@ -92,7 +92,7 @@ class ProfileMain extends React.Component {
         <TabView
           navigationState={this.state}
           renderScene={SceneMap({
-            posted: () => <PostedRoute isProfile={true} />,
+            posted: PostedRoute,
             given: GivenRoute,
             received: ReceivedRoute
           })}

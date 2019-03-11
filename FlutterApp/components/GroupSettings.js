@@ -154,11 +154,10 @@ class GroupSettings extends React.Component {
       }))
     });
     Fire.shared.getGroup(this.props.navigation.state.params.groupId, groupResult => {
-      this.setState({
+      this.setState(previousState => ({
         group: groupResult,
         inputGroupPicUrl: groupResult.groupPicUrl,
-      });
-      console.log(this.state.inputGroupPicUrl);
+      }));
     });
   }
 }

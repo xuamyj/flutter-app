@@ -71,7 +71,7 @@ class Group extends React.Component {
             <TabBar
               {...props}
               indicatorStyle={{backgroundColor: '#49B6BB'}}
-              labelStyle={{color: Colors.dark}}
+              labelStyle={{fontSize: 14, color: Colors.dark}}
               style={{backgroundColor: Colors.background}}
             />
           }

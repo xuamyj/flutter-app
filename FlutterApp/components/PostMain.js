@@ -53,9 +53,10 @@ class PostMain extends React.Component {
           groupResultList.push(tempGroupResult);
         }
       });
+      let key = (groupResultList.length > 0) ? groupResultList[0].key : ''
       this.setState(previousState => ({
         groups: groupResultList,
-        inputGroupKey: groupResultList[0].key,
+        inputGroupKey: key,
       }));
     })
   }
@@ -116,16 +117,6 @@ class PostMain extends React.Component {
           {text: 'OK', onPress: () => this.props.navigation.navigate('PROFILE')},
         ],
       );
-      // ChatListStore.chats.unshift({
-      //   key: '845',
-      //   userIds: [UserStore.userId, '9'],
-      //   messages: [{
-      //     text: 'Hello!! I love this! Can I claim?',
-      //     timestamp: new Date().getTime(),
-      //     userId: '9'
-      //   },
-      //   ]
-      // });
     }
   }
 
