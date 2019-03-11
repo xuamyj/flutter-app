@@ -324,38 +324,45 @@ class Fire {
 
   getChat(chatId, successCallback) {
     return firebase.database().ref('chats/' + chatId).once('value').then(function(snapshot) {
-      successCallback(shapshot);
-    })
-  }
-
-  getMessage(chatKey, messageKey) {
-    firebase.database.ref('chats/' + chatKey + "/messages/" + messageKey).once('value').then(function(snapshot) {
       successCallback(snapshot);
     })
   }
 
-  writeMessageData(chatKey, text, userId) {
-    this.getUserName(userId, userNameResult => {
-      this.getUserPicUrl(userId, userPicUrlResult => {
-        var newMessageKey = firebase.database().ref('chats/' + chatKey).push().key;
-        firebase.database().ref('chats/' + chatKey + "/messages").push({
-          _id: newMessageKey,
-          text: text,
-          createdAt: this.timestamp,
-          user: {
-            _id: userId,
-            name: userNameResult,
-            avatar: userPicUrlResult,
-          }
-        });
-      })
+  getAllMessages(chatId, successCallback) {
+    return firebase.database().ref('chats/' + chatId + "/messages").on('value', function(snapshot) {
+      successCallback(snapshot);
     })
+  }
+
+  getMessage(chatKey, messageKey, successCallback) {
+    firebase.database().ref('chats/' + chatKey + "/messages/" + messageKey).once('value').then(function(snapshot) {
+      successCallback(snapshot);
+    })
+  }
+
+  writeMessageData(chatKey, text, user) {
+    var newMessageKey = firebase.database().ref('chats/' + chatKey + '/messages/').push().key;
+    firebase.database().ref('chats/' + chatKey + "/messages/" + newMessageKey).set({
+      _id: newMessageKey,
+      text: text,
+      createdAt: this.timestamp,
+      user: user,
+    });
+    firebase.database().ref('chats/' + chatKey).update({
+      timestamp: this.timestamp,
+    }).then(function() {
+      successCallback();
+    }).catch(function(error) {
+      errorCallback();
+    });
+    return newMessageKey;
   }
 
   writeChatData(userIds) {
     var newChatKey = firebase.database().ref('chats/').push().key;
     firebase.database().ref('chats/' + newChatKey).set({
       userIds: userIds,
+      timestamp: this.timestamp,
     });
     return newChatKey;
   }
