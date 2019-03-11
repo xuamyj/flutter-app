@@ -64,7 +64,6 @@ class Treasures extends React.Component {
   }
 
   createTreasureObj(item, groupObj, giverObj, recvObj) {
-    console.log(item);
     return {
       itemName: item.itemName,
       itemDescription: item.giver.itemDescription,
@@ -159,8 +158,8 @@ class Treasures extends React.Component {
   render() {
     const { groupFilterModal, picked } = this.state;
 
-    let filteredTreasures = this.state.treasures.filter(createFilter(picked, GROUP_KEYS_TO_FILTERS));
-    filteredTreasures = filteredTreasures.filter(createFilter(searchTerm, KEYS_TO_FILTERS));
+    let filteredTreasures = this.state.treasures.filter(createFilter(this.state.picked, GROUP_KEYS_TO_FILTERS));
+    filteredTreasures = filteredTreasures.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
 
     return (
       <View style={styles.container}>

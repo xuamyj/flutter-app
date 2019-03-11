@@ -12,6 +12,7 @@ const {height, width} = Dimensions.get('window');
 
 class Settings extends React.Component {
   state = {
+    userName: this.props.navigation.state.params.username,
     inputName: '',
     inputPicUrl: '',
     errorMsg: 'Error message placeholder',
@@ -116,7 +117,7 @@ class Settings extends React.Component {
                 <Icon name={'edit'} color={Colors.dark} onPress={this.onPressCamera} containerStyle={styles.icon} />
               </View>
             </View>
-            <Text style={styles.text}>{this.props.navigation.state.params.username}</Text>
+            <Text style={styles.text}>{this.state.userName}</Text>
           </View>
           <Text style={styles.label}>Change display name</Text>
           <TextInput

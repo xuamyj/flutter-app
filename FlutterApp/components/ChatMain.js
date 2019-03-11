@@ -19,9 +19,7 @@ class ChatMain extends React.Component {
   }
 
   componentDidMount() {
-    this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
-      this.updateChatList();
-    });
+    this.updateChatList();
   }
 
   searchUpdated = (term) => {
@@ -90,7 +88,6 @@ class ChatMain extends React.Component {
   };
 
   renderChat = ({item}) => {
-    console.log(item);
     return (
       <TouchableOpacity onPress={() => this.onPressChat(item)}>
         <ChatItem chat={item}/>
