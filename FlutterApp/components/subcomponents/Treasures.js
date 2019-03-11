@@ -22,13 +22,14 @@ class Treasures extends React.Component {
       picked: '',
       isProfile: this.props.isProfile || false,
       treasures: [],
-      filteredTreasures: [],
       options: [],
     }
   }
 
   searchUpdated(term) {
-    this.updateFilter(term, this.state.picked);
+    this.setState({
+      searchTerm: searchTerm,
+    })
   }
 
   onShow = () => {
@@ -36,20 +37,15 @@ class Treasures extends React.Component {
   }
 
   onSelect = (picked) => {
-    this.updateFilter(this.state.searchTerm, picked);
+    this.setState({
+      picked: picked,
+      groupFilterModal: false,
+    })
   }
 
   onCancel = () => {
-    this.updateFilter(this.state.searchTerm, '');
-  }
-
-  updateFilter(searchTerm, picked) {
-    let filteredTreasures = this.state.treasures.filter(createFilter(picked, GROUP_KEYS_TO_FILTERS));
-    filteredTreasures = filteredTreasures.filter(createFilter(searchTerm, KEYS_TO_FILTERS));
     this.setState({
-      filteredTreasures: filteredTreasures,
-      searchTerm: searchTerm,
-      picked: picked,
+      picked: '',
       groupFilterModal: false,
     })
   }
@@ -68,6 +64,7 @@ class Treasures extends React.Component {
   }
 
   createTreasureObj(item, groupObj, giverObj, recvObj) {
+    console.log(item);
     return {
       itemName: item.itemName,
       itemDescription: item.giver.itemDescription,
@@ -77,7 +74,7 @@ class Treasures extends React.Component {
       userName: giverObj.display_name,
       userId: item.giver.id,
       userPicUrl: giverObj.profile_picture,
-      isActive: item.state === 'POSTED',
+      isActive: item.state === "POSTED",
       timestamp: item.timestamp,
       recvUserName: recvObj.display_name,
     }
@@ -137,7 +134,6 @@ class Treasures extends React.Component {
                 });
                 this.setState( previousState => ({
                   treasures: treasureList,
-                  filteredTreasures: treasureList,
                   options: options
                 }));
               })
@@ -162,6 +158,9 @@ class Treasures extends React.Component {
 
   render() {
     const { groupFilterModal, picked } = this.state;
+
+    let filteredTreasures = this.state.treasures.filter(createFilter(picked, GROUP_KEYS_TO_FILTERS));
+    filteredTreasures = filteredTreasures.filter(createFilter(searchTerm, KEYS_TO_FILTERS));
 
     return (
       <View style={styles.container}>
@@ -193,7 +192,7 @@ class Treasures extends React.Component {
         </View>
         <FlatList
           style={styles.cardsContainer}
-          data={this.state.filteredTreasures}
+          data={filteredTreasures}
           renderItem={this.renderItem}
           numColumns={2}
           extraData={this.state} />

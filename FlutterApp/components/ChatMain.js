@@ -14,7 +14,6 @@ class ChatMain extends React.Component {
     super(props);
     this.state = {
       chatList: [],
-      filteredChatList: [],
       searchTerm: '',
     }
   }
@@ -26,10 +25,8 @@ class ChatMain extends React.Component {
   }
 
   searchUpdated = (term) => {
-    var filteredChatList = this.state.chatList.filter(createFilter(this.state.searchTerm, ['otherUserName']));
     this.setState({
       searchTerm: term,
-      filteredChatList: filteredChatList,
     });
   }
 
@@ -118,12 +115,13 @@ class ChatMain extends React.Component {
   }
 
   render() {
+    var filteredChatList = this.state.chatList.filter(createFilter(this.state.searchTerm, ['otherUserName']));
     return (
       <View style={styles.container}>
         <Search searchUpdated={this.searchUpdated}/>
         <ScrollView>
             <FlatList
-              data={this.state.filteredChatList}
+              data={filteredChatList}
               renderItem={this.renderChat}
               extraData={this.state}
             />

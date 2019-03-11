@@ -26,13 +26,14 @@ class Stories extends React.Component {
       picked: '',
       isProfile: this.props.isProfile,
       stories: [],
-      filteredStories: [],
       options: [],
     }
   }
 
   searchUpdated(term) {
-    this.updateFilter(term, this.state.picked);
+    this.setState({
+      searchTerm: searchTerm,
+    })
   }
 
   onShow = () => {
@@ -40,20 +41,15 @@ class Stories extends React.Component {
   }
 
   onSelect = (picked) => {
-    this.updateFilter(this.state.searchTerm, picked);
+    this.setState({
+      picked: picked,
+      isModalVisible: false,
+    })
   }
 
   onCancel = () => {
-    this.updateFilter(this.state.searchTerm, '');
-  }
-
-  updateFilter(searchTerm, picked) {
-    let filteredStories = this.state.stories.filter(createFilter(picked, GROUP_KEYS_TO_FILTERS));
-    filteredStories = filteredStories.filter(createFilter(searchTerm, KEYS_TO_FILTERS));
     this.setState({
-      filteredStories: filteredStories,
-      searchTerm: searchTerm,
-      picked: picked,
+      picked: '',
       isModalVisible: false,
     })
   }
@@ -135,7 +131,6 @@ class Stories extends React.Component {
 
                   this.setState( previousState => ({
                     stories: storiesList,
-                    filteredStories: storiesList,
                     options: options,
                   }));
                 });
@@ -161,6 +156,9 @@ class Stories extends React.Component {
 
   render() {
     const { isModalVisible, picked } = this.state;
+
+    let filteredStories = this.state.stories.filter(createFilter(this.state.picked, GROUP_KEYS_TO_FILTERS));
+    filteredStories = filteredStories.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
 
     return (
       <View style={styles.container}>
@@ -193,7 +191,7 @@ class Stories extends React.Component {
 
         <ScrollView>
           {
-            this.state.filteredStories.map((l, i) => (
+            filteredStories.map((l, i) => (
               <StoryCard story={l}
                 key={l.key}
                 myId={Fire.shared.uid}
