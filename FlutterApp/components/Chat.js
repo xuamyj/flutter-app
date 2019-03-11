@@ -7,21 +7,17 @@ import { withNavigation } from 'react-navigation';
 
 import Fire from '../Fire';
 
-import { view } from 'react-easy-state';
-import { ChatListStore, UserListStore, UserStore } from '../GlobalStore';
-
 class Chat extends Component {
 
   static navigationOptions = ({ navigation }) => ({
-    title: (navigation.state.params || {}).chat.otherUserName || 'Chat!',
+    title: (navigation.state.params || {}).otherName || 'Chat!',
     headerStyle: {backgroundColor: Colors.background},
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
       color: Colors.dark,
     },
-    headerRight: (navigation.state.params.chat.messages.length != 0
-      && navigation.state.params.chat.messages[0].userId != UserStore.userId) ? (
+    headerRight: (true) ? (
       <View style={styles.headerButton}>
         <TouchableOpacity onPress={() => navigation.navigate('PROFILE')}>
           <Icons
@@ -40,41 +36,48 @@ class Chat extends Component {
     messages: [],
   };
 
+  componentDidMount() {
+    this.callbackGetUserName = Fire.shared.getUserName(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userName: result,
+      }))
+    })
+    this.callbackgetUserPicUrl = Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userPicUrl: result
+      }))
+    })
+    this.updateMessageList();
+  }
+
+  updateMessageList = () => {
+    messageList = [];
+    Fire.shared.getAllMessages(this.props.navigation.state.params.chatKey, messagesResult => {
+      messagesResult.forEach(message => {
+        messageList.unshift(message.val());
+      })
+      this.setState(previousState => ({
+        messages: messageList,
+      }))
+    })
+  }
+
   get user() {
     // Return our name and our UID for GiftedChat to parse
     return {
-      name: UserListStore.getUserObject(UserStore.userId).displayName,
-      _id: UserStore.userId,
+      name: this.state.userName,
+      _id: Fire.shared.uid,
+      avatar: this.state.userPicUrl,
     };
   }
 
   onSend = (messages = []) => {
-    var chat = ChatListStore.getChat(this.props.navigation.state.params.chat.key);
-    var timestamp = new Date();
-    chat.messages.push({
-      text: messages[0].text,
-      timestamp: timestamp.getTime(),
-      userId: this.user._id,
-    });
-    this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }));
+    let chatKey = this.props.navigation.state.params.chatKey;
+    Fire.shared.writeMessageData(chatKey, messages[0].text, this.user);
+    this.updateMessageList();
     if (this.props.navigation.state.params.needUpdate != false) {
       this.props.navigation.state.params.updateChatList();
     }
-  }
-
-  createMessageObj = (message) => {
-    return({
-      _id: this.user._id + "0" + message.userId + message.text.length,
-      text: message.text,
-      createdAt: message.timestamp,
-      user: {
-        _id: message.userId,
-        name: UserListStore.getUserObject(message.userId).displayName,
-        avatar: UserListStore.getUserObject(message.userId).userPicUrl,
-      }
-    })
   }
 
   render() {
@@ -87,21 +90,6 @@ class Chat extends Component {
       />
       </View>
     );
-  }
-
-  componentDidMount() {
-    // Fire.shared.on(message =>
-    //   this.setState(previousState => ({
-    //     messages: GiftedChat.append(previousState.messages, message),
-    //   }))
-    // );
-    var messageList = this.state.messages;
-    this.props.navigation.state.params.chat.messages.forEach((message) => {
-      messageList.unshift(this.createMessageObj(message));
-    });
-    this.setState({
-      messages: messageList,
-    })
   }
 
   componentWillUnmount() {

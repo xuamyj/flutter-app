@@ -12,9 +12,7 @@ import GivePopupButtons from '../subcomponents/GivePopupButtons';
 import GiveSelectFriendPopup from '../subcomponents/GiveSelectFriendPopup';
 import { withNavigation } from 'react-navigation';
 
-import { view } from 'react-easy-state';
-import { UserStore, UserListStore, ChatListStore } from '../../GlobalStore';
-
+import Fire from '../../Fire';
 
 const {height, width} = Dimensions.get('window');
 
@@ -25,7 +23,20 @@ class TreasurePopup extends React.Component {
     this.state = {
       selectFriendToggle: false,
       completionScreenViewed: false,
+      chats: [],
     }
+  }
+
+  componentDidMount() {
+    chatList = [];
+    Fire.shared.getAllChats(chatsResult => {
+      chatsResult.forEach(chat => {
+        chatList.push({key: chat.key, userIds: chat.val().userIds});
+      })
+      this.setState(previousState => ({
+        chats: chatList,
+      }))
+    })
   }
 
   _toggleModal = () => {
@@ -36,30 +47,27 @@ class TreasurePopup extends React.Component {
   }
 
   onPressMessage = () => {
+
     var chatObj = {
-      myUserId: UserStore.userId,
+      myUserId: Fire.shared.uid,
       otherUserId: this.props.treasure.userId,
-      otherUserName: UserListStore.getUserObject(this.props.treasure.userId).displayName,
-      messages: [],
-      key: UserStore.userId + "0" + this.props.treasure.userId,
+      otherUserName: this.props.treasure.userName,
+      key: "",
     }
 
     var chatExists = false;
-    ChatListStore.chats.forEach((chat) => {
-      if (chatExists === false && chat.key === chatObj.key) {
-        chatObj.messages = chat.messages;
+    this.state.chats.forEach((chat) => {
+      if (chatExists === false
+          && chat.userIds.includes(chatObj.myUserId)
+          && chat.userIds.includes(chatObj.otherUserId)) {
+        chatObj.key = chat.key;
         chatExists = true;
       }
     });
     if (chatExists === false) {
-      ChatListStore.chats.push({
-        key: chatObj.key,
-        userIds: [chatObj.myUserId, chatObj.otherUserId],
-        messages: chatObj.messages,
-      });
+      let chatKey = Fire.shared.writeChatData([chatObj.myUserId, chatObj.otherUserId]);
     }
-
-    this.props.navigation.navigate('Chat', { chat: chatObj, needUpdate: false });
+    this.props.navigation.navigate('Chat', { chatKey: chatObj.key, otherName: chatObj.otherUserName, needUpdate: false });
     this._toggleModal();
   }
 
@@ -114,7 +122,7 @@ class TreasurePopup extends React.Component {
               onToggleSelectFriend={this.onToggleSelectFriend}
               userName={userName}
               userId={userId}
-              myUserId={UserStore.userId}
+              myUserId={Fire.shared.uid}
               recvUserName={recvUserName}
               />
             </View>

@@ -5,33 +5,18 @@ import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
 import RoundButton from './subcomponents/RoundButton';
 
-
-import { view } from 'react-easy-state'
-import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../GlobalStore'
+import Fire from '../Fire'
 
 const {height, width} = Dimensions.get('window');
 
 class ShareStory extends React.Component {
   state = {
     name: (this.props.navigation.state.params || {}).name,
-    index: (this.props.navigation.state.params || {}).index,
+    key: (this.props.navigation.state.params || {}).key,
     inputItemDescription: '',
     inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
     errorMsgName: 'Error message placeholder: name',
     errorMsgDescription: 'Error message placeholder: description',
-  }
-
-  componentDidMount() {
-    this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
-      this.setState({
-        name: (this.props.navigation.state.params || {}).name,
-        index: (this.props.navigation.state.params || {}).index,
-        inputItemDescription: '',
-        inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
-        errorMsgName: 'Error message placeholder: name',
-        errorMsgDescription: 'Error message placeholder: description',
-      });
-    });
   }
 
   onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })}
@@ -61,21 +46,27 @@ class ShareStory extends React.Component {
       );
 
     } else {
-      let i = this.state.index
-      ItemListStore.items[i].state = "COMPLETE";
-      ItemListStore.items[i].receiver.itemDescription = this.state.inputItemDescription;
-      ItemListStore.items[i].receiver.itemPicUrl = this.state.inputItemPicUrl;
 
-      itemObj = ItemListStore.items.pop();
-      ItemListStore.items.unshift(itemObj);
-
-      Alert.alert(
-        'Story shared!',
-        ('You have shared your story with ' + this.state.name.substring(3) + '!'),
-        [
-          {text: 'OK', onPress: () => this.props.navigation.navigate('Profile')},
-        ],
-      );
+      Fire.shared.updateItem(this.state.key, this.state.inputItemDescription, this.state.inputItemPicUrl, () => {
+        this.setState({
+          name: (this.props.navigation.state.params || {}).name,
+          key: (this.props.navigation.state.params || {}).key,
+          inputItemDescription: '',
+          inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
+          errorMsgName: 'Error message placeholder: name',
+          errorMsgDescription: 'Error message placeholder: description',
+        });
+        // TODO toast
+      }, () => {
+        // TODO toast
+      });
+        Alert.alert(
+          'Story shared!',
+          ('You have shared your story with ' + this.state.name.substring(3) + '!'),
+          [
+            {text: 'OK', onPress: () => this.props.navigation.navigate('Profile')},
+          ],
+        );
     }
   }
 
@@ -211,4 +202,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default view(ShareStory);
+export default ShareStory;

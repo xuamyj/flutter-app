@@ -5,18 +5,18 @@ import { Metrics, Colors } from '../Themes';
 
 const {height, width} = Dimensions.get('window');
 
-import { view } from 'react-easy-state';
-import { ChatListStore, UserListStore } from '../../GlobalStore';
+import Fire from '../../Fire';
 
 export default class ChatItem extends React.Component {
+
   render() {
-    var otherUser = UserListStore.getUserObject(this.props.chat.otherUserId);
-    var otherUserPicUrl = otherUser.userPicUrl;
-    var otherUserName = otherUser.displayName;
-    var lastMessage = this.props.chat.messages.length > 0 ? this.props.chat.messages[this.props.chat.messages.length - 1] : 0;
+    var otherUserPicUrl = this.props.chat.otherUserPicUrl;
+    var otherUserName = this.props.chat.otherUserName;
+    console.log(this.props.chat.messages);
+    var lastMessage = this.props.chat.messages[0];
 
     var moment = require('moment');
-    var formattedDate = moment(new Date(lastMessage.timestamp)).format("MMM D");
+    var formattedDate = moment(new Date(lastMessage.createdAt)).format("MMM D");
 
     return (
       <View style={styles.container}>

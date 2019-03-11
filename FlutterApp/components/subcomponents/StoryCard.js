@@ -44,8 +44,8 @@ class StoryCard extends React.Component {
     });
   }
 
-  onPressShareStory = (name, index) => {
-    this.props.onPressShareStory(name, index);
+  onPressShareStory = (name, key) => {
+    this.props.onPressShareStory(name, key);
   }
 
   render() {
@@ -118,7 +118,7 @@ class StoryCard extends React.Component {
                   color={'white'}
                   size={14}
                   isActive={true}
-                  onPress={() => {this.onPressShareStory(itemName, this.props.index)}}/>
+                  onPress={() => {this.onPressShareStory(itemName, this.props.key)}}/>
               </View>
             }
           </View>

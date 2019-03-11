@@ -7,10 +7,9 @@ import StoryCard from './StoryCard';
 import SearchInput, { createFilter } from 'react-native-search-filter';
 import { withNavigation } from 'react-navigation';
 import Modal from 'react-native-modal';
-import ModalFilterPicker from 'react-native-modal-filter-picker'
+import ModalFilterPicker from 'react-native-modal-filter-picker';
 
-import { view } from 'react-easy-state'
-import { ItemListStore, UserStore, UserListStore, GroupListStore } from '../../GlobalStore'
+import Fire from '../../Fire';
 
 const KEYS_TO_FILTERS = ['itemName', 'itemDescription', 'userName', 'recvItemDescription'];
 const GROUP_KEYS_TO_FILTERS = ['groupName']
@@ -26,21 +25,15 @@ class Stories extends React.Component {
       searchTerm: '',
       picked: '',
       isProfile: this.props.isProfile,
+      stories: [],
+      options: [],
     }
   }
 
   searchUpdated(term) {
-    this.setState({ searchTerm: term })
-  }
-
-  changeRecvDescription = ({description, index}) => {
-    ItemListStore.items[index].receiver.itemDescription = description;
-    ItemListStore.items = ItemListStore.items;
-  }
-
-  changeRecvImage = ({url, index}) => {
-    ItemListStore.items[index].receiver.itemPicUrl = url;
-    ItemListStore.items = ItemListStore.items;
+    this.setState({
+      searchTerm: searchTerm,
+    })
   }
 
   onShow = () => {
@@ -50,46 +43,43 @@ class Stories extends React.Component {
   onSelect = (picked) => {
     this.setState({
       picked: picked,
-      isModalVisible: false
+      isModalVisible: false,
     })
   }
 
   onCancel = () => {
     this.setState({
       picked: '',
-      isModalVisible: false
-    });
+      isModalVisible: false,
+    })
   }
 
-  onPressShareStory = (name, index) => {
-    this.props.navigation.navigate('ShareStory', {name: name, index: index});
+  onPressShareStory = (name, key) => {
+    this.props.navigation.navigate('ShareStory', {name: name, key: key});
   }
 
-  createStoryObj = (item) => {
-    let giverObj = UserListStore.getUserObject(item.giver.id);
-    let receiverObj = UserListStore.getUserObject(item.receiver.id);
-
+  createStoryObj = (item, giverObj, receiverObj, groupObj) => {
     return {
       itemName: item.itemName,
       itemDescription: item.giver.itemDescription,
       itemPicUrl: item.giver.itemPicUrl,
-      groupName: item.groupId,
-      userName: giverObj.displayName,
-      userPicUrl: giverObj.userPicUrl,
-      key: item.itemId,
+      groupName: groupObj.groupName,
+      userName: giverObj.display_name,
+      userPicUrl: giverObj.profile_picture,
       state: item.state,
+      timestamp: item.timestamp,
 
       giveItemDescription: item.giver.itemDescription,
       giveItemPicUrl: item.giver.itemPicUrl,
-      giveUserName: giverObj.displayName,
-      giveUserPicUrl: giverObj.userPicUrl,
-      giveUserId: giverObj.userId,
+      giveUserName: giverObj.display_name,
+      giveUserPicUrl: giverObj.profile_picture,
+      giveUserId: item.giver.id,
 
       recvItemDescription: item.receiver.itemDescription,
       recvItemPicUrl: item.receiver.itemPicUrl,
-      recvUserName: receiverObj.displayName,
-      recvUserPicUrl: receiverObj.userPicUrl,
-      recvUserId: receiverObj.userId,
+      recvUserName: receiverObj.display_name,
+      recvUserPicUrl: receiverObj.profile_picture,
+      recvUserId: item.receiver.id,
     };
   }
 
@@ -98,43 +88,77 @@ class Stories extends React.Component {
   }
 
   isMineGiven = (item) => {
-    return item.giver.id === UserStore.userId;
+    return item.giver.id === Fire.shared.uid;
   }
   isMineReceived = (item) => {
-    return item.receiver.id === UserStore.userId;
+    return item.receiver.id === Fire.shared.uid;
+  }
+
+  componentDidMount() {
+    let itemList = [];
+    this.callbackGetAllItems = Fire.shared.getAllItems(itemResult => {
+      itemResult.forEach((item) => {
+        itemObj = item.val();
+        itemList.push(itemObj);
+      })
+      Promise.all(itemList).then(() => {
+        let storiesList = [];
+        itemList.forEach((itemObj) => {
+          // if it belongs to a group that I am a part of
+          if (!this.isTreasure(itemObj)) {
+            Fire.shared.getGroup(itemObj.groupId, groupObj => {
+              Fire.shared.getUser(itemObj.giver.id, giverObj => {
+                Fire.shared.getUser(itemObj.receiver.id, receiverObj => {
+                  if (this.props.isHome && itemObj.state === "COMPLETE") {
+                    storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                  } else if (this.props.isGroup
+                    && itemObj.state === "COMPLETE"
+                    && itemObj.groupId === this.props.navigation.state.params.groupId) {
+                    storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                  } else if ((this.props.isMineGiven && this.isMineGiven(itemObj))
+                    || (this.props.isMineReceived && this.isMineReceived(itemObj))) {
+                    storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                  }
+                  storiesList = this.sortByTime(storiesList);
+                  let options = [];
+                  Fire.shared.getAllGroups(groupResult => {
+                    groupResult.forEach((group)=>{
+                      key = group.val().groupName;
+                      label = group.val().groupName;
+                      options.push({key, label});
+                    });
+                  });
+
+                  this.setState( previousState => ({
+                    stories: storiesList,
+                    options: options,
+                  }));
+                });
+              });
+            });
+          }
+        })
+      });
+    });
+  }
+
+  sortByTime(list) {
+    return list.sort(function(a, b) {
+      let x = a.timestamp;
+      let y = b.timestamp;
+      return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+    })
+  }
+
+  componentWillUnmount() {
+    Fire.shared.offItems(this.callbackGetAllItems);
   }
 
   render() {
     const { isModalVisible, picked } = this.state;
 
-    let storiesList = [];
-    ItemListStore.items.forEach((item)=>{
-      // if it belongs to a group that I am a part of
-      let groupObj = GroupListStore.getGroup(item.groupId)
-
-      if (!this.isTreasure(item)){
-        if (this.props.isHome && item.state === "COMPLETE") {
-          storiesList.push(this.createStoryObj(item));
-        } else if (this.props.isGroup
-          && item.state === "COMPLETE"
-          && groupObj.groupId === this.props.navigation.state.params.group.groupId) {
-          storiesList.push(this.createStoryObj(item));
-        } else if ((this.props.isMineGiven && this.isMineGiven(item))
-          || (this.props.isMineReceived && this.isMineReceived(item))) {
-          storiesList.push(this.createStoryObj(item));
-        }
-      }
-    })
-
-    let options = [];
-    GroupListStore.groups.forEach((group)=>{
-      key = group.groupName;
-      label = group.groupName;
-      options.push({key, label});
-    });
-
-    filteredStoriesList = storiesList.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS))
-    filteredStoriesList = filteredStoriesList.filter(createFilter(this.state.picked, GROUP_KEYS_TO_FILTERS))
+    let filteredStories = this.state.stories.filter(createFilter(this.state.picked, GROUP_KEYS_TO_FILTERS));
+    filteredStories = filteredStories.filter(createFilter(this.state.searchTerm, KEYS_TO_FILTERS));
 
     return (
       <View style={styles.container}>
@@ -142,7 +166,7 @@ class Stories extends React.Component {
           visible={isModalVisible}
           onSelect={this.onSelect}
           onCancel={this.onCancel}
-          options={options}
+          options={this.state.options}
           placeholderText="Filter by group..."
         />
         <View style={styles.searchView}>
@@ -167,13 +191,11 @@ class Stories extends React.Component {
 
         <ScrollView>
           {
-            filteredStoriesList.map((l, i) => (
+            filteredStories.map((l, i) => (
               <StoryCard story={l}
                 key={l.key}
-                myId={UserStore.userId}
+                myId={Fire.shared.uid}
                 index={i}
-                changeRecvDescription={this.changeRecvDescription}
-                changeRecvImage={this.changeRecvImage}
                 onPressShareStory={this.onPressShareStory}
                 isProfile={this.state.isProfile}/>
             ))
@@ -275,4 +297,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default withNavigation(view(Stories));
+export default withNavigation(Stories);

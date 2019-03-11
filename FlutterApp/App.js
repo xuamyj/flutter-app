@@ -21,6 +21,7 @@ import Login from './components/authentication/Login';
 import Icons from './components/Themes/Icons';
 
 import { Colors, Metrics, Fonts } from './components/Themes'
+import { TouchableOpacity, View, StyleSheet } from 'react-native';
 
 // Import React Navigation
 import {
@@ -76,7 +77,7 @@ const AppNavigator = createBottomTabNavigator({
   PROFILE: ProfileStack,
 }, {
   defaultNavigationOptions: ({ navigation }) => ({
-    tabBarIcon: ({tintColor}) => {
+    tabBarIcon: ({tintColor, focused}) => {
       const { routeName } = navigation.state;
       let iconName;
       if (routeName === 'HOME') {
@@ -92,9 +93,25 @@ const AppNavigator = createBottomTabNavigator({
       }
 
       if (routeName == 'GROUPS') {
-        return <Icons iconName={iconName} size={26} tintColor={tintColor}/>;
-      } else {
-        return <Icons iconName={iconName} size={24} tintColor={tintColor}/>;
+          return <Icons iconName={iconName} size={26} tintColor={tintColor}/>;
+      } else if (routeName == 'POST') {
+        if (focused === false) {
+          return(
+              <View
+                style={{justifyContent: 'center', alignItems: 'center', backgroundColor: '#49B6BB', height: 60,  width: 60, borderRadius: 60 / 2, top: -20, position: 'absolute'}}>
+                <Icons iconName={iconName} size={30} tintColor={'white'}/>
+              </View>
+            )
+        } else {
+          return(
+              <View
+                style={{justifyContent: 'center', alignItems: 'center', backgroundColor: '#9bdadd', height: 60,  width: 60, borderRadius: 60 / 2, top: -20, position: 'absolute'}}>
+                <Icons iconName={iconName} size={30} tintColor={'white'}/>
+              </View>
+            )
+        }
+      }  else {
+          return <Icons iconName={iconName} size={24} tintColor={tintColor}/>;
       }
     },
   }),

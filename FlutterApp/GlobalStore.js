@@ -195,18 +195,6 @@ itemInfo = [
     receiver: null,
 },
 {
-    itemId: '67',
-    itemName: 'Duck carving',
-    state: 'POSTED',
-    groupId: 'Bay Art',
-    giver: {
-        itemDescription: 'My grandpa made this for me. He passed away a few years back and my heart breaks a little bit whenever I see this... If you do take it, please take care of it.',
-        itemPicUrl: 'https://i.etsystatic.com/5423629/r/il/da6804/460149722/il_1140xN.460149722_31i9.jpg',
-        id: '3',
-    },
-    receiver: null,
-},
-{
     itemId: '68',
     itemName: 'Handpainted wave bag',
     state: 'POSTED',
