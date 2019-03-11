@@ -54,8 +54,7 @@ class ProfileMain extends React.Component {
     routes: [
       { key: 'posted', title: 'Posted' },
       { key: 'given', title: 'Given' },
-      { key: 'received', title: "❗️ Received" },
-      //{ key: 'received', title: 'Received' },
+      { key: 'received', title: 'Received' },
     ],
   };
 
@@ -105,8 +104,7 @@ const styles = StyleSheet.create({
   },
   topSection:{
     flexDirection: 'column',
-    paddingBottom: Metrics.smallMargin,
-    paddingTop: -Metrics.smallMargin,
+    padding: Metrics.baseMargin,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: Colors.background,
