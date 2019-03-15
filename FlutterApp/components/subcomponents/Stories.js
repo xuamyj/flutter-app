@@ -12,7 +12,7 @@ import ModalFilterPicker from 'react-native-modal-filter-picker';
 import Fire from '../../Fire';
 
 const KEYS_TO_FILTERS = ['itemName', 'itemDescription', 'userName', 'recvItemDescription'];
-const GROUP_KEYS_TO_FILTERS = ['groupName']
+const GROUP_KEYS_TO_FILTERS = ['groupId']
 
 const {height, width} = Dimensions.get('window');
 
@@ -63,6 +63,7 @@ class Stories extends React.Component {
       itemName: item.itemName,
       itemDescription: item.giver.itemDescription,
       itemPicUrl: item.giver.itemPicUrl,
+      groupId: item.groupId,
       groupName: groupObj.groupName,
       userName: giverObj.display_name,
       userPicUrl: giverObj.profile_picture,
@@ -110,29 +111,33 @@ class Stories extends React.Component {
             Fire.shared.getGroup(itemObj.groupId, groupObj => {
               Fire.shared.getUser(itemObj.giver.id, giverObj => {
                 Fire.shared.getUser(itemObj.receiver.id, receiverObj => {
-                  if (this.props.isHome && itemObj.state === "COMPLETE") {
-                    storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
-                  } else if (this.props.isGroup
-                    && itemObj.state === "COMPLETE"
-                    && itemObj.groupId === this.props.navigation.state.params.groupId) {
-                    storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
-                  } else if ((this.props.isMineGiven && this.isMineGiven(itemObj))
-                    || (this.props.isMineReceived && this.isMineReceived(itemObj))) {
-                    storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                  if (groupObj.memberList.includes(Fire.shared.uid)) {
+                    if (this.props.isHome && itemObj.state === "COMPLETE") {
+                      storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                    } else if (this.props.isGroup
+                      && itemObj.state === "COMPLETE"
+                      && itemObj.groupId === this.props.navigation.state.params.groupId) {
+                      storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                    } else if ((this.props.isMineGiven && this.isMineGiven(itemObj))
+                      || (this.props.isMineReceived && this.isMineReceived(itemObj))) {
+                      storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                    }
                   }
                   storiesList = this.sortByTime(storiesList);
                   let options = [];
-                  Fire.shared.getAllGroups(groupResult => {
+                  this.callbackGetAllGroups = Fire.shared.getAllGroups(groupResult => {
                     groupResult.forEach((group)=>{
-                      key = group.val().groupName;
-                      label = group.val().groupName;
-                      options.push({key, label});
+                      if (group.val().memberList.includes(Fire.shared.uid)) {
+                        key = group.key;
+                        label = group.val().groupName;
+                        options.push({key, label});
+                      }
                     });
-                  });
-                  this.setState( previousState => ({
-                    stories: storiesList,
-                    options: options,
-                  }));
+                    this.setState( previousState => ({
+                      stories: storiesList,
+                      options: options
+                    }));
+                  })
                 });
               });
             });
@@ -144,6 +149,7 @@ class Stories extends React.Component {
 
   componentWillUnmount() {
     Fire.shared.offItems(this.callbackGetAllItems);
+    Fire.shared.offGroups(this.callbackGetAllGroups);
   }
 
   sortByTime(list) {
@@ -152,10 +158,6 @@ class Stories extends React.Component {
       let y = b.timestamp;
       return ((x < y) ? 1 : ((x > y) ? -1 : 0));
     })
-  }
-
-  componentWillUnmount() {
-    Fire.shared.offItems(this.callbackGetAllItems);
   }
 
   render() {

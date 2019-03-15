@@ -11,7 +11,7 @@ import { withNavigation } from 'react-navigation';
 import Fire from '../../Fire';
 
 const KEYS_TO_FILTERS = ['itemName', 'itemDescription', 'userName', 'recvItemDescription'];
-const GROUP_KEYS_TO_FILTERS = ['groupName']
+const GROUP_KEYS_TO_FILTERS = ['groupId']
 
 class Treasures extends React.Component {
    constructor(props) {
@@ -114,28 +114,32 @@ class Treasures extends React.Component {
           Fire.shared.getGroup(itemObj.groupId, groupObj => {
             Fire.shared.getUser(itemObj.giver.id, giverObj => {
               Fire.shared.getUser(itemObj.receiver.id, receiverObj => {
-                if (this.props.isHome && itemObj.state === "POSTED") {
-                  treasureList.push(this.createTreasureObj(itemObj, groupObj, giverObj, receiverObj))
-                } else if (this.props.isGroup
-                  && itemObj.groupId === this.props.navigation.state.params.groupId
-                  && itemObj.state === "POSTED") {
-                  treasureList.push(this.createTreasureObj(itemObj, groupObj, giverObj, receiverObj))
-                } else if (this.props.isProfile && itemObj.giver.id === Fire.shared.uid) {
-                  treasureList.push(this.createTreasureObj(itemObj, groupObj, giverObj, receiverObj))
+                if (groupObj.memberList.includes(Fire.shared.uid)) {
+                  if (this.props.isHome && itemObj.state === "POSTED") {
+                    treasureList.push(this.createTreasureObj(itemObj, groupObj, giverObj, receiverObj))
+                  } else if (this.props.isGroup
+                    && itemObj.groupId === this.props.navigation.state.params.groupId
+                    && itemObj.state === "POSTED") {
+                    treasureList.push(this.createTreasureObj(itemObj, groupObj, giverObj, receiverObj))
+                  } else if (this.props.isProfile && itemObj.giver.id === Fire.shared.uid) {
+                    treasureList.push(this.createTreasureObj(itemObj, groupObj, giverObj, receiverObj))
+                  }
                 }
                 treasureList = this.sortByTime(treasureList);
                 let options = [];
                 Fire.shared.getAllGroups(groupResult => {
                   groupResult.forEach((group)=>{
-                    key = group.val().groupName;
-                    label = group.val().groupName;
-                    options.push({key, label});
+                    if (group.val().memberList.includes(Fire.shared.uid)) {
+                      key = group.key;
+                      label = group.val().groupName;
+                      options.push({key, label});
+                    }
                   });
+                  this.setState( previousState => ({
+                    treasures: treasureList,
+                    options: options
+                  }));
                 });
-                this.setState( previousState => ({
-                  treasures: treasureList,
-                  options: options
-                }));
               })
             })
           })
@@ -183,12 +187,12 @@ class Treasures extends React.Component {
               clearIcon
             />
           </View>
-          <TouchableOpacity onPress={this.onShow}>
-              <Image
-              style={styles.button}
-              source={require("../../assets/filter.png")}
-              />
-          </TouchableOpacity>
+            <TouchableOpacity onPress={this.onShow}>
+                <Image
+                style={styles.button}
+                source={require("../../assets/filter.png")}
+                />
+            </TouchableOpacity>
         </View>
         <FlatList
           style={styles.cardsContainer}
