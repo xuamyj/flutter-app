@@ -38,6 +38,7 @@ class ChatMain extends React.Component {
     Fire.shared.getAllChats((chatsResult) => {
       let chatList = [];
       chatsResult.forEach((chatObj) => {
+        chatList = [];
         let key = chatObj.key;
         let chat = chatObj.val();
         if (chat.messages != undefined) {
@@ -48,7 +49,6 @@ class ChatMain extends React.Component {
               chatList = this.sortByTime(chatList)
               this.setState(previousState => ({
                 chatList: chatList,
-                filteredChatList: chatList,
               }));
             })
           } else if (chat.userIds[1] === userId) {
@@ -57,7 +57,6 @@ class ChatMain extends React.Component {
               chatList = this.sortByTime(chatList)
               this.setState(previousState => ({
                 chatList: chatList,
-                filteredChatList: chatList,
               }));
             })
           }
@@ -108,6 +107,7 @@ class ChatMain extends React.Component {
       otherUserPicUrl: otherUser.profile_picture,
       messages: messages,
       key: chatKey,
+      timestamp: chat.timestamp,
     }
   }
 

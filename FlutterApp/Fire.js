@@ -346,18 +346,18 @@ class Fire {
 
   writeMessageData(chatKey, text, user) {
     var newMessageKey = firebase.database().ref('chats/' + chatKey + '/messages/').push().key;
-    firebase.database().ref('chats/' + chatKey + "/messages/" + newMessageKey).set({
-      _id: newMessageKey,
-      text: text,
-      createdAt: this.timestamp,
-      user: user,
-    });
     firebase.database().ref('chats/' + chatKey).update({
       timestamp: this.timestamp,
     }).then(function() {
       successCallback();
     }).catch(function(error) {
       errorCallback();
+    });
+    firebase.database().ref('chats/' + chatKey + "/messages/" + newMessageKey).set({
+      _id: newMessageKey,
+      text: text,
+      createdAt: this.timestamp,
+      user: user,
     });
     return newMessageKey;
   }

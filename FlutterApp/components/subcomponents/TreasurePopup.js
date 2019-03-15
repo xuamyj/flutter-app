@@ -30,6 +30,7 @@ class TreasurePopup extends React.Component {
   componentDidMount() {
     chatList = [];
     this.callbackGetAllChats = Fire.shared.getAllChats(chatsResult => {
+      chatList = [];
       chatsResult.forEach(chat => {
         chatList.push({key: chat.key, userIds: chat.val().userIds});
       })
@@ -69,7 +70,7 @@ class TreasurePopup extends React.Component {
       }
     });
     if (chatExists === false) {
-      let chatKey = Fire.shared.writeChatData([chatObj.myUserId, chatObj.otherUserId]);
+      chatObj.key = Fire.shared.writeChatData([chatObj.myUserId, chatObj.otherUserId]);
     }
     this.props.navigation.navigate('Chat', { chatKey: chatObj.key, otherName: chatObj.otherUserName, needUpdate: false });
     this._toggleModal();
