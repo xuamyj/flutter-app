@@ -8,7 +8,6 @@ import ModalFilterPicker from 'react-native-modal-filter-picker'
 
 import { withNavigation } from 'react-navigation';
 
-import firebase from 'firebase';
 import Fire from '../../Fire';
 
 const KEYS_TO_FILTERS = ['itemName', 'itemDescription', 'userName', 'recvItemDescription'];
@@ -81,27 +80,8 @@ class Treasures extends React.Component {
     }
   }
 
-  changeObjectState = (key) => {
-    firebase.database().ref('posts/' + key).update({
-      state : "GIVEN",
-    })
-  }
-
-  addObjectRecv = (key, receiver) => {
-    firebase.database().ref('posts/' + key).update({
-      receiver : {
-        id: receiver,
-        itemDescription: "",
-        itemPicUrl: ""
-      },
-    })
-  }
-
   giveTreasure = (key, receiver) => {
-    console.log("Treasures -- receiver", receiver);
-    console.log("Treasures -- key", key);
-    this.changeObjectState(key);
-    this.addObjectRecv(key, receiver);
+    Fire.shared.giveItemUpdate(key, receiver);
   }
 
   componentDidMount() {

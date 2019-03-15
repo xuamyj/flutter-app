@@ -254,6 +254,22 @@ class Fire {
     });
   }
 
+  giveItemUpdate(key, receiver) {
+    firebase.database().ref('posts/' + key).update({
+      timestamp: this.timestamp,
+      state: "GIVEN",
+      receiver : {
+        id: receiver,
+        itemDescription: "",
+        itemPicUrl: ""
+      },
+    }).then(function() {
+      successCallback();
+    }).catch(function(error) {
+      errorCallback();
+    });
+  }
+
   writeItem(name, groupId, description, picUrl) {
     var newItemKey = firebase.database().ref('posts/').push().key;
     firebase.database().ref('posts/' + newItemKey).set({
