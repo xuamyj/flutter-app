@@ -4,6 +4,8 @@ import { Icon } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
 import RoundButton from './subcomponents/RoundButton';
+import { FontAwesome } from '@expo/vector-icons';
+
 
 import Fire from '../Fire'
 
@@ -46,6 +48,9 @@ class ShareStory extends React.Component {
       );
 
     } else {
+      console.log(this.state.key);
+      console.log(this.state.inputItemDescription);
+      console.log(this.state.inputItemUrl);
 
       Fire.shared.updateItem(this.state.key, this.state.inputItemDescription, this.state.inputItemPicUrl, () => {
         this.setState({
@@ -84,6 +89,21 @@ class ShareStory extends React.Component {
     }
   }
 
+  takePicture = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
+
+    if (status === 'granted') {
+      let result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [3,2],
+      });
+      if (!result.cancelled) {
+        this.setState({ inputItemPicUrl: result.uri });
+      }
+    }
+  }
+
   static navigationOptions = ({ navigation }) => ({
     title: (navigation.state.params || {}).name,
     headerStyle: {backgroundColor: Colors.background },
@@ -102,7 +122,12 @@ class ShareStory extends React.Component {
         </View>
         <ScrollView style={{ flex:1 }}>
           <View style={styles.iconContainer}>
-            <Icon name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
+            <View style={styles.icon}>
+              <Icon name={'photo'} color={Colors.dark} onPress={this.selectPhoto} size={30} />
+            </View>
+            <View style={styles.icon}>
+              <FontAwesome name={'camera'} color={Colors.dark} onPress={this.takePicture} containerStyle={styles.icon} size={30} />
+            </View>
           </View>
           <View style={styles.formContainer}>
             <Text style={styles.label}>Description</Text>

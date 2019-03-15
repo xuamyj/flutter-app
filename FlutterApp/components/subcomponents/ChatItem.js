@@ -12,7 +12,6 @@ export default class ChatItem extends React.Component {
   render() {
     var otherUserPicUrl = this.props.chat.otherUserPicUrl;
     var otherUserName = this.props.chat.otherUserName;
-    console.log(this.props.chat.messages);
     var lastMessage = this.props.chat.messages[0];
 
     var moment = require('moment');

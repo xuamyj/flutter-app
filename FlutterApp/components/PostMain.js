@@ -176,7 +176,7 @@ class PostMain extends React.Component {
         <ScrollView style={{ flex:1 }}>
           <View style={styles.iconContainer}>
             <View style={styles.icon}>
-              <FontAwesome name={'photo'} color={Colors.dark} onPress={this.selectPhoto} containerStyle={styles.icon} size={30} />
+              <Icon name={'photo'} color={Colors.dark} onPress={this.selectPhoto} size={30} />
             </View>
             <View style={styles.icon}>
               <FontAwesome name={'camera'} color={Colors.dark} onPress={this.takePicture} containerStyle={styles.icon} size={30} />

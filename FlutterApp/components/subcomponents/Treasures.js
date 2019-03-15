@@ -73,7 +73,7 @@ class Treasures extends React.Component {
       userName: giverObj.display_name,
       userId: item.giver.id,
       userPicUrl: giverObj.profile_picture,
-      isActive: item.state === 'POSTED' || item.state === "POSTED",
+      isActive: item.state === "POSTED",
       timestamp: item.timestamp,
       recvUserName: recvObj.display_name,
     }
