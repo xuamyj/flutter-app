@@ -8,13 +8,13 @@ const {height, width} = Dimensions.get('window');
 export default class UserListItem extends React.Component {
   render() {
     return (
-      <TouchableOpacity onPress={() => {this.props.onPress(this.props.chat.key)}}>
+      <TouchableOpacity onPress={() => {this.props.onPress(this.props.user.key)}}>
       <View style={styles.container}>
       <View style={styles.itemContainer}>
-        <Avatar containerStyle={styles.propic} small rounded source={{uri: this.props.chat.picUrl}} />
+        <Avatar containerStyle={styles.propic} small rounded source={{uri: this.props.user.picUrl}} />
         <View style={styles.text}>
           <View style={styles.heading}>
-            <Text style={styles.name} ellipsizeMode={'tail'} numberOfLines={1}>{this.props.chat.name}</Text>
+            <Text style={styles.name} ellipsizeMode={'tail'} numberOfLines={1}>{this.props.user.name}</Text>
           </View>
         </View>
       </View>

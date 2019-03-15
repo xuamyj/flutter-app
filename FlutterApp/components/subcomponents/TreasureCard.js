@@ -10,22 +10,15 @@ export default class TreasureCard extends React.Component {
   state = {
     isModalVisible: false,
     isProfile: this.props.isProfile,
-    isActive: this.props.isActive,
   };
 
   _toggleModal = () => {
     this.setState({ isModalVisible: !this.state.isModalVisible });
   }
 
-  giftObj(receiver) {
-    this.props.onPressGive(this.props.treasure, receiver);
-  }
-
   onPressGive = (receiver) => {
-    this.giftObj(receiver);
-    this.setState({
-      isActive: !this.state.isActive,
-    });
+    console.log("TreasureCard", receiver);
+    this.props.onPressGive(this.props.treasure.key, receiver);
   }
 
   constructor(props) {
@@ -83,7 +76,7 @@ export default class TreasureCard extends React.Component {
               <Text style={styles.username}>{userName}</Text>
             </View>
           }
-          {this.state.isActive === false &&
+          {this.props.isActive === false &&
             <View style={styles.givenOverlay}>
               <View style={styles.givenOverlayShadow} />
               <Text style={styles.givenOverlayText}>GIVEN</Text>
@@ -96,12 +89,11 @@ export default class TreasureCard extends React.Component {
             give={this.onPressGive}
             treasure={this.props.treasure}
             isProfile={this.state.isProfile}
-            isActive={this.state.isActive}/>
+            isActive={this.props.isActive}/>
         </Animated.View>
       </TouchableWithoutFeedback>
     );
   }
-
 }
 
 const styles = StyleSheet.create({

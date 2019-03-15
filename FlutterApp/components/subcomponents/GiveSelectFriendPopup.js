@@ -11,8 +11,7 @@ import { withNavigation } from 'react-navigation';
 
 const {height, width} = Dimensions.get('window');
 
-import { view } from 'react-easy-state'
-import { UserStore, UserListStore } from '../../GlobalStore'
+import Fire from '../../Fire';
 
 class GiveSelectFriendPopup extends React.Component {
 
@@ -21,14 +20,36 @@ class GiveSelectFriendPopup extends React.Component {
     this.state = {
       step: 0,
       searchTerm: '',
-      receiver: 0,
+      receiverId: "",
+      recvObj: {},
+      users: []
     }
   }
 
+  componentDidMount() {
+    let userList = [];
+    Fire.shared.getAllUsers( userResult => {
+      userList = [];
+      userResult.forEach((user) => {
+        if (user.key != Fire.shared.uid) {
+          userList.push(this.createUserObj(user.key, user.val()))
+        }
+      });
+      Promise.all(userList).then(() => {
+        this.setState(previousState => ({
+          users: userList,
+        }))
+      })
+    })
+  }
+
   onSelectFriend = (user) => {
-    this.setState({
-      receiver: user,
-      step: this.state.step + 1,
+    Fire.shared.getUser(user, userObj => {
+      this.setState( previousState => ({
+        receiverId: user,
+        recvObj: userObj,
+        step: this.state.step + 1,
+      }))
     })
   }
 
@@ -46,33 +67,27 @@ class GiveSelectFriendPopup extends React.Component {
 
   onPressGive = () => {
     this.onIncrementStep();
-    this.props.onPressGive(this.state.receiver);
+    this.props.onPressGive(this.state.receiverId);
   }
 
   searchUpdated(term) {
     this.setState({ searchTerm: term })
   }
 
-  createUserObj = (item) => {
-    let user = UserListStore.getUserObject(item.userId);
+  createUserObj = (key, user) => {
     return {
-      name: user.displayName,
-      picUrl: user.userPicUrl,
-      key: user.userId,
+      name: user.display_name,
+      picUrl: user.profile_picture,
+      key: key,
       subtitle: ''
     };
   }
 
   render() {
-    let userList = [];
-    UserListStore.users.forEach((user)=>{
-      if (user.userId != UserStore.userId) {
-        userList.push(this.createUserObj(user));
-      }
-    })
-    var filteredUserList = userList.filter(createFilter(this.state.searchTerm, ['name']));
+    var filteredUserList = this.state.users.filter(createFilter(this.state.searchTerm, ['name']));
 
-    var receiver = UserListStore.getUserObject(this.state.receiver);
+    var recvUserName = this.state.recvObj.display_name;
+    var recvPicUrl = this.state.recvObj.profile_picture;
 
     return  (
         <View>
@@ -93,7 +108,7 @@ class GiveSelectFriendPopup extends React.Component {
             <View style={styles.listContainer}>
               <ScrollView>
                   {filteredUserList.map((user) =>
-                    <UserListItem chat={user} onPress={this.onSelectFriend}/>
+                    <UserListItem user={user} onPress={this.onSelectFriend}/>
                   )}
               </ScrollView>
             </View>
@@ -104,9 +119,9 @@ class GiveSelectFriendPopup extends React.Component {
             <View style={styles.imageContainer}>
               <Avatar large rounded source={{uri: this.props.itemPicURL}} />
               <Image style={styles.arrow} source={require('../../assets/gift_confirmation.png')} />
-              <Avatar large rounded source={{uri: receiver.userPicUrl}} />
+              <Avatar large rounded source={{uri: recvPicUrl}} />
             </View>
-            <Text style={styles.confirmation}>Are you sure you want to give this item to <Text style={styles.bold}>{receiver.displayName}</Text>?</Text>
+            <Text style={styles.confirmation}>Are you sure you want to give this item to <Text style={styles.bold}>{recvUserName}</Text>?</Text>
             <View style={styles.buttonContainer}>
               <RoundButtonSmall
                 containerStyle={styles.doubleButton}
@@ -132,9 +147,9 @@ class GiveSelectFriendPopup extends React.Component {
             <View style={styles.imageContainer}>
               <Avatar large rounded source={{uri: this.props.itemPicURL}} />
               <Image style={styles.arrow} source={require('../../assets/gift_confirmed.png')} />
-              <Avatar large rounded source={{uri: receiver.userPicUrl}} />
+              <Avatar large rounded source={{uri: recvPicUrl}} />
             </View>
-            <Text style={styles.confirmed}>This item has fluttered away! <Text style={styles.bold}>{UserListStore.getUserObject(this.state.receiver).displayName}</Text> will update you in a few days about their new adventures.</Text>
+            <Text style={styles.confirmed}>This item has fluttered away! <Text style={styles.bold}>{recvUserName}</Text> will update you in a few days about their new adventures.</Text>
             <RoundButtonSmall
               containerStyle={styles.button}
               label="CLOSE"

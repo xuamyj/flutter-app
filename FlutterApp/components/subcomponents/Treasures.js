@@ -8,6 +8,7 @@ import ModalFilterPicker from 'react-native-modal-filter-picker'
 
 import { withNavigation } from 'react-navigation';
 
+import firebase from 'firebase';
 import Fire from '../../Fire';
 
 const KEYS_TO_FILTERS = ['itemName', 'itemDescription', 'userName', 'recvItemDescription'];
@@ -63,8 +64,9 @@ class Treasures extends React.Component {
     )
   }
 
-  createTreasureObj(item, groupObj, giverObj, recvObj) {
+  createTreasureObj(key, item, groupObj, giverObj, recvObj) {
     return {
+      key: key,
       itemName: item.itemName,
       itemDescription: item.giver.itemDescription,
       itemPicUrl: item.giver.itemPicUrl,
@@ -95,9 +97,11 @@ class Treasures extends React.Component {
     })
   }
 
-  giveTreasure = (treasure,receiver) => {
-    this.changeObjectState(treasure.key);
-    this.addObjectRecv(treasure.key, receiver);
+  giveTreasure = (key, receiver) => {
+    console.log("Treasures -- receiver", receiver);
+    console.log("Treasures -- key", key);
+    this.changeObjectState(key);
+    this.addObjectRecv(key, receiver);
   }
 
   componentDidMount() {
@@ -105,24 +109,25 @@ class Treasures extends React.Component {
     this.callbackGetAllItems = Fire.shared.getAllItems(itemResult => {
       itemList = [];
       itemResult.forEach((item) => {
-        itemObj = item.val();
-        itemList.push(itemObj);
+        itemList.push(item);
       });
       Promise.all(itemList).then(() => {
         let treasureList = [];
-        itemList.forEach((itemObj) => {
+        itemList.forEach((item) => {
+          let key = item.key;
+          let itemObj = item.val();
           Fire.shared.getGroup(itemObj.groupId, groupObj => {
             Fire.shared.getUser(itemObj.giver.id, giverObj => {
               Fire.shared.getUser(itemObj.receiver.id, receiverObj => {
                 if (groupObj.memberList.includes(Fire.shared.uid)) {
                   if (this.props.isHome && itemObj.state === "POSTED") {
-                    treasureList.push(this.createTreasureObj(itemObj, groupObj, giverObj, receiverObj))
+                    treasureList.push(this.createTreasureObj(key, itemObj, groupObj, giverObj, receiverObj))
                   } else if (this.props.isGroup
                     && itemObj.groupId === this.props.navigation.state.params.groupId
                     && itemObj.state === "POSTED") {
-                    treasureList.push(this.createTreasureObj(itemObj, groupObj, giverObj, receiverObj))
+                    treasureList.push(this.createTreasureObj(key, itemObj, groupObj, giverObj, receiverObj))
                   } else if (this.props.isProfile && itemObj.giver.id === Fire.shared.uid) {
-                    treasureList.push(this.createTreasureObj(itemObj, groupObj, giverObj, receiverObj))
+                    treasureList.push(this.createTreasureObj(key, itemObj, groupObj, giverObj, receiverObj))
                   }
                 }
                 treasureList = this.sortByTime(treasureList);
