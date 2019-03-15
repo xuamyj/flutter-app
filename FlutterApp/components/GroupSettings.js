@@ -31,16 +31,16 @@ class GroupSettings extends React.Component {
   }
 
   onPressSave = async () => {
-    this.setState({
-      tagsSelected: this.state.group.memberList
-    })
-    memberList = [];
-    this.state.tagsSelected.forEach((tag) => {
-      memberList.push(tag['userId']);
-    });
-    if (memberList.indexOf(Fire.shared.uid) == -1) {
-      memberList.push(Fire.shared.uid);
-    }
+    // this.setState({
+    //   tagsSelected: this.state.group.memberList
+    // })
+    // memberList = [];
+    // this.state.tagsSelected.forEach((tag) => {
+    //   memberList.push(tag['userId']);
+    // });
+    // if (memberList.indexOf(Fire.shared.uid) == -1) {
+    //   memberList.push(Fire.shared.uid);
+    // }
 
     uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputGroupPicUrl);
     Fire.shared.writeGroupData(this.state.inputGroupName, uploadUrl, memberList, () => {
@@ -86,13 +86,13 @@ class GroupSettings extends React.Component {
   }
 
   handleDelete = index => {
-    let tagsSelected = this.state.tagsSelected;
-    tagsSelected.splice(index, 1);
-    this.setState({ tagsSelected });
+    // let tagsSelected = this.state.tagsSelected;
+    // tagsSelected.splice(index, 1);
+    // this.setState({ tagsSelected });
   }
 
   handleAddition = suggestion => {
-    this.setState({ tagsSelected: this.state.tagsSelected.concat([suggestion]) });
+    // this.setState({ tagsSelected: this.state.tagsSelected.concat([suggestion]) });
   }
 
   render() {

@@ -25,13 +25,13 @@ class GroupCreate extends React.Component {
   onChangeInputGroupName = (inputGroupName) => {this.setState({ inputGroupName: inputGroupName })}
 
   onPressCreate = async () => {
-    memberList = []
-    this.state.tagsSelected.forEach((tag) => {
-      memberList.push(tag['userId']);
-    });
-    if (memberList.indexOf(Fire.shared.uid) == -1) {
-      memberList.push(Fire.shared.uid);
-    }
+    // memberList = []
+    // this.state.tagsSelected.forEach((tag) => {
+    //   memberList.push(tag['userId']);
+    // });
+    // if (memberList.indexOf(Fire.shared.uid) == -1) {
+    //   memberList.push(Fire.shared.uid);
+    // }
 
     uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputGroupPicUrl);
     let key;
@@ -75,13 +75,13 @@ class GroupCreate extends React.Component {
   }
 
   handleDelete = index => {
-    let tagsSelected = this.state.tagsSelected;
-    tagsSelected.splice(index, 1);
-    this.setState({ tagsSelected });
+    // let tagsSelected = this.state.tagsSelected;
+    // tagsSelected.splice(index, 1);
+    // this.setState({ tagsSelected });
   }
 
   handleAddition = suggestion => {
-    this.setState({ tagsSelected: this.state.tagsSelected.concat([suggestion]) });
+    // this.setState({ tagsSelected: this.state.tagsSelected.concat([suggestion]) });
   }
 
   render() {
