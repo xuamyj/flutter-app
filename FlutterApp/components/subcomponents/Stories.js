@@ -58,7 +58,7 @@ class Stories extends React.Component {
     this.props.navigation.navigate('ShareStory', {name: name, key: key});
   }
 
-  createStoryObj = (item, giverObj, receiverObj, groupObj) => {
+  createStoryObj = (key, item, giverObj, receiverObj, groupObj) => {
     return {
       itemName: item.itemName,
       itemDescription: item.giver.itemDescription,
@@ -69,6 +69,7 @@ class Stories extends React.Component {
       userPicUrl: giverObj.profile_picture,
       state: item.state,
       timestamp: item.timestamp,
+      key: key,
 
       giveItemDescription: item.giver.itemDescription,
       giveItemPicUrl: item.giver.itemPicUrl,
@@ -100,27 +101,28 @@ class Stories extends React.Component {
     this.callbackGetAllItems = Fire.shared.getAllItems(itemResult => {
       itemList = [];
       itemResult.forEach((item) => {
-        itemObj = item.val();
-        itemList.push(itemObj);
+        itemList.push(item);
       })
       Promise.all(itemList).then(() => {
         let storiesList = [];
-        itemList.forEach((itemObj) => {
+        itemList.forEach((item) => {
           // if it belongs to a group that I am a part of
+          let key = item.key;
+          let itemObj = item.val();
           if (!this.isTreasure(itemObj)) {
             Fire.shared.getGroup(itemObj.groupId, groupObj => {
               Fire.shared.getUser(itemObj.giver.id, giverObj => {
                 Fire.shared.getUser(itemObj.receiver.id, receiverObj => {
                   if (groupObj.memberList.includes(Fire.shared.uid)) {
                     if (this.props.isHome && itemObj.state === "COMPLETE") {
-                      storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                      storiesList.push(this.createStoryObj(key, itemObj, giverObj, receiverObj, groupObj));
                     } else if (this.props.isGroup
                       && itemObj.state === "COMPLETE"
                       && itemObj.groupId === this.props.navigation.state.params.groupId) {
-                      storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                      storiesList.push(this.createStoryObj(key, itemObj, giverObj, receiverObj, groupObj));
                     } else if ((this.props.isMineGiven && this.isMineGiven(itemObj))
                       || (this.props.isMineReceived && this.isMineReceived(itemObj))) {
-                      storiesList.push(this.createStoryObj(itemObj, giverObj, receiverObj, groupObj));
+                      storiesList.push(this.createStoryObj(key, itemObj, giverObj, receiverObj, groupObj));
                     }
                   }
                   storiesList = this.sortByTime(storiesList);
@@ -199,7 +201,6 @@ class Stories extends React.Component {
           {
             filteredStories.map((l, i) => (
               <StoryCard story={l}
-                key={l.key}
                 myId={Fire.shared.uid}
                 index={i}
                 onPressShareStory={this.onPressShareStory}

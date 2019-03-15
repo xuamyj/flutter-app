@@ -48,14 +48,8 @@ class ShareStory extends React.Component {
       );
 
     } else {
-      console.log(this.state.key);
-      console.log(this.state.inputItemDescription);
-      console.log(this.state.inputItemUrl);
-
       Fire.shared.updateItem(this.state.key, this.state.inputItemDescription, this.state.inputItemPicUrl, () => {
         this.setState({
-          name: (this.props.navigation.state.params || {}).name,
-          key: (this.props.navigation.state.params || {}).key,
           inputItemDescription: '',
           inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
           errorMsgName: 'Error message placeholder: name',

@@ -53,53 +53,53 @@ class Fire {
 
   // turn on the database connection
   // listen for `child_added` event, if it happens, run `snapshot => ...`
-  // on = callback => {
-  //   return firebase.database().ref('chats')
-  //     .limitToLast(20)
-  //     .once('child_added', snapshot => callback(this.parse(snapshot)));
-  // }
-  //
-  // parse = snapshot => {
-  //   const { timestamp: numberStamp, text, user } = snapshot.val();
-  //   const { key: _id } = snapshot;
-  //
-  //   const timestamp = new Date(numberStamp);
-  //
-  //   const message = {
-  //     _id,
-  //     timestamp,
-  //     text,
-  //     user,
-  //   };
-  //   return message;
-  // }
-  //
-  // // stick messages into the database
-  // send = messages => {
-  //   for (let i = 0; i < messages.length; i++) {
-  //     const { text, user } = messages[i];
-  //
-  //     const message = {
-  //       text,
-  //       user,
-  //       timestamp: this.timestamp,
-  //     };
-  //     this.append(message);
-  //   }
-  // };
-  //
-  // get timestamp() {
-  //   return firebase.database.ServerValue.TIMESTAMP;
-  // }
-  //
-  // append = message => {
-  //   return firebase.database().ref('messages').push(message);
-  // }
-  //
-  // // turn off the database connection
-  // off() {
-  //   firebase.database().ref('messages').off();
-  // }
+  on = callback => {
+    return firebase.database().ref('chats')
+      .limitToLast(20)
+      .once('child_added', snapshot => callback(this.parse(snapshot)));
+  }
+
+  parse = snapshot => {
+    const { timestamp: numberStamp, text, user } = snapshot.val();
+    const { key: _id } = snapshot;
+
+    const timestamp = new Date(numberStamp);
+
+    const message = {
+      _id,
+      timestamp,
+      text,
+      user,
+    };
+    return message;
+  }
+
+  // stick messages into the database
+  send = messages => {
+    for (let i = 0; i < messages.length; i++) {
+      const { text, user } = messages[i];
+
+      const message = {
+        text,
+        user,
+        timestamp: this.timestamp,
+      };
+      this.append(message);
+    }
+  };
+
+  get timestamp() {
+    return firebase.database.ServerValue.TIMESTAMP;
+  }
+
+  append = message => {
+    return firebase.database().ref('messages').push(message);
+  }
+
+  // turn off the database connection
+  off() {
+    firebase.database().ref('messages').off();
+  }
 
   // ----------------
   // DATABASE: PHOTOS
@@ -243,12 +243,10 @@ class Fire {
 
   updateItem(itemKey, description, picUrl) {
     firebase.database().ref('posts/' + itemKey).update({
+      timestamp: this.timestamp,
       state : "COMPLETE",
-      receiver : {
-        itemDescription: description,
-        itemPicUrl: picUrl,
-      },
-      timestamp: this.timestamp
+      "receiver/itemDescription" : description,
+      "receiver/itemPicUrl": picUrl,
     }).then(function() {
       successCallback();
     }).catch(function(error) {
