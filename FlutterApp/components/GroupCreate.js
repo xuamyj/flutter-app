@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Alert, Image, Dimensions, ScrollView, KeyboardAvoidingView } from 'react-native';
-import { Icon } from 'react-native-elements'
+import { Icon, SearchBar } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
 import AutoTags from 'react-native-tag-autocomplete';
@@ -103,13 +103,15 @@ class GroupCreate extends React.Component {
               onChangeText={this.onChangeInputGroupName}
             />
             <Text style={styles.label}>Members</Text>
-            <View style = {{marginLeft: '10%', marginVertical: Metrics.baseMargin}}>
-            <AutoTags
-              suggestions={this.state.suggestions}
-              tagsSelected={this.state.tagsSelected}
-              handleAddition={this.handleAddition}
-              handleDelete={this.handleDelete}
-              placeholder="Add a member.." />
+            <View style={styles.searchBarView}>
+              <SearchBar
+                round
+                lightTheme
+                containerStyle={styles.searchBarContainer}
+                inputStyle={styles.searchBar}
+                placeholder='Search...'
+                clearIcon
+              />
             </View>
             <RoundButton
               containerStyle={styles.button}
@@ -229,6 +231,28 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 15,
     shadowOpacity: 1,
+  },
+  searchBarContainer: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+  },
+  searchBar: {
+    backgroundColor: Colors.background,
+    fontSize: 15,
+    width: (Metrics.screenWidth - 3 * Metrics.baseMargin) * 0.88,
+  },
+  searchBarView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: (Metrics.screenWidth - 3 * Metrics.baseMargin) * 0.88,
+  },
+  searchView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: Metrics.screenWidth - 3 * Metrics.baseMargin,
   },
 })
 
