@@ -322,6 +322,10 @@ class Fire {
     });
   }
 
+  offChats(returnedCallback) {
+    firebase.database().ref('chats/').off('value', returnedCallback);
+  }
+
   getChat(chatId, successCallback) {
     return firebase.database().ref('chats/' + chatId).once('value').then(function(snapshot) {
       successCallback(snapshot);

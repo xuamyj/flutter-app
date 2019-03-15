@@ -29,7 +29,7 @@ class TreasurePopup extends React.Component {
 
   componentDidMount() {
     chatList = [];
-    Fire.shared.getAllChats(chatsResult => {
+    this.callbackGetAllChats = Fire.shared.getAllChats(chatsResult => {
       chatsResult.forEach(chat => {
         chatList.push({key: chat.key, userIds: chat.val().userIds});
       })
@@ -37,6 +37,10 @@ class TreasurePopup extends React.Component {
         chats: chatList,
       }))
     })
+  }
+
+  componentWillUnmount() {
+    Fire.shared.offChats(this.callbackGetAllChats);
   }
 
   _toggleModal = () => {

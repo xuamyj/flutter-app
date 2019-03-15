@@ -28,7 +28,7 @@ class Treasures extends React.Component {
 
   searchUpdated(term) {
     this.setState({
-      searchTerm: searchTerm,
+      searchTerm: term,
     })
   }
 
@@ -73,7 +73,7 @@ class Treasures extends React.Component {
       userName: giverObj.display_name,
       userId: item.giver.id,
       userPicUrl: giverObj.profile_picture,
-      isActive: item.state === "POSTED",
+      isActive: item.state === 'POSTED' || item.state === "POSTED",
       timestamp: item.timestamp,
       recvUserName: recvObj.display_name,
     }
@@ -103,6 +103,7 @@ class Treasures extends React.Component {
   componentDidMount() {
     let itemList = [];
     this.callbackGetAllItems = Fire.shared.getAllItems(itemResult => {
+      itemList = [];
       itemResult.forEach((item) => {
         itemObj = item.val();
         itemList.push(itemObj);

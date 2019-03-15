@@ -32,7 +32,7 @@ class Stories extends React.Component {
 
   searchUpdated(term) {
     this.setState({
-      searchTerm: searchTerm,
+      searchTerm: term,
     })
   }
 
@@ -97,6 +97,7 @@ class Stories extends React.Component {
   componentDidMount() {
     let itemList = [];
     this.callbackGetAllItems = Fire.shared.getAllItems(itemResult => {
+      itemList = [];
       itemResult.forEach((item) => {
         itemObj = item.val();
         itemList.push(itemObj);
@@ -128,7 +129,6 @@ class Stories extends React.Component {
                       options.push({key, label});
                     });
                   });
-
                   this.setState( previousState => ({
                     stories: storiesList,
                     options: options,
@@ -140,6 +140,10 @@ class Stories extends React.Component {
         })
       });
     });
+  }
+
+  componentWillUnmount() {
+    Fire.shared.offItems(this.callbackGetAllItems);
   }
 
   sortByTime(list) {
