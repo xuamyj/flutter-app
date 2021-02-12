@@ -16,6 +16,7 @@ class SignUp extends React.Component {
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then((userCredential) => {
         Fire.shared.writeUserData(userCredential.user.uid, this.state.email, this.state.userName);
+        Fire.shared.initialSetup(userCredential.user.uid);
         this.props.navigation.navigate('Main');
       })
       .catch(error => this.setState({ errorMessage: error.message }))

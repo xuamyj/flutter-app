@@ -1,20 +1,18 @@
 import React from 'react';
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, Button, Image, Dimensions } from 'react-native';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Button, Image, Dimensions, KeyboardAvoidingView } from 'react-native';
 import { Icon, Avatar } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
 import RoundButton from './subcomponents/RoundButton';
 
 import firebase from 'firebase';
-
 import Fire from '../Fire';
 
 const {height, width} = Dimensions.get('window');
 
 class Settings extends React.Component {
   state = {
-    userName: '',
-    userPicUrl: '',
+    userName: this.props.navigation.state.params.username,
     inputName: '',
     inputPicUrl: '',
     errorMsg: 'Error message placeholder',
@@ -59,7 +57,24 @@ class Settings extends React.Component {
   onSave = () => {
     this.onPressUpdateProfilePicture();
     this.onPressUpdateDisplayName();
-    this.props.navigation.navigate('Profile');
+    // AMY note: i took this out because i couldn't fix the top header and it looked too awkward as a result
+    // once we fix top header we can put it back in
+    // this.props.navigation.navigate('Profile');
+  }
+
+
+  componentDidMount() {
+    Fire.shared.getUserName(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userName: result,
+      }))
+    })
+    Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
+      this.setState(previousState => ({
+        userPicUrl: result,
+        inputPicUrl: result,
+      }))
+    })
   }
 
   onPressCamera = async () => {
@@ -89,7 +104,7 @@ class Settings extends React.Component {
 
 
     return (
-        <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
           <View style={styles.heading}>
             <View>
               <Avatar
@@ -126,22 +141,8 @@ class Settings extends React.Component {
             color={Colors.dark}
             size={14}
             onPress={this.onSignout} />
-        </View>
+        </KeyboardAvoidingView>
     );
-  }
-
-  componentDidMount() {
-    Fire.shared.getUserName(Fire.shared.uid, result => {
-      this.setState(previousState => ({
-        userName: result,
-      }))
-    })
-    Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
-      this.setState(previousState => ({
-        userPicUrl: result,
-        inputPicUrl: result,
-      }))
-    })
   }
 }
 

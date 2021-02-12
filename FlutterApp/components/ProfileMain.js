@@ -4,18 +4,19 @@ import { Icon, Avatar } from 'react-native-elements';
 import { TabView, TabBar, SceneMap } from 'react-native-tab-view';
 import { Metrics, Colors } from './Themes';
 
-import firebase from 'firebase';
+import Stories from './subcomponents/Stories'
+import Treasures from './subcomponents/Treasures'
 
 import Fire from '../Fire';
 
+const PostedRoute = () => (
+  <Treasures isProfile/>
+);
 const GivenRoute = () => (
-  <View style={styles.scene} />
+  <Stories isProfile isMineGiven/>
 );
 const ReceivedRoute = () => (
-  <View style={styles.scene} />
-);
-const PostedRoute = () => (
-  <View style={styles.scene} />
+  <Stories isProfile isMineReceived/>
 );
 
 class ProfileMain extends React.Component {
@@ -42,11 +43,8 @@ class ProfileMain extends React.Component {
     };
   };
 
-  callbackGetUserName = null;
-  callbackgetUserPicUrl = null;
-
   componentDidMount() {
-    this.props.navigation.setParams({ onPressSettings: this.onPressSettings });
+    this.props.navigation.setParams({ onPressSettings: this.onPressSettings});
 
     this.callbackGetUserName = Fire.shared.getUserName(Fire.shared.uid, result => {
       this.setState(previousState => ({
@@ -61,46 +59,41 @@ class ProfileMain extends React.Component {
     })
   }
 
-  componentWillUnmount() {
-    Fire.shared.offUsers(Fire.shared.uid, this.callbackGetUserName);
-    Fire.shared.offUsers(Fire.shared.uid, this.callbackgetUserPicUrl);
-  }
-
   state = {
     index: 0,
     routes: [
+      { key: 'posted', title: 'Posted' },
       { key: 'given', title: 'Given' },
       { key: 'received', title: 'Received' },
-      { key: 'posted', title: 'Posted' },
     ],
-    userName: '',
-    userPicUrl: '',
   };
 
   onPressSettings = () => {
-    this.props.navigation.navigate('Settings', {});
+    this.props.navigation.navigate('Settings', {username: this.props.navigation.state.params.userName});
   }
 
   render() {
+    var userPicUrl;
+    Fire.shared.getUserPicUrl(Fire.shared.uid, result => {
+      userPicUrl = result;
+    });
     return (
       <View style={styles.container}>
           <View style={styles.topSection}>
             <Avatar
             large
             rounded
-            source={{uri: this.state.userPicUrl}}
+            source={{uri: userPicUrl}}
             style={styles.icon}
             />
           </View>
 
-
-
         <TabView
           navigationState={this.state}
           renderScene={SceneMap({
+            posted: PostedRoute,
             given: GivenRoute,
-            received: ReceivedRoute,
-            posted: PostedRoute
+            received: ReceivedRoute
           })}
           onIndexChange={index => this.setState({ index })}
           initialLayout={{width: Dimensions.get('window').width}}
@@ -116,7 +109,6 @@ class ProfileMain extends React.Component {
       </View>
     );
   }
-
 }
 
 const styles = StyleSheet.create({

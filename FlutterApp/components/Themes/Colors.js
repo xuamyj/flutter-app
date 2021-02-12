@@ -5,6 +5,7 @@ const colors = {
   lightText: '#858585',
   buttonTint: '#C5C5C5',
   dark: '#484848',
+  medium: '#676767',
   teal: '#49B6BB',
   darkTeal: '#0b788e',
 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Alert, Image, Dimensions, ScrollView } from 'react-native';
-import { Icon } from 'react-native-elements'
+import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Alert, Image, Dimensions, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { Icon, SearchBar } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
 import AutoTags from 'react-native-tag-autocomplete';
@@ -11,33 +11,40 @@ import Fire from '../Fire';
 const {height, width} = Dimensions.get('window');
 
 class GroupSettings extends React.Component {
-  state = {
-    inputGroupName: '',
-    inputGroupPicUrl: '',
-    errorMsgName: 'Error message placeholder: name',
-    errorMsgMembers: 'Error message placeholder: members',
-    inputGroupPicUrl: '',
+  constructor(props) {
+    super(props);
+    this.state = {
+      group: {},
 
-    suggestions : [ {name:''}, ],
-    tagsSelected : []
+      inputGroupName: "",
+      inputGroupPicUrl: "",
+      errorMsgName: 'Error message placeholder: name',
+      errorMsgMembers: 'Error message placeholder: members',
+
+      suggestions : [ {name:''}, ],
+      tagsSelected: [],
+    }
   }
 
-  onChangeInputGroupName = (inputGroupName) => {this.setState({ inputGroupName: inputGroupName })}
+  onChangeInputGroupName = (inputGroupName) => {
+    this.setState({ inputGroupName: inputGroupName })
+  }
 
   onPressSave = async () => {
-    memberList = []
-    this.state.tagsSelected.forEach((tag) => {
-      memberList.push(tag['userId']);
-    });
-    if (memberList.indexOf(Fire.shared.uid) == -1) {
-      memberList.push(Fire.shared.uid);
-    }
+    // this.setState({
+    //   tagsSelected: this.state.group.memberList
+    // })
+    // memberList = [];
+    // this.state.tagsSelected.forEach((tag) => {
+    //   memberList.push(tag['userId']);
+    // });
+    // if (memberList.indexOf(Fire.shared.uid) == -1) {
+    //   memberList.push(Fire.shared.uid);
+    // }
 
     uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputGroupPicUrl);
     Fire.shared.writeGroupData(this.state.inputGroupName, uploadUrl, memberList, () => {
       this.props.navigation.navigate('GroupsMain');
-    }, () => {
-      // TODO toast
     });
   }
 
@@ -54,7 +61,7 @@ class GroupSettings extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'Group Settings',
+    title: 'Community Settings',
     headerStyle: {backgroundColor: Colors.background },
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
@@ -79,18 +86,18 @@ class GroupSettings extends React.Component {
   }
 
   handleDelete = index => {
-    let tagsSelected = this.state.tagsSelected;
-    tagsSelected.splice(index, 1);
-    this.setState({ tagsSelected });
+    // let tagsSelected = this.state.tagsSelected;
+    // tagsSelected.splice(index, 1);
+    // this.setState({ tagsSelected });
   }
 
   handleAddition = suggestion => {
-    this.setState({ tagsSelected: this.state.tagsSelected.concat([suggestion]) });
+    // this.setState({ tagsSelected: this.state.tagsSelected.concat([suggestion]) });
   }
 
   render() {
     return (
-      <View style={{ flex:1, backgroundColor: 'transparent' }}>
+      <KeyboardAvoidingView style={{ flex:1, backgroundColor: 'transparent' }} behavior="padding" keyboardVerticalOffset={width * 1 / 3 - 2 * Metrics.doubleBaseMargin}>
         <View style={{ backgroundColor: Colors.teal }}>
             <Image style={styles.imagePreview} source={{uri: this.state.inputGroupPicUrl}} />
         </View>
@@ -107,13 +114,15 @@ class GroupSettings extends React.Component {
               onChangeText={this.onChangeInputGroupName}
             />
             <Text style={styles.label}>Manage Members</Text>
-            <View style = {{marginLeft: '10%', marginVertical: Metrics.baseMargin}}>
-              <AutoTags
-                suggestions={this.state.suggestions}
-                tagsSelected={this.state.tagsSelected}
-                handleAddition={this.handleAddition}
-                handleDelete={this.handleDelete}
-                placeholder="Add a member.." />
+            <View style={styles.searchBarView}>
+              <SearchBar
+                round
+                lightTheme
+                containerStyle={styles.searchBarContainer}
+                inputStyle={styles.searchBar}
+                placeholder='Search...'
+                clearIcon
+              />
             </View>
             <RoundButton
               containerStyle={styles.button}
@@ -124,7 +133,7 @@ class GroupSettings extends React.Component {
               onPress={this.onPressSave} />
           </View>
         </ScrollView>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 
@@ -135,8 +144,8 @@ class GroupSettings extends React.Component {
       result.forEach((childResult) => {
         let userObj = {}
         let userId = childResult.key;
-        let userEmail = childResult.val()['email'];
-        userObj['name'] = userEmail;
+        let userDisplayName = childResult.val()['displayName'];
+        userObj['name'] = userDisplayName;
         userObj['userId'] = userId;
         resultList.push(userObj);
       });
@@ -145,7 +154,13 @@ class GroupSettings extends React.Component {
       this.setState(previousState => ({
         suggestions: resultList,
       }))
-    })
+    });
+    Fire.shared.getGroup(this.props.navigation.state.params.groupId, groupResult => {
+      this.setState(previousState => ({
+        group: groupResult,
+        inputGroupPicUrl: groupResult.groupPicUrl,
+      }));
+    });
   }
 }
 
@@ -167,7 +182,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '100%',
-    marginTop: width * 2 / 5 - Metrics.doubleBaseMargin,
+    marginTop: height / 2 - width * 9 / 20,
     shadowColor: Colors.dark,
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.7,
@@ -220,7 +235,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'row',
     padding: Metrics.baseMargin,
-    top: width / 6 - Metrics.baseMargin * 3,
+    top: height / 12,
     right:0,
   },
   fillout: {
@@ -233,6 +248,28 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 15,
     shadowOpacity: 1,
+  },
+  searchBarContainer: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+  },
+  searchBar: {
+    backgroundColor: Colors.background,
+    fontSize: 15,
+    width: (Metrics.screenWidth - 3 * Metrics.baseMargin) * 0.88,
+  },
+  searchBarView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: (Metrics.screenWidth - 3 * Metrics.baseMargin) * 0.88,
+  },
+  searchView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: Metrics.screenWidth - 3 * Metrics.baseMargin,
   },
 })
 

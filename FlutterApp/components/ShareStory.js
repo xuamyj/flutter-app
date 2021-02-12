@@ -4,83 +4,32 @@ import { Icon } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
 import RoundButton from './subcomponents/RoundButton';
-import Carousel from 'react-native-snap-carousel';
-import GroupItemSmall from './subcomponents/GroupItemSmall';
 import { FontAwesome } from '@expo/vector-icons';
 
-import Fire from '../Fire';
+
+import Fire from '../Fire'
 
 const {height, width} = Dimensions.get('window');
 
-class PostMain extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      inputItemName: '',
-      inputItemDescription: '',
-      inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
-      inputGroupKey: "",
-      errorMsgName: 'Error message placeholder: name',
-      errorMsgDescription: 'Error message placeholder: description',
-      groups: [],
-    };
+class ShareStory extends React.Component {
+  state = {
+    name: (this.props.navigation.state.params || {}).name,
+    key: (this.props.navigation.state.params || {}).key,
+    inputItemDescription: '',
+    inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
+    errorMsgName: 'Error message placeholder: name',
+    errorMsgDescription: 'Error message placeholder: description',
   }
 
-  componentDidMount() {
-    this._onFocusListener = this.props.navigation.addListener('didFocus', (payload) => {
-      this.setState({
-        inputItemName: '',
-        inputItemDescription: '',
-        inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
-        errorMsgName: 'Error message placeholder: name',
-        errorMsgDescription: 'Error message placeholder: description',
-      });
-    });
-
-    Fire.shared.getAllGroups(groupResult => {
-      let groupResultList = [];
-      groupResult.forEach((childResult) => {
-        let childResultObj = childResult.val();
-
-        if (childResultObj['memberList'].indexOf(Fire.shared.uid) != -1) {
-          tempGroupResult = {
-            name: childResultObj['groupName'],
-            key: childResult.key,
-            size: childResultObj['memberList'].length,
-            picUrl: childResultObj['groupPicUrl'],
-          }
-          groupResultList.push(tempGroupResult);
-        }
-      });
-      let key = (groupResultList.length > 0) ? groupResultList[0].key : ''
-      this.setState(previousState => ({
-        groups: groupResultList,
-        inputGroupKey: key,
-      }));
-    })
-  }
-
-  onChangeInputItemName = (inputItemName) => {this.setState({ inputItemName: inputItemName })};
-  onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })};
-  onChangeGroup = (inputGroupKey) => {
-    this.setState({inputGroupKey: this.state.groups[inputGroupKey].key})
-  }
+  onChangeInputItemDescription = (inputItemDescription) => {this.setState({ inputItemDescription: inputItemDescription })}
 
   onPressPost = () => {
-    postIsIncomplete = (this.state.inputItemName == "") ||
-    (this.state.inputItemDescription == "") ||
+    postIsIncomplete = (this.state.inputItemDescription == "") ||
     (this.state.inputItemPicUrl === "https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640");
 
     if (postIsIncomplete){
       missingItems = "";
-      if (this.state.inputItemName == "") {
-        missingItems += "name";
-      }
       if (this.state.inputItemDescription == "") {
-        if (missingItems != "") {
-          missingItems += " and "
-        }
         missingItems += "description";
       }
       if (this.state.inputItemPicUrl === "https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640") {
@@ -99,32 +48,29 @@ class PostMain extends React.Component {
       );
 
     } else {
-      Fire.shared.writeItem(this.state.inputItemName, this.state.inputGroupKey, this.state.inputItemDescription, this.state.inputItemPicUrl, () => {
+      Fire.shared.updateItem(this.state.key, this.state.inputItemDescription, this.state.inputItemPicUrl, () => {
         this.setState({
-          inputItemName: '',
           inputItemDescription: '',
           inputItemPicUrl: 'https://vignette.wikia.nocookie.net/the-darkest-minds/images/4/47/Placeholder.png/revision/latest?cb=20160927044640',
-          inputGroupKey: "",
           errorMsgName: 'Error message placeholder: name',
           errorMsgDescription: 'Error message placeholder: description',
         });
+        // TODO toast
       }, () => {
+        // TODO toast
       });
-      Alert.alert(
-        'Item posted!',
-        ('You have posted ' + this.state.inputItemName + '!'),
-        [
-          {text: 'OK', onPress: () => this.props.navigation.navigate('PROFILE')},
-        ],
-      );
+        Alert.alert(
+          'Story shared!',
+          ('You have shared your story with ' + this.state.name.substring(3) + '!'),
+          [
+            {text: 'OK', onPress: () => this.props.navigation.navigate('Profile')},
+          ],
+        );
     }
   }
 
-  // tom woz 'ere 2k19 yolo swaGGGG xDxDxD
-
   selectPhoto = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-
     if (status === 'granted') {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -136,6 +82,7 @@ class PostMain extends React.Component {
       }
     }
   }
+
   takePicture = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL, Permissions.CAMERA);
 
@@ -151,25 +98,19 @@ class PostMain extends React.Component {
     }
   }
 
-
-  renderItem = ({item}) => {
-    return (
-      <GroupItemSmall group={item}/>
-    )
-  }
-
-  static navigationOptions = {
-    title: 'Give',
+  static navigationOptions = ({ navigation }) => ({
+    title: (navigation.state.params || {}).name,
     headerStyle: {backgroundColor: Colors.background },
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
       fontWeight: '200',
     }
-  };
+  });
 
   render() {
+
     return (
-      <View style={{ flex:1 }}>
+      <View style={{ flex: 1 }}>
         <View>
             <Image style={styles.imagePreview} source={{uri: this.state.inputItemPicUrl}} />
         </View>
@@ -183,38 +124,17 @@ class PostMain extends React.Component {
             </View>
           </View>
           <View style={styles.formContainer}>
-            <Text style={styles.label}>Name</Text>
-            <TextInput
-              placeholder="What are you giving away?"
-              autoCapitalize="none"
-              style={styles.textInput}
-              onChangeText={this.onChangeInputItemName}
-              defaultValue={this.state.inputItemName}
-            />
             <Text style={styles.label}>Description</Text>
             <TextInput
               style = {[styles.textInput]}
               multiline={true}
-              placeholder = "Why is it meaningful to you?"
+              placeholder = "What experiences have you had with this object?"
               onChangeText={this.onChangeInputItemDescription}
-              defaultValue={this.state.inputItemDescription}
+              defaultValue={""}
             />
-            <Text style={styles.label}>Community</Text>
-            <Carousel
-                ref={(c) => { this._carousel = c; }}
-                data={this.state.groups}
-                renderItem={this.renderItem}
-                sliderWidth={width}
-                itemWidth={width * 0.65}
-                enableMomentum={true}
-                onSnapToItem={this.onChangeGroup}
-                containerCustomStyle={styles.groups}
-                inactiveSlideScale={0.8}
-                inactiveSlideOpacity={0.6}
-              />
             <RoundButton
               containerStyle={styles.button}
-              label="GIVE ITEM"
+              label="SHARE STORY"
               backgroundColor={Colors.teal}
               color={'white'}
               size={15}
@@ -232,6 +152,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+    minHeight: '50%',
   },
   imagePreview: {
     height: width * 2 / 3,
@@ -297,7 +218,7 @@ const styles = StyleSheet.create({
     padding: Metrics.baseMargin,
     top: height * 1 / 4 - Metrics.baseMargin,
     right:0,
-  },
-})
+  }
+});
 
-export default PostMain;
+export default ShareStory;

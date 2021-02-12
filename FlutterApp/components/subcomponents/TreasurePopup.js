@@ -5,17 +5,92 @@ import { Metrics, Colors } from '../Themes';
 import Icons from '../Themes/Icons';
 import Modal from 'react-native-modal';
 import RoundButtonSmall from '../subcomponents/RoundButtonSmall';
+import GivePopupImage from '../subcomponents/GivePopupImage';
+import GivePopupHeader from '../subcomponents/GivePopupHeader';
+import GivePopupDescription from '../subcomponents/GivePopupDescription';
+import GivePopupButtons from '../subcomponents/GivePopupButtons';
+import GiveSelectFriendPopup from '../subcomponents/GiveSelectFriendPopup';
+import { withNavigation } from 'react-navigation';
+
+import Fire from '../../Fire';
 
 const {height, width} = Dimensions.get('window');
 
-export default class TreasurePopup extends React.Component {
+class TreasurePopup extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      selectFriendToggle: false,
+      completionScreenViewed: false,
+      chats: [],
+    }
+  }
+
+  componentDidMount() {
+    chatList = [];
+    this.callbackGetAllChats = Fire.shared.getAllChats(chatsResult => {
+      chatList = [];
+      chatsResult.forEach(chat => {
+        chatList.push({key: chat.key, userIds: chat.val().userIds});
+      })
+      this.setState(previousState => ({
+        chats: chatList,
+      }))
+    })
+  }
+
+  componentWillUnmount() {
+    Fire.shared.offChats(this.callbackGetAllChats);
   }
 
   _toggleModal = () => {
     this.props.toggle();
+    if (this.state.selectFriendToggle === true) {
+      this.onToggleSelectFriend();
+    }
+  }
+
+  onPressMessage = () => {
+
+    var chatObj = {
+      myUserId: Fire.shared.uid,
+      otherUserId: this.props.treasure.userId,
+      otherUserName: this.props.treasure.userName,
+      key: "",
+    }
+
+    var chatExists = false;
+    this.state.chats.forEach((chat) => {
+      if (chatExists === false
+          && chat.userIds.includes(chatObj.myUserId)
+          && chat.userIds.includes(chatObj.otherUserId)) {
+        chatObj.key = chat.key;
+        chatExists = true;
+      }
+    });
+    if (chatExists === false) {
+      chatObj.key = Fire.shared.writeChatData([chatObj.myUserId, chatObj.otherUserId]);
+    }
+    this.props.navigation.navigate('Chat', { chatKey: chatObj.key, otherName: chatObj.otherUserName, needUpdate: false });
+    this._toggleModal();
+  }
+
+  onPressGive = (receiver) => {
+    this.props.give(receiver);
+  }
+
+  onToggleSelectFriend = () => {
+    this.setState({
+      selectFriendToggle: !this.state.selectFriendToggle,
+    });
+  }
+
+  onCompleteGive = (receiver) => {
+    this._toggleModal();
+    this.setState({
+      completionScreenViewed: true,
+    })
   }
 
   render() {
@@ -25,83 +100,47 @@ export default class TreasurePopup extends React.Component {
     var userName = this.props.treasure.userName;
     var itemPicURL = this.props.treasure.itemPicUrl;
     var userPicUrl = this.props.treasure.userPicUrl;
+    var userId = this.props.treasure.userId;
+    var recvUserName = this.props.treasure.recvUserName;
 
     return  (
       <Modal isVisible={this.props.isVisible}
              onBackdropPress={this._toggleModal}>
         <View style={styles.card}>
-          <View style={styles.cardTitle}>
-            <Text style={styles.itemName} ellipsizeMode={'tail'} numberOfLines={1}>{itemName}</Text>
-            <View style={styles.cardTitleRight}>
-              <Badge textStyle={styles.groupName} value={groupName} containerStyle={styles.badgeStyle}/>
-              <TouchableOpacity onPress={this._toggleModal}>
-                <Icons iconName={"cross"} size={18}/>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View>
-            <Image style={styles.image} source={{uri:itemPicURL}} />
-          </View>
-          {this.props.isProfile === true &&
+        <GivePopupHeader
+          itemName={itemName}
+          groupName={groupName}
+          toggle={this._toggleModal}/>
+          {this.state.selectFriendToggle === false &&
             <View>
-              <View style={styles.cardInfo}>
-                <View style={styles.cardInfoText} >
-                  <Text style={styles.text}>{itemDescription}</Text>
-                </View>
-              </View>
-              <View style={styles.buttonContainer}>
-                {this.props.isActive === true &&
-                  <RoundButtonSmall
-                    containerStyle={styles.button}
-                    label="GIVE!"
-                    backgroundColor={Colors.teal}
-                    color={'white'}
-                    size={14}
-                    onPress={this._toggleModal}
-                    isActive={this.props.isActive} />
-                }
-                {this.props.isActive === false &&
-                  <RoundButtonSmall
-                    containerStyle={styles.button}
-                    label="ALREADY GIVEN"
-                    backgroundColor={Colors.background}
-                    color={Colors.lightText}
-                    size={14}
-                    isActive={this.props.isActive} />
-                }
-              </View>
+            <GivePopupImage
+              itemPicURL={itemPicURL} />
+            <GivePopupDescription
+              isProfile={this.props.isProfile}
+              itemDescription={itemDescription}
+              userName={userName}
+              userPicUrl={userPicUrl}/>
+            <GivePopupButtons
+              isProfile={this.props.isProfile}
+              isActive={this.props.isActive}
+              onPressMessage={this.onPressMessage}
+              onToggleSelectFriend={this.onToggleSelectFriend}
+              userName={userName}
+              userId={userId}
+              myUserId={Fire.shared.uid}
+              recvUserName={recvUserName}
+              />
             </View>
           }
-          {this.props.isProfile === false &&
-            <View>
-              <View style={styles.cardInfo}>
-                <Avatar containerStyle={styles.propic} medium rounded source={{uri: userPicUrl}} />
-                <View style={styles.cardInfoText}>
-                  <Text style={styles.text}><Text style={styles.username}>{userName} </Text>{itemDescription}</Text>
-                </View>
-              </View>
-              <View style={styles.buttonContainer}>
-                {this.props.isActive === true &&
-                  <RoundButtonSmall
-                    containerStyle={styles.button}
-                    label={"MESSAGE " + userName.toUpperCase()}
-                    backgroundColor={Colors.teal}
-                    color={'white'}
-                    size={14}
-                    onPress={this._toggleModal}
-                    isActive={this.props.isActive} />
-                }
-                {this.props.isActive === false &&
-                  <RoundButtonSmall
-                    containerStyle={styles.button}
-                    label="ALREADY GIVEN"
-                    backgroundColor={Colors.background}
-                    color={Colors.lightText}
-                    size={14}
-                    isActive={this.props.isActive} />
-                }
-              </View>
-            </View>
+          {this.state.selectFriendToggle === true && this.state.completionScreenViewed === false &&
+            <GiveSelectFriendPopup
+              isActive={true}
+              onToggleSelectFriend={this.onToggleSelectFriend}
+              onCompleteGive={this.onCompleteGive}
+              onPressGive={this.onPressGive}
+              toggle={this._toggleModal}
+              itemPicURL={itemPicURL}
+              />
           }
         </View>
       </Modal>
@@ -109,6 +148,8 @@ export default class TreasurePopup extends React.Component {
   }
 
 }
+
+export default withNavigation(TreasurePopup);
 
 const styles = StyleSheet.create({
   itemName: {

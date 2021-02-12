@@ -4,34 +4,74 @@ import { ListItem, SearchBar, Icon } from 'react-native-elements';
 import { Metrics, Colors } from './Themes';
 import ChatItem from './subcomponents/ChatItem';
 import Search from './subcomponents/Search';
+import SearchInput, { createFilter } from 'react-native-search-filter';
+
+import Fire from '../Fire';
 
 class ChatMain extends React.Component {
-  state = {
-    chatList: [
-      {
-        name: 'Cynthia',
-        picUrl: 'https://i.imgur.com/z7fgB60.jpg',
-        key: '11221212',
-        subtitle: 'Cynthia: let\'s meet by the pond'
-      },
-      {
-        name: 'Belle',
-        picUrl: 'https://vignette.wikia.nocookie.net/disneyheroines/images/7/7c/Belle.jpg',
-        key: '33488788',
-        subtitle: 'You: Okay, see you in a bit!'
-      },
-    ]
-  };
 
-  onChangeSearchText = () => null; // search; do last
-  onClearSearchText = () => null; // search; do last
-
-  onPressNewChat = () => {
-    this.props.navigation.navigate('Chat', { name: 'TODO fix chat' });
+  constructor(props) {
+    super(props);
+    this.state = {
+      chatList: [],
+      searchTerm: '',
+    }
   }
 
-  onPressChat = (name) => {
-    this.props.navigation.navigate('Chat', { name: name });
+  componentDidMount() {
+    this.updateChatList();
+  }
+
+  searchUpdated = (term) => {
+    this.setState({
+      searchTerm: term,
+    });
+  }
+
+  onPressChat = (chat) => {
+    this.props.navigation.navigate('Chat', { chatKey: chat.key, otherName: chat.otherUserName, updateChatList: this.updateChatList });
+  }
+
+  updateChatList = () => {
+    let userId = Fire.shared.uid;
+
+    Fire.shared.getAllChats((chatsResult) => {
+      let chatList = [];
+      chatsResult.forEach((chatObj) => {
+        chatList = [];
+        let key = chatObj.key;
+        let chat = chatObj.val();
+        if (chat.messages != undefined) {
+          // if it is user's chats
+          if (chat.userIds[0] === userId) {
+            Fire.shared.getUser(chat.userIds[1], otherUser => {
+              chatList.push(this.createChatObject(chat, key, chat.userIds[1], otherUser));
+              chatList = this.sortByTime(chatList)
+              this.setState(previousState => ({
+                chatList: chatList,
+              }));
+            })
+          } else if (chat.userIds[1] === userId) {
+            Fire.shared.getUser(chat.userIds[0], otherUser => {
+              chatList.push(this.createChatObject(chat, key, chat.userIds[0], otherUser));
+              chatList = this.sortByTime(chatList)
+              this.setState(previousState => ({
+                chatList: chatList,
+              }));
+            })
+          }
+        }
+      })
+
+    })
+  }
+
+  sortByTime(list) {
+    return list.sort(function(a, b) {
+      let x = a.timestamp;
+      let y = b.timestamp;
+      return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+    })
   }
 
   static navigationOptions = {
@@ -46,35 +86,60 @@ class ChatMain extends React.Component {
     headerTintColor: Colors.teal,
   };
 
-  renderChat = ({ item }) => (
-    <TouchableOpacity onPress={() => {this.onPressChat(item.name)}}>
-      <ChatItem chat={item} />
-    </TouchableOpacity>
-  )
+  renderChat = ({item}) => {
+    return (
+      <TouchableOpacity onPress={() => this.onPressChat(item)}>
+        <ChatItem chat={item}/>
+      </TouchableOpacity>
+    )
+  }
+
+  createChatObject(chat, chatKey, otherUserId, otherUser) {
+    let messages = [];
+    for (var key in chat.messages) {
+      var message = chat.messages[key];
+      messages.unshift(message);
+    }
+    return {
+      myUserId: Fire.shared.uid,
+      otherUserId: otherUserId,
+      otherUserName: otherUser.display_name,
+      otherUserPicUrl: otherUser.profile_picture,
+      messages: messages,
+      key: chatKey,
+      timestamp: chat.timestamp,
+    }
+  }
 
   render() {
+    var filteredChatList = this.state.chatList.filter(createFilter(this.state.searchTerm, ['otherUserName']));
     return (
       <View style={styles.container}>
-
-      <Search />
-
-      <ScrollView>
-        {
-          <FlatList
-            data={this.state.chatList}
-            renderItem={this.renderChat}
-          />
-        }
-      </ScrollView>
+        <Search searchUpdated={this.searchUpdated}/>
+        <ScrollView>
+            <FlatList
+              data={filteredChatList}
+              renderItem={this.renderChat}
+              extraData={this.state}
+            />
+        </ScrollView>
       </View>
     );
   }
 }
 
-const offset = 24;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  searchBarContainer: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+  },
+  searchBar: {
+    backgroundColor: Colors.background,
+    fontSize: 15,
   },
 });
 

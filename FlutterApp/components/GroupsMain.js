@@ -4,13 +4,23 @@ import { ListItem, SearchBar, Icon } from 'react-native-elements';
 import { Metrics, Colors } from './Themes';
 import Search from './subcomponents/Search';
 import GroupItem from './subcomponents/GroupItem';
+import SearchInput, { createFilter } from 'react-native-search-filter';
 
 import Fire from '../Fire';
 
 class GroupsMain extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      searchTerm: '',
+      groupList: []
+    }
+  }
+
   static navigationOptions = ({navigation}) => {
     return {
-      title: 'Groups',
+      title: 'Communities',
       headerStyle: {backgroundColor: Colors.background},
       headerRight: (
         <View style={styles.headerButton}>
@@ -38,14 +48,12 @@ class GroupsMain extends React.Component {
     this.props.navigation.setParams({ onPressCreateGroup: this.onPressCreateGroup });
 
     this.callbackGetAllGroups = Fire.shared.getAllGroups(groupResult => {
-      Fire.shared.getAllUsersOn(userResult => {
+      Fire.shared.getAllUsers(userResult => {
         // create map {userId: userPicUrl}
         let userPicUrlMap = {};
         userResult.forEach((childResult) => {
           userPicUrlMap[childResult.key] = childResult.val()['profile_picture']
         })
-
-        console.log('userPicUrlMap', userPicUrlMap);
 
         // loop through groups, keep only the ones with current user in them
         let groupResultList = [];
@@ -55,7 +63,7 @@ class GroupsMain extends React.Component {
           if (childResultObj['memberList'].indexOf(Fire.shared.uid) != -1) {
             tempGroupResult = {
               name: childResultObj['groupName'],
-              key: childResultObj['groupId'],
+              key: childResult.key,
               size: childResultObj['memberList'].length,
               picUrl: childResultObj['groupPicUrl'],
             }
@@ -64,8 +72,6 @@ class GroupsMain extends React.Component {
             for (let i = 0; i < childResultObj['memberList'].length; i++) {
               tempGroupResult['user' + (i+1)] = userPicUrlMap[childResultObj['memberList'][i]];
             }
-
-            console.log('tempGroupResult', tempGroupResult);
 
             groupResultList.push(tempGroupResult);
           }
@@ -79,24 +85,17 @@ class GroupsMain extends React.Component {
   }
 
   componentWillUnmount() {
-    Fire.shared.offAllUsers(this.callbackGetAllGroups);
     Fire.shared.offGroups(this.callbackGetAllGroups);
   }
-
-  state = {
-    groupList: [
-    ]
-  };
-
-  onChangeSearchText = () => null; // search; do last
-  onClearSearchText = () => null; // search; do last
 
   onPressCreateGroup = () => {
     this.props.navigation.navigate('GroupCreate', {});
   }
 
-  onPressGroup = (name) => {
-    this.props.navigation.navigate('Group', { name: name });
+  onPressGroup = (id) => {
+    Fire.shared.getGroupName(id, nameResult => {
+      this.props.navigation.navigate('Group', { groupId: id, groupName: nameResult });
+    });
   }
 
   renderItem = ({item}) => {
@@ -105,13 +104,19 @@ class GroupsMain extends React.Component {
     )
   }
 
+  searchUpdated = (term) => {
+    this.setState({ searchTerm: term });
+  }
+
   render() {
+    var filteredGroupList = this.state.groupList.filter(createFilter(this.state.searchTerm, ['name']));
+
     return (
       <View style={styles.container}>
-        <Search />
+        <Search searchUpdated={this.searchUpdated}/>
         <FlatList
           style={styles.cardsContainer}
-          data={this.state.groupList}
+          data={filteredGroupList}
           renderItem={this.renderItem} />
       </View>
     );

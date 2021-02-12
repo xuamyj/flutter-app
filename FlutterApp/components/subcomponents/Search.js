@@ -5,9 +5,6 @@ import { Metrics, Colors } from '../Themes';
 
 class Search extends React.Component {
 
-  onChangeSearchText = () => null; // search; do last
-  onClearSearchText = () => null; // search; do last
-
   render() {
     return (
         <SearchBar
@@ -15,9 +12,10 @@ class Search extends React.Component {
           lightTheme
           containerStyle={styles.searchBarContainer}
           inputStyle={styles.searchBar}
-          onChangeText={this.onChangeSearchText}
+          onChangeText={(term) => this.props.searchUpdated(term)}
           onClearText={this.onClearSearchText}
           placeholder='Search...'
+          clearIcon
         />
     );
   }

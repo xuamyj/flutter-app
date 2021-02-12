@@ -8,25 +8,25 @@ import Stories from './subcomponents/Stories'
 import Treasures from './subcomponents/Treasures'
 
 const StoriesRoute = () => (
-  <Stories />
+  <Stories isGroup />
 );
 const TreasuresRoute = () => (
-  <Treasures />
+  <Treasures isGroup />
 );
 
 class Group extends React.Component {
 
-  state = {
-    index: 0,
-    routes: [
-      { key: 'stories', title: 'Stories' },
-      { key: 'treasures', title: 'Treasures' },
-    ],
-    groupName: 'Disney',
-  };
+    state = {
+      index: 0,
+      routes: [
+        { key: 'stories', title: 'Stories' },
+        { key: 'treasures', title: 'Treasures' },
+      ],
+      groupName:"",
+    };
 
   static navigationOptions = ({ navigation }) => ({
-    title: (navigation.state.params || {}).name || 'Group!',
+    title: (navigation.state.params || {}).groupName || 'Group!',
     headerStyle: {backgroundColor: Colors.background, borderBottomWidth: 0, elevation: 0},
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
@@ -35,7 +35,7 @@ class Group extends React.Component {
     },
     headerRight: (
       <View style={styles.headerButton}>
-        <TouchableOpacity onPress={navigation.getParam("onPressGroupSettings", {name: (navigation.state.params || {}).name || 'Group'})}>
+        <TouchableOpacity onPress={navigation.getParam("onPressGroupSettings")}>
           <Icon
             name='settings'
             color='#49B6BB'
@@ -48,11 +48,12 @@ class Group extends React.Component {
   });
 
   onPressGroupSettings = () => {
-    this.props.navigation.navigate('GroupSettings', {});
+    this.props.navigation.navigate('GroupSettings', {groupId: this.props.navigation.state.params.groupId});
   }
 
   componentDidMount() {
     this.props.navigation.setParams({ onPressGroupSettings: this.onPressGroupSettings });
+
   }
 
   render() {
@@ -70,7 +71,7 @@ class Group extends React.Component {
             <TabBar
               {...props}
               indicatorStyle={{backgroundColor: '#49B6BB'}}
-              labelStyle={{color: Colors.dark}}
+              labelStyle={{fontSize: 14, color: Colors.dark}}
               style={{backgroundColor: Colors.background}}
             />
           }

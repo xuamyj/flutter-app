@@ -3,12 +3,20 @@ import { Text, View, StyleSheet, Dimensions, Image, Animated, TouchableWithoutFe
 import { Avatar } from 'react-native-elements';
 import { Metrics, Colors } from '../Themes';
 
+import Fire from '../../Fire';
+
 const {height, width} = Dimensions.get('window');
 
 export default class GroupItem extends React.Component {
 
   constructor(props) {
     super(props);
+    let group = props.group;
+    this.state = {
+      name: group.name,
+      id: group.key,
+      picUrl: group.picUrl,
+    }
     this.handlePressIn = this.handlePressIn.bind(this);
     this.handlePressOut = this.handlePressOut.bind(this);
   }
@@ -31,28 +39,40 @@ export default class GroupItem extends React.Component {
     }).start();
   }
 
+  getUserPicUrl(id) {
+    switch (id) {
+      case 1:
+        return this.props.group.user1;
+      case 2:
+        return this.props.group.user2;
+      case 3:
+        return this.props.group.user3;
+      default:
+        return "";
+    }
+  }
+
+  getRemainingUsers() {
+    let remaining = this.props.group.size - 3;
+    return "+" + remaining;
+  }
+
   render() {
     const animatedStyle = {
       transform: [{scale: this.animatedValue}]
-    }
-
-    var membersLabel = this.props.group.size - 3;
-    var extraMembers = null;
-    if (membersLabel > 0) {
-      extraMembers = <Avatar containerStyle={styles.propic} medium rounded title={"+"+membersLabel} />
-    }
+    };
 
     return (
-      <TouchableWithoutFeedback onPress={() => {this.props.openGroup(this.props.group.name)}} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
+      <TouchableWithoutFeedback onPress={() => {this.props.openGroup(this.state.id)}} onPressIn={this.handlePressIn} onPressOut={this.handlePressOut}>
         <Animated.View style={[styles.container, animatedStyle]}>
-          <Image style={styles.image} source={{uri:this.props.group.picUrl}} />
-          <Text style={styles.groupName}>{this.props.group.name}</Text>
+          <Image style={styles.image} source={{uri:this.state.picUrl}} />
+          <Text style={styles.groupName}>{this.state.name}</Text>
           <View style={styles.memberContainer}>
             <View style={styles.groupMembersContainer}>
-              <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.props.group.user1}} />
-              <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.props.group.user2}} />
-              <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.props.group.user3}} />
-              {extraMembers}
+              {this.props.group.size > 0 && <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.getUserPicUrl(1)}} /> }
+              {this.props.group.size > 1 && <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.getUserPicUrl(2)}} /> }
+              {this.props.group.size > 2 && <Avatar containerStyle={styles.propic} medium rounded source={{uri: this.getUserPicUrl(3)}} /> }
+              {this.props.group.size > 3 && <Avatar containerStyle={styles.propic} medium rounded title={this.getRemainingUsers()} /> }
             </View>
           </View>
         </Animated.View>
@@ -63,7 +83,7 @@ export default class GroupItem extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: Colors.darkTeal,
     borderRadius: Metrics.baseMargin,
     shadowColor: Colors.dark,
     shadowOffset: {width: 0, height: 0},
@@ -76,16 +96,20 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 120,
+    height: width * 0.3,
     resizeMode: 'cover',
     borderRadius: Metrics.baseMargin,
-    opacity: 0.25,
+    opacity: 0.6,
   },
   groupName: {
     position: 'absolute',
     flex: 1,
     flexDirection: 'row',
-    padding: Metrics.baseMargin,
+    fontFamily: 'NunitoSemiBold',
+    color: 'white',
+    fontSize: 24,
+    paddingHorizontal: Metrics.doubleBaseMargin,
+    paddingVertical: Metrics.baseMargin * 1.5,
   },
   groupMembersContainer: {
     position: 'absolute',
@@ -107,17 +131,4 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'flex-end',
   },
-  nameContainer: {
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-  },
-  groupName: {
-    position: 'absolute',
-    flex: 1,
-    fontFamily: 'NunitoSemiBold',
-    color: Colors.dark,
-    fontSize: 23,
-    paddingHorizontal: Metrics.doubleBaseMargin,
-    paddingVertical: Metrics.baseMargin * 1.5,
-  }
 })

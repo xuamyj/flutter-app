@@ -54,9 +54,9 @@ class Fire {
   // turn on the database connection
   // listen for `child_added` event, if it happens, run `snapshot => ...`
   on = callback => {
-    return firebase.database().ref('messages')
+    return firebase.database().ref('chats')
       .limitToLast(20)
-      .on('child_added', snapshot => callback(this.parse(snapshot)));
+      .once('child_added', snapshot => callback(this.parse(snapshot)));
   }
 
   parse = snapshot => {
@@ -133,6 +133,16 @@ class Fire {
     });
   }
 
+  initialSetup(userId) {
+    firebase.database().ref('groups/-LYBZ-GC4QLMeouCGJ37/memberList').update({
+      7: userId
+    }).then(function() {
+      successCallback();
+    }).catch(function(error) {
+      errorCallback();
+    });
+  }
+
   // update display name
   updateUserName(userId, userName, successCallback, errorCallback) {
     firebase.database().ref('users/' + userId).update({
@@ -171,6 +181,19 @@ class Fire {
     });
   }
 
+  getUser(userId, successCallback) {
+    var emptyUser = {
+      display_name: "",
+      email: "",
+      profile_picture: "",
+    }
+
+    return firebase.database().ref('users/' + userId).once('value').then(function(snapshot) {
+      var user = userId === "" ? emptyUser : snapshot.val();
+      successCallback(user);
+    });
+  }
+
   offUsers(userId, returnedCallback) {
     firebase.database().ref('users/' + userId).off('value', returnedCallback);
   }
@@ -192,7 +215,7 @@ class Fire {
 
   // get all uid/email pairs
   getAllUsersOn(successCallback) {
-    return firebase.database().ref('users/').on('value', function(snapshot) {
+    return firebase.database().ref('users/').once('value', function(snapshot) {
       successCallback(snapshot);
     });
   }
@@ -202,11 +225,81 @@ class Fire {
   }
 
   // ----------------
+  // DATABASE: ITEMS
+  // ----------------
+
+  // get all items
+  getAllItems(successCallback) {
+    return firebase.database().ref('posts/').orderByChild('timestamp').on('value', function(snapshot) {
+      successCallback(snapshot);
+    });
+  }
+
+  getItem(itemKey, successCallback) {
+    return firebase.database().ref('posts/' + itemKey).once('value').then(function(snapshot) {
+      successCallback(snapshot.val());
+    });
+  }
+
+  updateItem(itemKey, description, picUrl) {
+    firebase.database().ref('posts/' + itemKey).update({
+      timestamp: this.timestamp,
+      state : "COMPLETE",
+      "receiver/itemDescription" : description,
+      "receiver/itemPicUrl": picUrl,
+    }).then(function() {
+      successCallback();
+    }).catch(function(error) {
+      errorCallback();
+    });
+  }
+
+  giveItemUpdate(key, receiver) {
+    firebase.database().ref('posts/' + key).update({
+      timestamp: this.timestamp,
+      state: "GIVEN",
+      receiver : {
+        id: receiver,
+        itemDescription: "",
+        itemPicUrl: ""
+      },
+    }).then(function() {
+      successCallback();
+    }).catch(function(error) {
+      errorCallback();
+    });
+  }
+
+  writeItem(name, groupId, description, picUrl) {
+    var newItemKey = firebase.database().ref('posts/').push().key;
+    firebase.database().ref('posts/' + newItemKey).set({
+      itemName: name,
+      groupId: groupId,
+      state: "POSTED",
+      giver: {
+        id: this.uid,
+        itemDescription: description,
+        itemPicUrl: picUrl,
+      },
+      receiver: {
+        id: "",
+        itemDescription: "",
+        itemPicUrl: "",
+      },
+      timestamp: this.timestamp,
+    });
+  }
+
+  offItems(returnedCallback) {
+    firebase.database().ref('posts/').off('value', returnedCallback);
+  }
+
+  // ----------------
   // DATABASE: GROUPS
   // ----------------
 
   // save groupId + group name + group image + member list the first time
-  writeGroupData(groupName, groupPicUrl, memberList) {
+  writeGroupData(groupName, groupPicUrl, memberList, successCallback) {
     var newGroupKey = firebase.database().ref('groups/').push().key;
     firebase.database().ref('groups/' + newGroupKey).set({
       groupId: newGroupKey,
@@ -214,6 +307,7 @@ class Fire {
       groupPicUrl: groupPicUrl,
       memberList: memberList,
     });
+    return successCallback(newGroupKey);
   }
 
   // get all groups for a certain uid
@@ -223,8 +317,82 @@ class Fire {
     });
   }
 
+  getGroupName(groupId, successCallback) {
+    return firebase.database().ref('groups/' + groupId).once('value', function(snapshot) {
+      var groupName = (snapshot.val() && snapshot.val().groupName) || '';
+      successCallback(groupName);
+    });
+  }
+
+  getGroup(groupId, successCallback) {
+    return firebase.database().ref('groups/' + groupId).once('value').then(function(snapshot) {
+      var group = snapshot.val() || '';
+      successCallback(group);
+    });
+  }
+
   offGroups(userId, returnedCallback) {
     firebase.database().ref('groups/').off('value', returnedCallback);
+  }
+
+  // ----------------
+  // DATABASE: MESSAGES
+  // ----------------
+
+  // get all groups for a certain uid
+  getAllChats(successCallback) {
+    return firebase.database().ref('chats/').on('value', function(snapshot) {
+      successCallback(snapshot);
+    });
+  }
+
+  offChats(returnedCallback) {
+    firebase.database().ref('chats/').off('value', returnedCallback);
+  }
+
+  getChat(chatId, successCallback) {
+    return firebase.database().ref('chats/' + chatId).once('value').then(function(snapshot) {
+      successCallback(snapshot);
+    })
+  }
+
+  getAllMessages(chatId, successCallback) {
+    return firebase.database().ref('chats/' + chatId + "/messages").on('value', function(snapshot) {
+      successCallback(snapshot);
+    })
+  }
+
+  getMessage(chatKey, messageKey, successCallback) {
+    firebase.database().ref('chats/' + chatKey + "/messages/" + messageKey).once('value').then(function(snapshot) {
+      successCallback(snapshot);
+    })
+  }
+
+  writeMessageData(chatKey, text, user) {
+    var newMessageKey = firebase.database().ref('chats/' + chatKey + '/messages/').push().key;
+    firebase.database().ref('chats/' + chatKey).update({
+      timestamp: this.timestamp,
+    }).then(function() {
+      successCallback();
+    }).catch(function(error) {
+      errorCallback();
+    });
+    firebase.database().ref('chats/' + chatKey + "/messages/" + newMessageKey).set({
+      _id: newMessageKey,
+      text: text,
+      createdAt: this.timestamp,
+      user: user,
+    });
+    return newMessageKey;
+  }
+
+  writeChatData(userIds) {
+    var newChatKey = firebase.database().ref('chats/').push().key;
+    firebase.database().ref('chats/' + newChatKey).set({
+      userIds: userIds,
+      timestamp: this.timestamp,
+    });
+    return newChatKey;
   }
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Alert, Image, Dimensions, ScrollView } from 'react-native';
-import { Icon } from 'react-native-elements'
+import { Text, TextInput, View, StyleSheet, Button, TouchableOpacity, Alert, Image, Dimensions, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { Icon, SearchBar } from 'react-native-elements'
 import { ImagePicker, Permissions } from 'expo';
 import { Metrics, Colors } from './Themes';
 import AutoTags from 'react-native-tag-autocomplete';
@@ -25,24 +25,32 @@ class GroupCreate extends React.Component {
   onChangeInputGroupName = (inputGroupName) => {this.setState({ inputGroupName: inputGroupName })}
 
   onPressCreate = async () => {
-    memberList = []
-    this.state.tagsSelected.forEach((tag) => {
-      memberList.push(tag['userId']);
-    });
-    if (memberList.indexOf(Fire.shared.uid) == -1) {
-      memberList.push(Fire.shared.uid);
-    }
+    // memberList = []
+    // this.state.tagsSelected.forEach((tag) => {
+    //   memberList.push(tag['userId']);
+    // });
+    // if (memberList.indexOf(Fire.shared.uid) == -1) {
+    //   memberList.push(Fire.shared.uid);
+    // }
 
     uploadUrl = await Fire.shared.uploadImageAsync(this.state.inputGroupPicUrl);
-    Fire.shared.writeGroupData(this.state.inputGroupName, uploadUrl, memberList, () => {
-      this.props.navigation.navigate('Group', {name: this.state.inputGroupName});
+    let key;
+    Fire.shared.writeGroupData(this.state.inputGroupName, uploadUrl, memberList, keyResult => {
+      key = keyResult;
     }, () => {
-      // TODO toast
     });
+    Alert.alert(
+      'Community created!',
+      ('You have created ' + this.state.inputGroupName + '!'),
+      [
+        {text: 'OK'},
+      ],
+    );
+    this.props.navigation.navigate('Group', { groupId: key, groupName: this.state.inputGroupName});
   }
 
   static navigationOptions = {
-    title: 'Create New Group',
+    title: 'Create New Community',
     headerStyle: {backgroundColor: Colors.background },
     headerTitleStyle: {
       fontFamily: 'NunitoBold',
@@ -67,18 +75,18 @@ class GroupCreate extends React.Component {
   }
 
   handleDelete = index => {
-    let tagsSelected = this.state.tagsSelected;
-    tagsSelected.splice(index, 1);
-    this.setState({ tagsSelected });
+    // let tagsSelected = this.state.tagsSelected;
+    // tagsSelected.splice(index, 1);
+    // this.setState({ tagsSelected });
   }
 
   handleAddition = suggestion => {
-    this.setState({ tagsSelected: this.state.tagsSelected.concat([suggestion]) });
+    // this.setState({ tagsSelected: this.state.tagsSelected.concat([suggestion]) });
   }
 
   render() {
     return (
-      <View style={{ flex:1, backgroundColor: 'transparent' }}>
+      <KeyboardAvoidingView style={{ flex:1, backgroundColor: 'transparent' }} behavior="padding" keyboardVerticalOffset={width * 1 / 3 - 2 * Metrics.doubleBaseMargin}>
         <View style={{ backgroundColor: Colors.teal }}>
             <Image style={styles.imagePreview} source={{uri: this.state.inputGroupPicUrl}} />
         </View>
@@ -95,24 +103,26 @@ class GroupCreate extends React.Component {
               onChangeText={this.onChangeInputGroupName}
             />
             <Text style={styles.label}>Members</Text>
-            <View style = {{marginLeft: '10%', marginVertical: Metrics.baseMargin}}>
-              <AutoTags
-                suggestions={this.state.suggestions}
-                tagsSelected={this.state.tagsSelected}
-                handleAddition={this.handleAddition}
-                handleDelete={this.handleDelete}
-                placeholder="Add a member.." />
+            <View style={styles.searchBarView}>
+              <SearchBar
+                round
+                lightTheme
+                containerStyle={styles.searchBarContainer}
+                inputStyle={styles.searchBar}
+                placeholder='Search...'
+                clearIcon
+              />
             </View>
             <RoundButton
               containerStyle={styles.button}
-              label="CREATE GROUP"
+              label="CREATE COMMUNITY"
               backgroundColor={Colors.teal}
               color={'white'}
               size={15}
               onPress={this.onPressCreate} />
           </View>
         </ScrollView>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 
@@ -123,8 +133,8 @@ class GroupCreate extends React.Component {
       result.forEach((childResult) => {
         let userObj = {}
         let userId = childResult.key;
-        let userEmail = childResult.val()['email'];
-        userObj['name'] = userEmail;
+        let userDisplayName = childResult.val()['displayName'];
+        userObj['name'] = userDisplayName;
         userObj['userId'] = userId;
         resultList.push(userObj);
       });
@@ -133,7 +143,7 @@ class GroupCreate extends React.Component {
       this.setState(previousState => ({
         suggestions: resultList,
       }))
-    })
+    });
   }
 }
 
@@ -155,7 +165,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     width: '100%',
-    marginTop: width * 2 / 5 - Metrics.doubleBaseMargin,
+    marginTop: height / 2 - width * 9 / 20,
     shadowColor: Colors.dark,
     shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.7,
@@ -208,7 +218,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     flexDirection: 'row',
     padding: Metrics.baseMargin,
-    top: width / 6 - Metrics.baseMargin * 3,
+    top: height / 12,
     right:0,
   },
   fillout: {
@@ -221,6 +231,28 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 15,
     shadowOpacity: 1,
+  },
+  searchBarContainer: {
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    borderBottomWidth: 0,
+  },
+  searchBar: {
+    backgroundColor: Colors.background,
+    fontSize: 15,
+    width: (Metrics.screenWidth - 3 * Metrics.baseMargin) * 0.88,
+  },
+  searchBarView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: (Metrics.screenWidth - 3 * Metrics.baseMargin) * 0.88,
+  },
+  searchView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: Metrics.screenWidth - 3 * Metrics.baseMargin,
   },
 })
 
